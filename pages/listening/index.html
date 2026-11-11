@@ -354,10 +354,6 @@
             const card = document.createElement('a');
             card.className = 'tool-card';
             card.href = tool.link;
-            if (tool.external) {
-                card.target = '_blank';
-                card.rel = 'noopener noreferrer';
-            }
             card.style.setProperty('--aura', tool.color || '#c20000');
             card.style.setProperty('--aura-shadow', tool.auraShadow || 'rgba(120,0,0,0.35)');
             card.style.animationDelay = (i * 0.06) + 's';
@@ -369,6 +365,10 @@
                 card.setAttribute('role', 'link');
                 card.setAttribute('aria-disabled', 'true');
                 card.addEventListener('click', (e) => e.preventDefault());
+            } else {
+                // Todos os links ativos abrem em nova aba
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
             }
 
             card.setAttribute('aria-label', 'Abrir ' + tool.title + '. ' + (tool.desc || ''));
