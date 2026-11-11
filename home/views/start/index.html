@@ -67,6 +67,15 @@
             opacity: .65;
         }
 
+        .page-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-weight: 600; font-size: 10px; letter-spacing: .28em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+        }
+        .page-kicker::before, .page-kicker::after {
+            content: ''; width: 20px; height: 1.5px; background: currentColor;
+        }
+
         /* Nova classe para alinhar o subtítulo e o botão na mesma linha */
         .section-header {
             display: flex;
@@ -84,8 +93,8 @@
         .btn-see-all {
             display: inline-flex; align-items: center; 
             position: absolute;
-            top:230px;
-            left:500px;
+            top:200px;
+            left:600px;
             justify-content: center;
             gap: 6px;
             font-family: 'Gochi Hand', cursive;
@@ -119,6 +128,31 @@
         }
         .page-description strong {
             color: var(--ink);
+        }
+
+        /* =========================================
+           TYPEWRITER NA DESCRIÇÃO
+           ========================================= */
+           .typewriter-cursor {
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    background: var(--muted);
+    margin-left: 2px;
+    vertical-align: baseline;
+    position: relative;
+    top: 1px;   /* sobe/desce o cursor em px. Positivo = desce, negativo = sobe */
+    animation: cursorBlink 1s steps(1) infinite;
+    opacity: 1;
+}
+
+        @keyframes cursorBlink {
+            0%, 50%   { opacity: 1; }
+            50.01%, 100% { opacity: 0; }
+        }
+
+        .typewriter-cursor.done {
+            animation: cursorBlink 1.2s steps(1) infinite;
         }
 
         /* =========================================
@@ -349,11 +383,10 @@
 <body>
 
     <section class="view" id="page-home">
-        <h1 class="page-title"> Welcome, Student! <span class="scribble"> </span></h1>
+        <span class="page-kicker">Welcome!</span>
+        <h1 class="page-title"> <span class="scribble"> </span></h1>
         
-        <p class="page-description">
-            <strong>Bem-vindo!</strong> Você está usando o Language Lab gratuitamente, cortesia da teacher <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a> | <a href="https://wa.me/5516993272278/" target="_blank" rel="noopener noreferrer" class="footer-link">Torne-se aluno</a> e faça <a href="../profile/" class="footer-link">login</a> para desbloquear as ferramentas exclusivas.
-        </p>
+        <p class="page-description" id="typewriter"></p>
         
         <!-- ALTERAÇÃO AQUI: Cabeçalho com Subtítulo e Botão Ver Tudo -->
         <div class="section-header">
@@ -405,6 +438,73 @@
             { art: '../../../assets/7.webp',     title: 'Airpaint Beta',    description: 'Desenhe usando gestos das mãos via webcam.', link: 'https://dididoingles.github.io/airpaint/', color: '#5a5a5a', shadow: 'rgba(40,40,40,.6)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } }
         ];
         let currentIndex = 0;
+
+        /* =========================================
+           TYPEWRITER NA DESCRIÇÃO
+           ========================================= */
+        (function typewriter() {
+            const target = document.getElementById('typewriter');
+            if (!target) return;
+
+            const STORAGE_KEY = 'll_typewriter_done';
+
+            const html = '<strong>Olá!</strong> Você está usando o Language Lab gratuitamente, cortesia da teacher <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a> | <a href="https://wa.me/5516993272278/" target="_blank" rel="noopener noreferrer" class="footer-link">Torne-se aluno</a> e faça <a href="../profile/" class="footer-link">login</a> para desbloquear as ferramentas exclusivas.';
+
+            // Se já rodou nesta sessão, mostra direto (sem cursor)
+            if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+                target.innerHTML = html;
+                return;
+            }
+
+            // Tokeniza o HTML: tags viram tokens únicos, texto vira caracteres
+            const tokens = [];
+            let buffer = '';
+            let inTag = false;
+            for (let c = 0; c < html.length; c++) {
+                const ch = html[c];
+                if (ch === '<') { inTag = true; buffer = ch; }
+                else if (ch === '>' && inTag) { buffer += ch; tokens.push(buffer); buffer = ''; inTag = false; }
+                else if (inTag) { buffer += ch; }
+                else { tokens.push(ch); }
+            }
+
+            let i = 0;
+            let typedHTML = '';
+
+            function nextDelay(visibleChar) {
+                if (visibleChar === '.' || visibleChar === '!' || visibleChar === '?') return 420;
+                if (visibleChar === ',' || visibleChar === ';' || visibleChar === ':') return 220;
+                if (visibleChar === ' ') return 30;
+                return 32 + Math.random() * 40;
+            }
+
+            function render() {
+                // SEMPRE reconstrói o conteúdo do <p> como textoDigitado + cursor
+                target.innerHTML = typedHTML + '<span class="typewriter-cursor" aria-hidden="true"></span>';
+            }
+
+            function typeToken() {
+                if (i >= tokens.length) {
+                    // Termina: marca na sessão e trava o cursor piscando
+                    sessionStorage.setItem(STORAGE_KEY, '1');
+                    const cur = target.querySelector('.typewriter-cursor');
+                    if (cur) cur.classList.add('done');
+                    return;
+                }
+                const token = tokens[i];
+                typedHTML += token;
+                i++;
+                render();
+
+                const isTag = token.startsWith('<');
+                const delay = isTag ? 0 : nextDelay(token);
+                setTimeout(typeToken, delay);
+            }
+
+            // Estado inicial: cursor sozinho, piscando
+            render();
+            setTimeout(typeToken, 500);
+        })();
 
         function applyLayout(el, layout) {
             if (!layout) return;
