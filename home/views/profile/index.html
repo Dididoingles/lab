@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil — Language Lab</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #222222; --paper: #ffffff;
+            --accent: #c20000; --accent-dark: #a30000; --muted: #666666;
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-hand: 'Gochi Hand', cursive;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            background: transparent; font-family: var(--font-title); color: var(--ink);
+            min-height: 100%;
+        }
+        body {
+            padding: 100px 40px 30px 40px;
+            display: flex; flex-direction: column; justify-content: center;
+            overflow-y: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; margin: 0 auto; }
+
+        .page-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-weight: 600; font-size: 10px; letter-spacing: .28em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+        }
+        .page-kicker::before, .page-kicker::after {
+            content: ''; width: 22px; height: 1.5px; background: currentColor;
+        }
+        .page-title { font-size: 38px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.05em; line-height: 1.1; }
+
+        .profile-card {
+            background: #fafafa; padding: 32px; border-radius: 18px;
+            max-width: 420px; border: 1px solid rgba(34,34,34,.06);
+        }
+        .profile-card p { margin-bottom: 10px; font-size: 14px; }
+        .profile-name  { font-weight: 700; font-size: 18px; }
+        .profile-stats { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            background: var(--accent); color: #fff;
+            padding: 0 24px; height: 46px;
+            font-family: var(--font-hand); font-size: 17px; letter-spacing: .02em;
+            border: 2px solid var(--ink); border-radius: 12px; cursor: pointer;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform .15s, box-shadow .15s, background .2s;
+            width: fit-content;
+        }
+        .btn-primary:hover { background: var(--accent-dark); transform: translate(1px, 1px); box-shadow: 1px 2px 0 rgba(34,34,34,.85); }
+        .btn-primary:active { transform: translate(3px, 3px); box-shadow: 0 0 0 rgba(34,34,34,.85); }
+
+         /* FOOTER */
+         .site-footer {
+            width: 100%;
+            text-align: center;
+            padding: 28px 20px 26px;
+            margin-top: 20px;
+            border-top: 1.5px dashed rgba(34, 34, 34, 0.18);
+        }
+        .footer-text {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.7;
+            letter-spacing: -0.02em;
+        }
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.25s ease;
+            white-space: nowrap;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -2px;
+            height: 1.5px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .footer-link:hover { color: var(--accent-dark); }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+        .footer-ig {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 6px;
+        }
+        .footer-ig svg {
+            width: 14px; height: 14px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none;
+        }
+
+        /* width */
+::-webkit-scrollbar {
+width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f12d;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #8888882a;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+
+
+        @media (max-width: 1024px) {
+            body { padding-top: 40px; justify-content: flex-start; }
+            .page-title { font-size: 28px; }
+            .profile-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="view" id="page-profile">
+        <span class="page-kicker">Sua conta</span>
+        <h2 class="page-title">Meu Perfil</h2>
+        <div class="profile-card">
+            <p class="profile-name">Bem-vindo, Aluno!</p>
+            <p class="profile-stats">Você tem 3 ferramentas salvas.</p>
+            <button class="btn-primary" id="logout-btn">Sair</button>
+        </div>
+
+        <footer class="site-footer">
+            <p class="footer-text">
+                Desenvolvido pela professora
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+            </p>
+            <p class="footer-text">
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    Seguir no Instagram
+                </a>
+            </p>
+        </footer>
+    </section>
+
+    <script>
+    (function () {
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            alert('Fazendo Logout...');
+        });
+    })();
+    </script>
+
+</body>
+</html>
