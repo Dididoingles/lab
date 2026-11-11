@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início — Language Lab</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #222222; --paper: #ffffff;
+            --inkgrey: #222222af;
+            --accent: #c20000; --accent-dark: #a30000; --muted: #666666;
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-hand: 'Gochi Hand', cursive;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            background: transparent;
+            font-family: var(--font-title);
+            color: var(--ink);
+            min-height: 100%;
+        }
+        
+        body {
+            padding: 80px 40px 30px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; }
+
+        .page-title {
+            font-family: var(--font-title);
+            font-size: 38px; font-weight: 700; color: var(--inkgrey); opacity: 0.8;
+            margin-bottom: 20px; letter-spacing: -.07em; line-height: 1.1;
+        }
+        .page-title .scribble {
+            font-family: var(--font-hand); letter-spacing: normal; font-weight: 400;
+            color: var(--inkgrey); position: relative; white-space: nowrap;
+        }
+        .page-title .scribble::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 8px;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'><path d='M2 7 C 20 2, 40 9, 60 5 S 90 3, 98 6' stroke='%23222222' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>") no-repeat center / 100% 100%;
+            opacity: .65;
+        }
+
+        /* Nova classe para alinhar o subtítulo e o botão na mesma linha */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-family: var(--font-hand); font-size: 18px; color: var(--accent);
+            margin-bottom: 0; /* Removido margin-bottom para alinhar com o botão */
+            max-width: 500px; line-height: 1.4; font-weight: 600;
+        }
+
+        .btn-see-all {
+            display: inline-flex; align-items: center; 
+            position: absolute;
+            top:230px;
+            left:500px;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal;
+            font-size: 12px;
+            padding: 0 12px;
+            height: 42px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid var(--ink);
+            text-decoration: none;
+            min-height: 32px;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+        }
+        .btn-see-all:hover {
+            background: var(--accent-dark);
+            transform: translate(1px, 1px);
+            box-shadow: 1px 2px 0 rgba(34,34,34,0.85);
+        }
+
+        .page-description {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 580px;
+        }
+        .page-description strong {
+            color: var(--ink);
+        }
+
+        /* =========================================
+           CARROSSEL (Desktop)
+           ========================================= */
+        .carousel-section {
+            position: relative; 
+            width: 100%; 
+            height: 320px;
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: flex-start; 
+            overflow: hidden; 
+            margin: -10px 0 10px 0;
+            touch-action: pan-y; user-select: none;
+        }
+        .carousel-track {
+            position: relative; 
+            width: 100%; 
+            height: 100%;
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-start; 
+            cursor: grab;
+        }
+        .carousel-track:active { cursor: grabbing; }
+        
+        .card-scale {
+            position: absolute; 
+            top: 50%; 
+            left: 50px; 
+            transform: translate(0, -50%) scale(.7);
+            opacity: 0; filter: blur(4px); z-index: 0; pointer-events: none;
+            transition: transform .7s cubic-bezier(.22,1,.36,1),
+                        opacity .7s cubic-bezier(.22,1,.36,1),
+                        filter .7s cubic-bezier(.22,1,.36,1);
+            will-change: transform, opacity, filter;
+        }
+        
+        .card {
+            width: 220px; height: 270px;
+            border-radius: 20px; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding: 16px 14px 12px; gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.15); flex-shrink: 0;
+        }
+        
+        .card-art {
+            width: 65%; max-width: 130px;
+            height: var(--art-height, 100px); object-fit: contain; display: block; flex-shrink: 0;
+            filter: drop-shadow(0 10px 20px var(--card-shadow, rgba(0,0,0,.3))) brightness(1.05);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+        }
+        
+        .card-text { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; flex-shrink: 0; }
+        
+        .card-title {
+            font-family: var(--font-title); font-weight: 700; font-size: var(--title-size, 16px);
+            color: #fff; letter-spacing: -.03em; line-height: 1.1; text-align: center; width: 100%;
+            display: -webkit-box; -webkit-line-clamp: var(--title-lines, 2);
+            -webkit-box-orient: vertical; overflow: hidden;
+            min-height: calc(1.1em * var(--title-lines, 2));
+        }
+        
+        .card-desc {
+            font-family: var(--font-title); font-weight: 400; font-size: var(--desc-size, 11px);
+            color: rgba(255,255,255,.85); letter-spacing: -.02em; line-height: 1.3;
+            text-align: center; width: 100%;
+            display: -webkit-box; -webkit-line-clamp: var(--desc-lines, 2);
+            -webkit-box-orient: vertical; overflow: hidden;
+            min-height: calc(1.3em * var(--desc-lines, 2));
+        }
+        
+        .card-scale.active {
+            transform: translate(0, -50%) scale(1);
+            opacity: 1; filter: blur(0); z-index: 3; pointer-events: auto; cursor: pointer;
+        }
+        
+        .card-scale.thumbnail-left {
+            transform: translate(-60px, -50%) scale(.4);
+            opacity: 0; filter: blur(2px); z-index: 1; pointer-events: none;
+        }
+        
+        .card-scale.thumbnail-right {
+            transform: translate(200px, -50%) scale(.45);
+            opacity: .35; filter: blur(2px); z-index: 1;
+        }
+        
+        .card-scale.hidden-card {
+            transform: translate(200px, -50%) scale(.3);
+            opacity: 0; filter: blur(4px); z-index: 0;
+        }
+        
+        .carousel-dots {
+            position: absolute; bottom: -10px; left: 50px; 
+            display: flex; gap: 8px; z-index: 5;
+        }
+        
+        .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background-color: var(--accent); opacity: .25; cursor: pointer;
+            transition: opacity .4s, transform .4s cubic-bezier(.22,1,.36,1),
+                        width .4s cubic-bezier(.22,1,.36,1);
+        }
+        .dot.active { opacity: 1; width: 20px; border-radius: 4px; }
+        
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 36px; height: 36px; padding: 0;
+            margin-left: 10px;
+            background: var(--paper); border: 1px solid rgba(34,34,34,.1);
+            border-radius: 50%; color: var(--accent); font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+            transition: transform .2s, background-color .2s, color .2s;
+        }
+        .nav-btn:hover { background: var(--accent); color: #fff; transform: translateY(-50%) scale(1.08); }
+        .nav-btn:active { transform: translateY(-50%) scale(.95); }
+        
+        .prev-btn { left: -5px; } 
+        .next-btn { left: 272px; }
+
+         /* FOOTER */
+         .site-footer {
+            width: 100%;
+            text-align: center;
+            padding: 28px 20px 26px;
+            margin-top: 10px;
+            border-top: 1.5px dashed rgba(34, 34, 34, 0.18);
+        }
+        .footer-text {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.7;
+            letter-spacing: -0.02em;
+        }
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.25s ease;
+            white-space: nowrap;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -2px;
+            height: 1.5px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .footer-link:hover { color: var(--accent-dark); }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+        .footer-ig {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 6px;
+        }
+        .footer-ig svg {
+            width: 14px; height: 14px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #f1f1f12d; }
+        ::-webkit-scrollbar-thumb { background: #8888882a; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+         @media(max-width: 1024px) {
+            body { padding: 80px 20px 20px 20px; }
+            .page-title { font-size: 28px; }
+            .page-subtitle { font-size: 16px; }
+            .page-description { font-size: 12px; }
+            .carousel-section { height: 280px; margin: 10px 0; }
+            .card { width: 190px; height: 240px; padding: 12px 10px; }
+            .card-art { height: 70px; }
+            .card-title { font-size: var(--title-size, 14px); }
+            .card-desc { font-size: var(--desc-size, 10px); }
+            
+            .carousel-section { justify-content: center; }
+            .carousel-track { justify-content: center; }
+            
+            .card-scale { left: 50%; transform: translate(-50%, -50%) scale(.7); }
+            .card-scale.active { transform: translate(-50%, -50%) scale(1); }
+            .card-scale.thumbnail-left  { transform: translate(calc(-50% - 20px), -50%) scale(.4); opacity: .3; pointer-events: auto; }
+            .card-scale.thumbnail-right { transform: translate(calc(30% + 20px), -50%) scale(.4); opacity: .3; }
+            .card-scale.hidden-card { transform: translate(calc(50% + 60px), -50%) scale(.3); }
+            
+            .carousel-dots { bottom: 0; left: 50%; transform: translateX(-50%); }
+            .nav-btn { width: 30px; height: 30px; font-size: 12px; }
+            .prev-btn { left: 0px; }
+            .next-btn { right: 0px; left: auto; }
+            
+            .section-header { flex-direction: row; /* Mantém na mesma linha no mobile se couber */ }
+            .btn-see-all {
+            display: inline-flex; align-items: center; 
+            position: absolute;
+            top:230px;
+            right:20px;
+            left: 280px;
+            justify-content: center;
+            gap: 5px;
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal;
+            font-size: 12px;
+            padding: 0px 5px;
+            height: 42px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid var(--ink);
+            text-decoration: none;
+            min-height: 32px;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+        }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="view" id="page-home">
+        <h1 class="page-title"> Welcome, Student! <span class="scribble"> </span></h1>
+        
+        <p class="page-description">
+            <strong>Bem-vindo!</strong> Você está usando o Language Lab gratuitamente, cortesia da teacher <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a> | <a href="https://wa.me/5516993272278/" target="_blank" rel="noopener noreferrer" class="footer-link">Torne-se aluno</a> e faça login para desbloquear as ferramentas exclusivas.
+        </p>
+        
+        <!-- ALTERAÇÃO AQUI: Cabeçalho com Subtítulo e Botão Ver Tudo -->
+        <div class="section-header">
+            <p class="page-subtitle">Em destaque:</p>
+            <a href="../todas/index.html" class="btn-see-all">
+                Ver tudo <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <section class="carousel-section">
+            <button class="nav-btn prev-btn" aria-label="Anterior">&#10094;</button>
+            <div class="carousel-track" id="carouselTrack"></div>
+            <button class="nav-btn next-btn" aria-label="Próximo">&#10095;</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </section>
+
+        <footer class="site-footer">
+            <p class="footer-text">
+                Desenvolvido pela professora
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+            </p>
+            <p class="footer-text">
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    Seguir no Instagram
+                </a>
+            </p>
+        </footer>
+
+    </section>
+
+    <!-- O FontAwesome é necessário para o ícone de setinha do botão Ver Tudo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+    (function () {
+        const cardsData = [
+            { art: '../../../assets/card3.png',  title: 'Leitor Interativo', description: 'Aprenda a pronúncia de qualquer texto', link: 'https://dididoingles.github.io/leitor/', color: '#c20000', shadow: 'rgba(120,0,0,.55)', layout: { artHeight: 100, titleSize: '15px', descSize: '11px', titleLines: 2, descLines: 2 } },
+            { art: '../../../assets/stop.png',   title: 'Stop game',        description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês', link: 'https://dididoingles.github.io/stopgame/', color: '#5a5a5a', shadow: 'rgba(40,40,40,.6)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
+            { art: '../../../assets/wheel.png',  title: 'Conversation wheel',description: 'Ideal para estimular as aulas de conversação', link: 'https://dididoingles.github.io/conversationwheel/', color: '#c20000', shadow: 'rgba(120,0,0,.55)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
+            { art: '../../../assets/card2.png',  title: 'My Sketchbook',    description: 'Pratique a gramática com tempos verbais', link: 'https://dididoingles.github.io/mysketchbook/', color: '#5a5a5a', shadow: 'rgba(40,40,40,.6)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
+            { art: '../../../assets/mars.png',   title: 'Role play',        description: 'Simule uma conversa em Inglês em diferentes situações.', link: 'https://dididoingles.github.io/marsroleplay/', color: '#c20000', shadow: 'rgba(120,0,0,.55)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
+            { art: '../../../assets/listen.png', title: 'YouListen',        description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.', link: 'https://dididoingles.github.io/youlisten/', color: '#4a4a4a', shadow: 'rgba(35,35,35,.6)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 3 } },
+            { art: '../../../assets/card5.png',  title: 'Você me conhece?', description: 'Versão em Inglês do famoso "Perguntados" para casais.', link: 'https://dididoingles.github.io/couples_trivia/', color: '#c20000', shadow: 'rgba(120,0,0,.55)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
+            { art: '../../../assets/7.webp',     title: 'Airpaint Beta',    description: 'Desenhe usando gestos das mãos via webcam.', link: 'https://dididoingles.github.io/airpaint/', color: '#5a5a5a', shadow: 'rgba(40,40,40,.6)', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } }
+        ];
+        let currentIndex = 0;
+
+        function applyLayout(el, layout) {
+            if (!layout) return;
+            if (layout.artHeight)  el.style.setProperty('--art-height',  layout.artHeight + 'px');
+            if (layout.titleSize)  el.style.setProperty('--title-size',  layout.titleSize);
+            if (layout.descSize)   el.style.setProperty('--desc-size',   layout.descSize);
+            if (layout.titleLines) el.style.setProperty('--title-lines', layout.titleLines);
+            if (layout.descLines)  el.style.setProperty('--desc-lines',  layout.descLines);
+        }
+
+        function buildCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dotsContainer = document.getElementById('carouselDots');
+            track.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            cardsData.forEach((data, i) => {
+                const scale = document.createElement('div');
+                scale.className = 'card-scale hidden-card';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.backgroundColor = data.color;
+                if (data.shadow) card.style.setProperty('--card-shadow', data.shadow);
+                applyLayout(card, data.layout);
+
+                const art = document.createElement('img');
+                art.src = data.art; art.alt = data.title; art.className = 'card-art';
+
+                const textBlock = document.createElement('div');
+                textBlock.className = 'card-text';
+
+                const title = document.createElement('h3');
+                title.className = 'card-title'; title.textContent = data.title;
+
+                const desc = document.createElement('p');
+                desc.className = 'card-desc'; desc.textContent = data.description;
+
+                textBlock.appendChild(title);
+                textBlock.appendChild(desc);
+                card.appendChild(art);
+                card.appendChild(textBlock);
+                scale.appendChild(card);
+                track.appendChild(scale);
+
+                scale.addEventListener('click', () => {
+                    if (i === currentIndex) window.open(data.link, '_blank');
+                });
+
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.addEventListener('click', () => goToCard(i));
+                dotsContainer.appendChild(dot);
+            });
+
+            initCarouselGestures();
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const allScales = document.querySelectorAll('.card-scale');
+            const total = cardsData.length;
+            const prevIndex = (currentIndex - 1 + total) % total;
+            const nextIndex = (currentIndex + 1) % total;
+
+            allScales.forEach((scale, i) => {
+                scale.classList.remove('active', 'thumbnail-left', 'thumbnail-right', 'hidden-card');
+                if (i === currentIndex) scale.classList.add('active');
+                else if (i === prevIndex) scale.classList.add('thumbnail-left');
+                else if (i === nextIndex) scale.classList.add('thumbnail-right');
+                else scale.classList.add('hidden-card');
+            });
+
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        function goToCard(index) { currentIndex = index; updateCarousel(); }
+        function nextCard() { currentIndex = (currentIndex + 1) % cardsData.length; updateCarousel(); }
+        function prevCard() { currentIndex = (currentIndex - 1 + cardsData.length) % cardsData.length; updateCarousel(); }
+
+        function initCarouselGestures() {
+            const track = document.getElementById('carouselTrack');
+            let startX = 0;
+            let isDragging = false;
+            const threshold = 30;
+
+            track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
+            track.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const diff = e.touches[0].clientX - startX;
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) prevCard(); else nextCard();
+                    isDragging = false;
+                }
+            }, { passive: true });
+            track.addEventListener('touchend', () => { isDragging = false; });
+
+            track.addEventListener('mousedown', (e) => { startX = e.clientX; isDragging = true; track.style.cursor = 'grabbing'; });
+            track.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const diff = e.clientX - startX;
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) prevCard(); else nextCard();
+                    isDragging = false;
+                    track.style.cursor = 'grab';
+                }
+            });
+            track.addEventListener('mouseup', () => { isDragging = false; track.style.cursor = 'grab'; });
+            track.addEventListener('mouseleave', () => { isDragging = false; track.style.cursor = 'grab'; });
+        }
+
+        document.querySelector('.prev-btn').addEventListener('click', prevCard);
+        document.querySelector('.next-btn').addEventListener('click', nextCard);
+
+        buildCarousel();
+    })();
+    </script>
+
+</body>
+</html>
