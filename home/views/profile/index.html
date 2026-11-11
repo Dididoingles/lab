@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil — Language Lab</title>
+    <title>Login</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
@@ -21,7 +21,7 @@
             min-height: 100%;
         }
         body {
-            padding: 100px 40px 30px 40px;
+            padding: 150px 40px 30px 40px;
             display: flex; flex-direction: column; justify-content: center;
             overflow-y: auto;
             -webkit-tap-highlight-color: transparent;
@@ -126,7 +126,7 @@ background: #555;
 
 
         @media (max-width: 1024px) {
-            body { padding-top: 40px; justify-content: flex-start; }
+            body { padding-top: 80px; justify-content: flex-start; }
             .page-title { font-size: 28px; }
             .profile-card { padding: 24px; }
         }
@@ -135,12 +135,11 @@ background: #555;
 <body>
 
     <section class="view" id="page-profile">
-        <span class="page-kicker">Sua conta</span>
-        <h2 class="page-title">Meu Perfil</h2>
+        <span class="page-kicker">Em breve</span>
+        <h2 class="page-title">Login no Language Lab</h2>
         <div class="profile-card">
             <p class="profile-name">Bem-vindo, Aluno!</p>
-            <p class="profile-stats">Você tem 3 ferramentas salvas.</p>
-            <button class="btn-primary" id="logout-btn">Sair</button>
+            <p class="profile-stats">Em breve você vai poder fazer login com o google no Language Lab e acessar ferramentas exclusivas.</p>
         </div>
 
         <footer class="site-footer">
@@ -161,13 +160,6 @@ background: #555;
         </footer>
     </section>
 
-    <script>
-    (function () {
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            alert('Fazendo Logout...');
-        });
-    })();
-    </script>
-
+   
 </body>
 </html>
