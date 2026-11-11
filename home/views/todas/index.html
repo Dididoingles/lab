@@ -20,6 +20,7 @@
      <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
     <title>Todas as ferramentas</title>
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@100;200;300;400;600;700&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -80,7 +81,6 @@
         }
         .speech-balao { width: 30px; height: auto; }
         
-        /* CORREÇÃO: z-index alto para ficar acima da aura do hero */
         .back-link {
             display: inline-flex; align-items: center; justify-content: center;
             gap: 6px;
@@ -101,7 +101,6 @@
             color: #fff;
             box-shadow: #222222;
             transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
-            
         }
         .back-link:hover {
             background: #a30000;
@@ -119,7 +118,7 @@
            ============================================================ */
         .page-hero {
             position: relative;
-            padding: 20px 20px 30px;
+            padding: 20px 20px 10px;
             text-align: center;
             overflow: hidden;
         }
@@ -143,7 +142,7 @@
 
         .page-kicker {
             display: inline-flex; align-items: center; gap: 10px;
-            margin-top: 60px;
+            margin-top: 80px;
             font-family: 'Poppins', sans-serif; font-weight: 600;
             font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
             color: #c20000; margin-bottom: 12px;
@@ -163,6 +162,92 @@
             font-size: 16px; color: #555555;
             max-width: 520px; margin: 0 auto;
             line-height: 1.4;
+        }
+
+        /* ============================================================
+           BUSCA
+           ============================================================ */
+        .search-wrap {
+            max-width: 560px;
+            margin: 18px auto 0;
+            padding: 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            font-size: 13px;
+            color: #999;
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+        .search-box input {
+            width: 100%;
+            height: 46px;
+            padding: 0 42px 0 42px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(34,34,34,0.10);
+            background: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            letter-spacing: -0.02em;
+            color: #222;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-box input::placeholder {
+            color: #aaa;
+            font-weight: 400;
+        }
+        .search-box input:focus {
+            border-color: #c20000;
+            box-shadow: 0 0 0 3px rgba(194,0,0,0.10);
+        }
+        .search-box input:focus + i,
+        .search-box:focus-within i {
+            color: #c20000;
+        }
+        .search-clear {
+            position: absolute;
+            right: 10px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 13px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .search-clear:hover { background: #f2f2f2; color: #222; }
+        .search-clear.visible { display: inline-flex; }
+
+        .search-empty {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal;
+            font-size: 17px;
+            color: #888;
+        }
+        .search-empty.visible { display: block; }
+        .search-empty i {
+            display: block;
+            font-size: 26px;
+            color: #c20000;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
 
         /* ============================================================
@@ -240,7 +325,6 @@
             border-color: rgba(34,34,34,0.02);
         }
         .tool-card:hover::before { opacity: 0.16; }
-        .tool-card:hover::after { transform: scaleX(1); }
 
         .tool-card:active {
             transform: translateY(-2px) scale(0.99);
@@ -278,7 +362,34 @@
         }
 
         /* ============================================================
-           BADGE "EXCLUSIVO"
+           ÍCONE DO LAB (canto superior esquerdo)
+           ============================================================ */
+        .tool-card-lab-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: rgba(34,34,34,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: var(--lab-color, #222);
+            transition: background 0.2s ease, transform 0.3s ease;
+        }
+        .tool-card-lab-icon i {
+            font-size: 12px;
+            line-height: 1;
+        }
+        .tool-card:hover .tool-card-lab-icon {
+            background: rgba(34,34,34,0.07);
+            transform: scale(1.08);
+        }
+
+        /* ============================================================
+           BADGE "EM BREVE"
            ============================================================ */
         .tool-card.exclusive {
             cursor: not-allowed;
@@ -291,18 +402,20 @@
             background: #c20000;
             color: #fff;
             font-family: 'Poppins', sans-serif;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 8px;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.10em;
             padding: 4px 7px;
             border-radius: 6px;
             z-index: 3;
-            box-shadow: 0 2px 6px rgba(194, 0, 0, 0.35);
             pointer-events: none;
-            transform: none;
         }
         .tool-card.exclusive .tool-card-art {
             filter: grayscale(0.35) drop-shadow(0 8px 16px var(--aura-shadow));
+            opacity: 0.7;
+        }
+        .tool-card.exclusive .tool-card-name {
+            color: #777;
         }
 
         /* ============================================================
@@ -351,16 +464,19 @@
             .speech-balao { width: 40px; }
             .back-link { font-size: 13px; padding: 8px 16px; }
 
-            .page-hero { padding: 40px 40px 50px; }
+            .page-hero { padding: 40px 40px 20px; }
             .page-title { font-size: 48px; }
             .page-subtitle { font-size: 20px; }
             .page-kicker {
-            display: inline-flex; align-items: center; gap: 10px;
-            margin-top: 50px;
-            font-family: 'Poppins', sans-serif; font-weight: 600;
-            font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-            color: #c20000; margin-bottom: 12px;
-        }
+                display: inline-flex; align-items: center; gap: 10px;
+                margin-top: 50px;
+                font-family: 'Poppins', sans-serif; font-weight: 600;
+                font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+                color: #c20000; margin-bottom: 12px;
+            }
+
+            .search-wrap { max-width: 640px; margin-top: 24px; }
+            .search-box input { height: 50px; font-size: 15px; }
 
             .tools-section { padding: 20px 60px 60px; }
 
@@ -371,6 +487,13 @@
             }
             .tool-card-art { width: 64%; max-width: 150px; }
             .tool-card-name { font-size: 15px; }
+
+            .tool-card-lab-icon {
+                top: 12px; left: 12px;
+                width: 30px; height: 30px;
+                border-radius: 9px;
+            }
+            .tool-card-lab-icon i { font-size: 14px; }
 
             .tool-card.exclusive::after {
                 font-size: 9px;
@@ -387,7 +510,6 @@
 </head>
 <body>
     
-    <!-- CORREÇÃO: O </div> extra foi removido e o link está limpo -->
     <a href="../start/index.html" class="back-link" style="z-index: 50;">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -398,10 +520,23 @@
 
     <section class="page-hero">
         <span class="page-kicker">Todas as ferramentas</span>
+        <div class="search-wrap">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por nome ou lab (ex.: Listening, Guess...)" autocomplete="off" aria-label="Buscar ferramentas">
+                <button class="search-clear" id="searchClear" aria-label="Limpar busca">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
     </section>
 
     <section class="tools-section">
         <div class="tools-grid" id="toolsGrid"></div>
+        <div class="search-empty" id="searchEmpty">
+            <i class="fa-regular fa-face-frown"></i>
+            Nenhuma ferramenta encontrada.
+        </div>
     </section>
 
     <footer>
@@ -423,6 +558,17 @@
 
     <script>
         /* ============================================================
+           MAPA DE LABS → ícone + cor
+           ============================================================ */
+        const LAB_META = {
+            listening: { icon: 'fa-solid fa-headphones', color: '#c20000', label: 'Listening' },
+            speaking:  { icon: 'fa-solid fa-microphone', color: '#c20000', label: 'Speaking' },
+            reading:   { icon: 'fa-solid fa-book-open',  color: '#2b2b2b', label: 'Reading' },
+            writing:   { icon: 'fa-solid fa-pen-fancy',  color: '#2b2b2b', label: 'Writing' },
+            group:     { icon: 'fa-solid fa-users',      color: '#c20000', label: 'Group' }
+        };
+
+        /* ============================================================
            DADOS DAS FERRAMENTAS
            ============================================================ */
         const toolsData = [
@@ -430,56 +576,94 @@
                 art: '../../../assets/mars.png', title: 'Praticar fala',
                 description: 'Simule uma conversa em Inglês em diferentes situações.',
                 link: 'https://dididoingles.github.io/marsroleplay/',
-                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking'
             },
             {
                 art: '../../../assets/card2.png', title: 'Treinar gramática',
                 description: 'Treine suas habilidades em todos os tempos verbais',
                 link: 'https://dididoingles.github.io/mysketchbook/',
-                color: '#2b2b2b', auraShadow: 'rgba(15, 15, 15, 0.35)'
+                color: '#2b2b2b', auraShadow: 'rgba(15, 15, 15, 0.35)',
+                lab: 'Reading'
             },
             {
                 art: '../../../assets/card3.png', title: 'Leitor Interativo',
                 description: 'Aprenda a pronúncia de qualquer texto.',
                 link: 'https://dididoingles.github.io/leitor/',
-                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening'
             },
             {
                 art: '../../../assets/listen.png', title: 'YouListen',
                 description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.',
                 link: 'https://dididoingles.github.io/youlisten/',
-                color: '#4a4a4a', auraShadow: 'rgba(35, 35, 35, 0.35)'
+                color: '#4a4a4a', auraShadow: 'rgba(35, 35, 35, 0.35)',
+                lab: 'Listening'
             },
             {
                 art: '../../../assets/wheel.png', title: 'Conversation wheel',
                 description: 'Uma roleta de temas de conversação em inglês com 3 níveis.',
                 link: 'https://dididoingles.github.io/conversationwheel/',
-                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking'
             },
             {
                 art: '../../../assets/stop.png', title: 'Stop!',
                 description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês.',
                 link: 'https://dididoingles.github.io/stopgame/',
-                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)'
+                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Group'
             },
             {
                 art: '../../../assets/card5.png', title: 'Você me conhece?',
                 description: 'Versão em Inglês do famoso "Perguntados" para casais.',
                 link: 'https://dididoingles.github.io/couples_trivia/',
                 color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Group'
             },
             {
                 art: '../../../assets/7.webp', title: 'Airpaint Beta',
                 description: 'Desenhe usando gestos das mãos via webcam.',
                 link: 'https://dididoingles.github.io/airpaint/',
                 color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Writing'
             },
-
             {
-                art: '../../../assets/card2.png', title: 'Ajudante de escrita',
-                description: 'Desenhe usando gestos das mãos via webcam.',
+                art: '../../../assets/helper.webp', title: 'Ajudante de escrita',
+                description: 'Escreva misturando os idiomas',
                 link: '#',
                 color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Writing',
+                exclusive: true
+            },
+            {
+                title: 'Guess',
+                link: '#',
+                art: '../../../assets/guess.webp',
+                desc: 'Ditado interativo: ouça o trecho e escreva exatamente o que você ouviu.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening',
+                exclusive: true
+            },
+            {
+                title: 'Que som é esse?',
+                link: '#',
+                art: '../../../assets/som.webp',
+                desc: 'Ouça um trecho de música e adivinhe o que o cantor disse. Desafio de listening!',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening',
+                exclusive: true
+            },
+            {
+                title: 'Assistente de conversa',
+                link: '#',
+                art: '../../../assets/helper2.webp',
+                desc: 'Fale livremente, adicionando as palavras desconhecidas em português que o ajudante completa para você.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking',
                 exclusive: true
             }
         ];
@@ -488,6 +672,11 @@
            BUILD GRID
            ============================================================ */
         const toolsGrid = document.getElementById('toolsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        const searchEmpty = document.getElementById('searchEmpty');
+
+        const cardElements = [];
 
         toolsData.forEach((tool, i) => {
             const card = document.createElement('a');
@@ -499,10 +688,14 @@
             card.setAttribute('aria-label',
                 (tool.exclusive ? 'Exclusivo para alunos: ' : 'Abrir ') + tool.title);
 
+            // Guarda dados para a busca
+            card.dataset.title = (tool.title || '').toLowerCase();
+            card.dataset.lab = (tool.lab || '').toLowerCase();
+
             if (tool.exclusive) {
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
-                    alert(' Exclusivo para alunos da teacher @dicarvalho.prof.\n\nDisponível em breve!');
+                    alert('Exclusivo para alunos da teacher @dicarvalho.prof.\n\nDisponível em breve!');
                 });
             } else {
                 card.target = '_blank';
@@ -522,11 +715,65 @@
             card.appendChild(art);
             card.appendChild(name);
 
+            // Ícone do lab (canto superior esquerdo)
+            if (tool.lab) {
+                const labKey = tool.lab.toLowerCase();
+                const meta = LAB_META[labKey] || { icon: 'fa-solid fa-flask', color: '#222', label: tool.lab };
+                const labIcon = document.createElement('span');
+                labIcon.className = 'tool-card-lab-icon';
+                labIcon.style.setProperty('--lab-color', meta.color);
+                labIcon.title = meta.label;
+                labIcon.innerHTML = `<i class="${meta.icon}"></i>`;
+                card.appendChild(labIcon);
+            }
+
             toolsGrid.appendChild(card);
+            cardElements.push(card);
         });
 
         /* ============================================================
-           LOADER
+           BUSCA
+           ============================================================ */
+        function applyFilter(query) {
+            const q = query.trim().toLowerCase();
+            let visibleCount = 0;
+
+            cardElements.forEach(card => {
+                const matchesTitle = card.dataset.title.includes(q);
+                const matchesLab = card.dataset.lab.includes(q);
+                const show = q === '' || matchesTitle || matchesLab;
+
+                if (show) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            searchEmpty.classList.toggle('visible', visibleCount === 0);
+            searchClear.classList.toggle('visible', q !== '');
+        }
+
+        searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            applyFilter('');
+            searchInput.focus();
+        });
+
+        // ESC limpa a busca
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                applyFilter('');
+                searchInput.blur();
+            }
+        });
+
+        /* ============================================================
+           LOADER (mantido para compatibilidade)
            ============================================================ */
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -534,7 +781,6 @@
                 if (loader) loader.classList.add('hidden');
             }, 400);
         });
-        /* Segurança */
         setTimeout(() => {
             const loader = document.getElementById('loaderScreen');
             if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden');
@@ -543,12 +789,15 @@
         /* ============================================================
            BOTÃO VOLTAR (postMessage pro shell)
            ============================================================ */
-           document.getElementById('btn-voltar').addEventListener('click', function(e) {
-    e.preventDefault(); // <-- IMPEDE O IFRAME DE NAVEGAR SOZINHO
-    if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ action: 'navigate', route: 'start' }, '*');
-    }
-});
+        const btnVoltar = document.getElementById('btn-voltar');
+        if (btnVoltar) {
+            btnVoltar.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ action: 'navigate', route: 'start' }, '*');
+                }
+            });
+        }
     </script>
 </body>
 </html>
