@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
+        <meta property="og:title" content="Language Lab">
+        <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+        <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+        <meta property="og:url" content="https://dididoingles.github.io/lab/">
+        <meta property="og:type" content="website">
+        
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Language Lab">
+        <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+        <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+        <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <title>Language Lab</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gochi+Hand&family=Poppins:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #B30000;
+            --accent-dark: #990000;
+            --ink: #222222;
+            --shadow-hard-sm: 2px 3px 0 rgba(34, 34, 34, 0.85);
+            
+            --font-title: 'Poppins', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            font-family: var(--font-mono);
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+
+        /* Container Principal (Desktop) */
+        .page-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            min-height: 600px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 50px 40px 50px;
+        }
+
+        /* --- GRUPO DA ESQUERDA (Dee + Título) --- */
+        .left-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+            height: 100%;
+            justify-content: flex-end;
+            z-index: 3;
+        }
+
+        /* Estado inicial da imagem: Escondida e posicionada para o slide */
+        .dee-img {
+            position: absolute;
+            opacity: 0;
+            left: -30px;
+            bottom: 80px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            max-height: 95vh;
+            object-fit: contain;
+            object-position: bottom left;
+            z-index: 1;
+            transform: translateX(-100px);
+            /* Otimização para evitar o "salto" no navegador */
+            will-change: transform, opacity; 
+        }
+
+        /* Animação de slide + fade original aprovada */
+        .body-loaded .dee-img {
+            animation: slideIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 0.6; transform: translateX(0); }
+        }
+
+        .text-block {
+            position: relative;
+            z-index: 5;
+            background: transparent;
+            padding-bottom: 10px;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 1), 0px 0px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .title-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .title-row h1 {
+            font-family: var(--font-title);
+            font-size: 55px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.07em;
+            line-height: 1;
+        }
+
+        .pencil-img {
+            width: 65px;
+            height: auto;
+            transform: rotate(20deg);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        /* --- CONTEÚDO DA DIREITA (Texto, Botões) --- */
+        .right-content {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-left: 40px;
+            padding-bottom: 10px;
+            z-index: 4;
+        }
+
+        /* --- TOGGLE DE IDIOMAS --- */
+        .lang-toggle {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            color: var(--accent);
+        }
+
+        .lang-btn.active {
+            background-color: #ffffff;
+            color: var(--accent);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .welcome-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #333;
+            max-width: 750px;
+            min-height: 100px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-text .red {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Cursor fino */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 15px;
+            background-color: #333;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- BOTÕES --- */
+        .btn-group {
+            display: flex;
+            margin-top: -30px;
+            margin-bottom: 5px;
+            gap: 15px;
+            opacity: 0;
+        }
+
+        .body-loaded .btn-group {
+            animation: fadeIn 0.5s ease-out 1.5s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: var(--accent);
+            color: #ffffff;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 0.02em;
+            padding: 0 22px;
+            height: 46px;
+            border: 2px solid var(--ink);
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(1px) translateX(1px);
+            box-shadow: 1px 2px 0 rgba(34, 34, 34, 0.85);
+        }
+
+        .action-btn:active {
+            transform: translateY(3px) translateX(2px);
+            box-shadow: 0 0 0 rgba(34, 34, 34, 0.85);
+        }
+
+        .action-btn svg {
+            width: 15px; height: 15px;
+            stroke: #ffffff; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: transparent;
+            color: var(--accent);
+            font-family: 'Gochi Hand', cursive;
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 0.02em;
+            padding: 0 22px;
+            height: 46px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(179, 0, 0, 0.05);
+            transform: translateY(1px) translateX(1px);
+            box-shadow: 1px 2px 0 rgba(179, 0, 0, 0.4);
+        }
+        
+        .btn-outline svg { width: 16px; height: 16px; }
+
+        .google-logo-svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* --- ROBÔ --- */
+        .robot-box {
+            position: absolute;
+            right: 50px;
+            top: 40px;
+            width: 150px;
+            height:150px;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .body-loaded .robot-box {
+            animation: fadeIn 0.1s ease-out 0.2s forwards;
+        }
+
+        .robot-box img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+        }
+
+        .robot-box .sketch { z-index: 1; opacity: 1; }
+        .robot-box .mars { z-index: 2; opacity: 0; transition: opacity 0.8s ease; }
+
+        /* --- RODAPÉ --- */
+        .footer {
+            position: absolute;
+            right: 120px;
+            bottom: 30px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .footer p {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #444;
+            text-align: right;
+        }
+
+        .block-img {
+            width: 40px;
+            height: auto;
+        }
+
+        /* =========================================
+           RESPONSIVIDADE (MOBILE)
+           ========================================= */
+        @media (max-width: 1024px) {
+            html, body {
+                overflow: auto;
+            }
+
+            .page-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+                padding: 20px;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+
+            /* NO MOBILE: Começa invisível e sem slide lateral */
+            .dee-img {
+                position: relative;
+                left: auto;
+                bottom: auto;
+                width: 100%;
+                max-width: 300px;
+                margin: 40px 0 0 0;
+                opacity: 0;
+                transform: none !important; /* Remove o slide */
+            }
+
+            /* NO MOBILE: Animação apenas de fade-in suave */
+            .body-loaded .dee-img {
+                animation: fadeInMobile 0.8s ease-out forwards;
+            }
+
+            @keyframes fadeInMobile {
+                to { opacity: 0.5; }
+            }
+
+            .left-group {
+                width: 100%;
+                height: auto;
+                padding-bottom: 0;
+                margin-top: -40px;
+            }
+
+            .text-block {
+                text-align: left;
+                background: transparent;
+                padding-top: 0;
+                padding-bottom: 20px;
+                text-shadow: none;
+            }
+
+            .title-row {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .title-row h1 { font-size: 38px; }
+            .pencil-img { width: 40px; margin-bottom: 4px; }
+            .subtitle { margin-bottom: 25px; color: #555; font-weight: 400; }
+
+            .right-content {
+                width: 100%;
+                padding-left: 0;
+                padding-bottom: 20px;
+                justify-content: flex-start;
+            }
+
+            .welcome-text {
+                text-align: left;
+                font-size: 13px;
+                margin-bottom: 20px;
+                min-height: auto;
+            }
+
+            .btn-group {
+                flex-direction: row;
+                width: 100%;
+                gap: 10px;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                opacity: 1 !important;
+                animation: none !important;
+            }
+
+            .action-btn, .btn-outline {
+                font-size: 14px;
+                padding: 0 12px;
+                height: 40px;
+                flex: 1;
+                min-width: 130px;
+            }
+
+            .robot-box {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                width: 70px;
+                height: 70px;
+                opacity: 1 !important;
+                animation: none !important;
+            }
+
+            .footer {
+                position: relative;
+                right: auto; 
+                bottom: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                width: 100%;
+                margin-top: 30px;
+                gap: 10px;
+            }
+
+            .footer p { text-align: left; font-size: 11px; }
+            
+            .lang-toggle {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <!-- Lado Esquerdo: Dee + Título -->
+        <div class="left-group">
+            <img src="assets/dee.webp" alt="Dee" class="dee-img">
+            
+            <div class="text-block">
+                <div class="title-row">
+                    <h1 id="title-text">Language Lab</h1>
+                    <img src="assets/pencil.webp" alt="Lápis" class="pencil-img">
+                </div>
+                <p class="subtitle" id="subtitle-text">Um laboratório, dezenas de maneiras de aprender.</p>
+            </div>
+        </div>
+
+        <!-- Lado Direito: Conteúdo -->
+        <div class="right-content">
+            
+            <!-- TOGGLE DE IDIOMAS -->
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en">EN-GB</button>
+                <button class="lang-btn active" data-lang="pt">PT-BR</button>
+            </div>
+
+            <div class="welcome-text" id="typewriter-container"></div>
+
+            <div class="btn-group">
+                <a href="home/" class="action-btn" id="btn-primary-text">
+                    Try it for free 
+                    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <a href="#" class="btn-outline" id="btn-outline-text">
+                    Login with google 
+                    <!-- Logo oficial do Google em SVG Colorido -->
+                    <svg class="google-logo-svg" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.7 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Robô -->
+        <div class="robot-box">
+            <img src="assets/sketch.webp" alt="Sketch" class="sketch">
+            <img src="assets/mars.webp" alt="Mars" class="mars">
+        </div>
+
+        <!-- Rodapé -->
+        <div class="footer">
+            <p id="footer-text">Somos uma iniciativa inclusiva: neurodivergentes, sejam bem vindos!</p>
+            <img src="assets/block.webp" alt="Blocos" class="block-img">
+        </div>
+
+    </div>
+
+    <script>
+        // --- LÓGICA PARA EVITAR O "SALTO" E O "FATIADO" ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const deeImg = document.querySelector('.dee-img');
+            
+            const liberarAnimacoes = () => {
+                // O delay dá tempo do navegador "assentar" a imagem escondida antes de animar
+                setTimeout(() => {
+                    document.body.classList.add('body-loaded');
+                }, 50);
+                
+                // Animação do Robô (Mars)
+                setTimeout(() => {
+                    const marsImg = document.querySelector('.mars');
+                    if (marsImg) marsImg.style.opacity = "1";
+                }, 800);
+            };
+
+            // Se a imagem já estiver carregada no cache
+            if (deeImg && deeImg.complete) {
+                liberarAnimacoes();
+            } else if (deeImg) {
+                // Se não, espera a imagem baixar
+                deeImg.onload = liberarAnimacoes;
+                // Rede de segurança
+                setTimeout(liberarAnimacoes, 1000); 
+            } else {
+                liberarAnimacoes();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 2. Configuração de Idiomas
+            const translations = {
+                pt: {
+                    title: "Language Lab",
+                    subtitle: "Um laboratório, dezenas de maneiras de aprender.",
+                    welcome: 'Bem vindo ao meu <span class="red">Language lab!</span><br>Eu sou a Diandra, mas pode me chamar de “Di”. Você pode fazer login ou testar nossas ferramentas gratuitas agora mesmo.',
+                    btnPrimary: 'Começar de graça',
+                    btnOutline: 'Login com google',
+                    footer: 'Somos uma iniciativa inclusiva: neurodivergentes, sejam bem vindos!'
+                },
+                en: {
+                    title: "Language Lab",
+                    subtitle: "A lab, dozens of ways to learn.",
+                    welcome: 'Welcome to my <span class="red">Language lab!</span><br>I am Diandra, but you can call me “Dee”.<br>You can either log-in or test our free tools right now.',
+                    btnPrimary: 'Start free',
+                    btnOutline: 'Login with google',
+                    footer: 'We are an inclusive initiative: neurodivergent people, be welcome!'
+                }
+            };
+
+            let currentLang = 'pt';
+            const container = document.getElementById("typewriter-container");
+            let typingTimeout;
+
+            // Função Typewriter
+            function startTypewriter(htmlContent) {
+                clearTimeout(typingTimeout);
+                container.innerHTML = '';
+                
+                const template = document.createElement('div');
+                template.innerHTML = htmlContent;
+                const nodes = Array.from(template.childNodes);
+                
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                container.appendChild(cursor);
+
+                let nodeIndex = 0;
+                let charIndex = 0;
+
+                function typeWriter() {
+                    if (nodeIndex >= nodes.length) return;
+
+                    const currentNode = nodes[nodeIndex];
+
+                    if (currentNode.nodeType === Node.TEXT_NODE) {
+                        if (charIndex < currentNode.textContent.length) {
+                            const charNode = document.createTextNode(currentNode.textContent.charAt(charIndex));
+                            container.insertBefore(charNode, cursor);
+                            
+                            charIndex++;
+                            typingTimeout = setTimeout(typeWriter, 25);
+                        } else {
+                            nodeIndex++;
+                            charIndex = 0;
+                            typeWriter();
+                        }
+                    } else {
+                        const clonedNode = currentNode.cloneNode(false);
+                        if (clonedNode.nodeName === 'SPAN') {
+                            clonedNode.textContent = '';
+                        }
+                        
+                        container.insertBefore(clonedNode, cursor);
+                        
+                        if (clonedNode.nodeName === 'BR' || !currentNode.hasChildNodes()) {
+                            nodeIndex++;
+                            charIndex = 0;
+                        } else {
+                            nodes[nodeIndex] = document.createTextNode(currentNode.textContent);
+                            charIndex = 0;
+                        }
+                        typeWriter(); 
+                    }
+                }
+
+                typingTimeout = setTimeout(typeWriter, 100);
+            }
+
+            // Função para aplicar o idioma
+            function setLanguage(lang) {
+                currentLang = lang;
+                const t = translations[lang];
+
+                document.getElementById('title-text').textContent = t.title;
+                document.getElementById('subtitle-text').textContent = t.subtitle;
+                document.getElementById('footer-text').textContent = t.footer;
+                
+                document.getElementById('btn-primary-text').childNodes[0].nodeValue = t.btnPrimary + ' ';
+                document.getElementById('btn-outline-text').childNodes[0].nodeValue = t.btnOutline + ' ';
+
+                startTypewriter(t.welcome);
+
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setLanguage(btn.dataset.lang);
+                });
+            });
+
+            setLanguage('pt');
+        });
+    </script>
+
+</body>
+</html>
