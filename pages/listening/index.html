@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório de Listening — Language Lab</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #222222; --paper: #ffffff;
+            --accent: #c20000; --accent-dark: #a00000;
+            --muted: #666666;
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-hand: 'Gochi Hand', cursive;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            background: transparent; font-family: var(--font-title); color: var(--ink);
+            min-height: 100%;
+        }
+        body {
+            padding: 100px 100px 30px 0px;
+            display: flex; flex-direction: column; justify-content: left;
+            margin-left: 10px;
+            overflow-y: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; margin: 0 auto; }
+
+        .page-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-weight: 600; font-size: 10px; letter-spacing: .28em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+        }
+        .page-kicker::before, .page-kicker::after {
+            content: ''; width: 22px; height: 1.5px; background: currentColor;
+        }
+        .page-title { font-size: 38px; font-weight: 700; margin-bottom: 12px; letter-spacing: -.05em; line-height: 1.1; }
+        .page-subtitle { font-family: var(--font-hand); font-size: 17px; color: var(--muted); margin-bottom: 24px; max-width: 500px; line-height: 1.4; }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 3fr);
+            gap: 12px;
+        }
+
+        .tool-card {
+            position: relative;
+            z-index: 1;
+            aspect-ratio: 1 / 1;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 500;
+            font-size: 15px;
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid rgba(34,34,34,0.06);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 16px 12px 12px;
+            gap: 8px;
+            overflow: visible;
+            text-decoration: none;
+            color: inherit;
+            transition:
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s ease,
+                border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px) scale(0.96);
+            animation: cardEnter 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        @keyframes cardEnter {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 40%, var(--aura, #c20000) 0%, transparent 70%);
+            opacity: 0.06;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .tool-card:hover::before { opacity: 0.16; }
+
+        .tool-card:hover {
+            z-index: 100;
+            transform: translateY(-6px) scale(1.04);
+            box-shadow:
+                0 24px 48px rgba(0,0,0,0.15),
+                0 10px 20px var(--aura-shadow, rgba(120,0,0,0.20));
+            border-color: rgba(34,34,34,0.02);
+        }
+        .tool-card:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .tool-card-art {
+            width: 68%;
+            max-width: 120px;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+            filter: drop-shadow(0 8px 16px var(--aura-shadow, rgba(0,0,0,0.2)));
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .tool-card:hover .tool-card-art {
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        .tool-card-name {
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+        }
+
+        /* --- SELO "EM BREVE" (tag vermelha discreta) --- */
+        .tool-card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: #ffffff;
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 9px;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Card "em breve": visual levemente esmaecido, cursor padrão */
+        .tool-card.is-soon {
+            cursor: default;
+        }
+        .tool-card.is-soon .tool-card-art {
+            opacity: 0.55;
+        }
+        .tool-card.is-soon .tool-card-name {
+            color: var(--muted);
+        }
+        .tool-card.is-soon::before {
+            opacity: 0.02;
+        }
+        .tool-card.is-soon:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow:
+                0 12px 24px rgba(0,0,0,0.08),
+                0 4px 8px rgba(120,0,0,0.08);
+        }
+        .tool-card.is-soon:hover .tool-card-art {
+            transform: none;
+        }
+
+        /* --- BALÃO DE EXPLICAÇÃO ABAIXO DO CARD --- */
+        .tool-card-desc {
+            position: absolute;
+            top: calc(100% + 14px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+            width: 220px;
+            background: #ffffff;
+            border: 1.5px solid rgba(34,34,34,0.10);
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-family: var(--font-title);
+            font-weight: 400;
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: var(--muted);
+            letter-spacing: -0.01em;
+            box-shadow:
+                0 16px 32px rgba(0,0,0,0.12),
+                0 4px 8px var(--aura-shadow, rgba(120,0,0,0.10));
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                opacity 0.25s ease,
+                transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 101;
+        }
+        /* Setinha do balão apontando para cima */
+        .tool-card-desc::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border: 7px solid transparent;
+            border-bottom-color: #ffffff;
+            filter: drop-shadow(0 -1px 0 rgba(34,34,34,0.10));
+        }
+        .tool-card:hover .tool-card-desc {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* FOOTER */
+        .site-footer {
+            width: 100%;
+            text-align: center;
+            padding: 28px 20px 26px;
+            margin-top: 100px;
+            border-top: 1.5px dashed rgba(34, 34, 34, 0.18);
+        }
+        .footer-text {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.7;
+            letter-spacing: -0.02em;
+        }
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.25s ease;
+            white-space: nowrap;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -2px;
+            height: 1.5px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .footer-link:hover { color: var(--accent-dark); }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+        .footer-ig {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 6px;
+        }
+        .footer-ig svg {
+            width: 14px; height: 14px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none;
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #f1f1f12d; }
+        ::-webkit-scrollbar-thumb { background: #8888882a; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        @media(max-width: 1024px) {
+            .tools-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 3fr);
+                gap: 12px;
+            }
+            body {
+                padding: 100px 50px 30px 20px;
+                display: flex; flex-direction: column; justify-content: left;
+                overflow-y: auto;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .page-title { font-size: 28px; font-weight: 700; text-wrap: nowrap; text-align: left; letter-spacing: -.07em; line-height: 1.1; }
+            .page-subtitle { font-family: var(--font-hand); font-size: 17px; color: var(--muted); margin-bottom: 24px; max-width: 500px; line-height: 1.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="view" id="page-tools">
+        <span class="page-kicker">Listening Lab</span>
+        <h2 class="page-title">Laboratório de Listening</h2>
+        <p class="page-subtitle">Escolha uma ferramenta para treinar seu ouvido hoje</p>
+        <main class="tools-section">
+            <div class="tools-grid" id="toolsGrid" aria-live="polite"></div>
+        </main>
+
+        <footer class="site-footer">
+            <p class="footer-text">
+                Desenvolvido pela professora
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+            </p>
+            <p class="footer-text">
+                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    Seguir no Instagram
+                </a>
+            </p>
+        </footer>
+    </section>
+
+    <script>
+        const toolsData = [
+            {
+                title: 'Leitor Interativo',
+                link: 'https://dididoingles.github.io/leitor/',
+                art: '../../../assets/card3.png',
+                desc: 'Aprenda a pronúncia de qualquer texto.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)'
+            },
+            {
+                title: 'Youlisten',
+                link: 'https://dididoingles.github.io/youlisten/',
+                art: '../../../assets/listen.png',
+                desc: 'Pratique com vídeos e áudios reais do YouTube, com controles de velocidade e legendas.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)'
+            },
+            {
+                title: 'Guess',
+                link: '#',
+                art: '../../../assets/guess.webp',
+                desc: 'Ditado interativo: ouça o trecho e escreva exatamente o que você ouviu.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                soon: true
+            },
+            {
+                title: 'Que som é esse?',
+                link: '#',
+                art: '../../../assets/som.webp',
+                desc: 'Ouça um trecho de música e adivinhe o que o cantor disse. Desafio de listening!',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                soon: true
+            }
+        ];
+
+        const toolsGrid = document.getElementById('toolsGrid');
+
+        toolsData.forEach((tool, i) => {
+            const card = document.createElement('a');
+            card.className = 'tool-card';
+            card.href = tool.link;
+            if (tool.external) {
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+            }
+            card.style.setProperty('--aura', tool.color || '#c20000');
+            card.style.setProperty('--aura-shadow', tool.auraShadow || 'rgba(120,0,0,0.35)');
+            card.style.animationDelay = (i * 0.06) + 's';
+
+            // Marca como "em breve" e impede navegação
+            if (tool.soon) {
+                card.classList.add('is-soon');
+                card.removeAttribute('href');
+                card.setAttribute('role', 'link');
+                card.setAttribute('aria-disabled', 'true');
+                card.addEventListener('click', (e) => e.preventDefault());
+            }
+
+            card.setAttribute('aria-label', 'Abrir ' + tool.title + '. ' + (tool.desc || ''));
+
+            const art = document.createElement('img');
+            art.src = tool.art;
+            art.alt = tool.title;
+            art.className = 'tool-card-art';
+            art.loading = 'lazy';
+
+            const name = document.createElement('div');
+            name.className = 'tool-card-name';
+            name.textContent = tool.title;
+
+            // Balão de explicação
+            const desc = document.createElement('div');
+            desc.className = 'tool-card-desc';
+            desc.textContent = tool.desc || '';
+
+            card.appendChild(art);
+            card.appendChild(name);
+            card.appendChild(desc);
+
+            // Selo "Em breve"
+            if (tool.soon) {
+                const badge = document.createElement('span');
+                badge.className = 'tool-card-badge';
+                badge.textContent = 'Em breve';
+                card.appendChild(badge);
+            }
+
+            toolsGrid.appendChild(card);
+        });
+    </script>
+
+</body>
+</html>
