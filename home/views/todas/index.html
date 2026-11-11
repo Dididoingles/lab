@@ -3,70 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
-    <meta property="og:title" content="Language Lab">
-    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
-    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-    <meta property="og:url" content="https://dididoingles.github.io/lab/">
-    <meta property="og:type" content="website">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Language Lab">
-    <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
-    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
-    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
-    <title>Laboratórios — Language Lab</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
+     <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
+     <meta property="og:title" content="Language Lab">
+     <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+     <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+     <meta property="og:url" content="https://dididoingles.github.io/lab/">
+     <meta property="og:type" content="website">
+     
+     <meta name="twitter:card" content="summary_large_image">
+     <meta name="twitter:title" content="Language Lab">
+     <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+     <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+ 
+     <!-- Favicon -->
+     <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+     <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <title>Todas as ferramentas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@100;200;300;400;600;700&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root {
-            --ink: #222222; --paper: #ffffff;
-            --accent: #c20000; --muted: #666666;
-            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
-            --font-title: 'Poppins', sans-serif;
-            --font-hand: 'Gochi Hand', cursive;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body {
-            background: transparent; font-family: var(--font-title); color: var(--ink);
-            min-height: 100%;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scrollbar-width: thin; scrollbar-color: rgba(34,34,34,0.22) transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(34,34,34,0.22); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(34,34,34,0.45); }
+
+        html, body { width: 100%; overflow-x: hidden; }
         body {
-            padding: 100px 100px 30px 0px;
-            display: flex; flex-direction: column; justify-content: left;
-            margin-left: 10px;
-            overflow-y: auto;
-            -webkit-tap-highlight-color: transparent;
+            background-color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em;
+            min-height: 100vh;
+            color: #222222;
+            display: flex;
+            flex-direction: column;
         }
-        .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; margin: 0 auto; }
+
+        /* ============================================================
+           LOADER
+           ============================================================ */
+        .loader-screen {
+            position: fixed; inset: 0; background-color: #ffffff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 24px; z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-text {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal; font-size: 20px;
+            color: #222222; opacity: 0; animation: loaderTextFade 0.8s ease-out 0.2s forwards;
+            text-align: center; padding: 0 24px;
+        }
+        @keyframes loaderTextFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 0.75; transform: translateY(0); }
+        }
+        .loader-spinner {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 3px solid rgba(194,0,0,0.15); border-top-color: #c20000;
+            animation: spinnerRotate 0.9s linear infinite;
+        }
+        @keyframes spinnerRotate { to { transform: rotate(360deg); } }
+
+        /* ============================================================
+           TOPBAR
+           ============================================================ */
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; position: relative; z-index: 20;
+        }
+        .logo-title-row { display: flex; align-items: center; gap: 8px; }
+        .logo-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            letter-spacing: -0.05em; font-size: 22px; color: #c20000; line-height: 1;
+        }
+        .speech-balao { width: 30px; height: auto; }
+        
+        .back-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 6px;
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal;
+            position:absolute;
+            top: 20px;
+            left: 10px;
+            font-size: 15px;
+            padding: 0 18px;
+            height: 42px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid #222222;
+            text-decoration: none;
+            min-height: 42px;
+            background: #c20000;
+            color: #fff;
+            box-shadow: #222222;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+        }
+        .back-link:hover {
+            background: #a30000;
+            transform: translate(1px, 1px);
+            box-shadow: 1px 2px 0 rgba(34, 34, 34, 0.85);
+        }
+        .back-link svg {
+            width: 13px; height: 13px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* ============================================================
+           HERO CURTO
+           ============================================================ */
+        .page-hero {
+            position: relative;
+            padding: 20px 20px 10px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -60%; left: 50%;
+            width: 80vmax; height: 80vmax;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(194,0,0,0.08) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: auraBreath 10s ease-in-out infinite;
+        }
+        @keyframes auraBreath {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50%      { transform: translateX(-50%) scale(1.12); }
+        }
+        .page-hero > * { position: relative; z-index: 1; }
 
         .page-kicker {
             display: inline-flex; align-items: center; gap: 10px;
-            font-weight: 600; font-size: 10px; letter-spacing: .28em;
-            text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+            margin-top: 50px;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #c20000; margin-bottom: 12px;
         }
         .page-kicker::before, .page-kicker::after {
-            content: ''; width: 22px; height: 1.5px; background: currentColor;
+            content: ''; width: 20px; height: 1px; background: currentColor;
         }
-        .page-title { font-size: 38px; font-weight: 700; margin-bottom: 12px; letter-spacing: -.05em; line-height: 1.1; }
-        .page-subtitle { font-family: var(--font-hand); font-size: 17px; color: var(--muted); margin-bottom: 24px; max-width: 500px; line-height: 1.4; }
+        .page-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 28px; color: #222222;
+            letter-spacing: -0.05em; line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .page-title .accent { color: #c20000; }
+        .page-subtitle {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal;
+            font-size: 16px; color: #555555;
+            max-width: 520px; margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        /* ============================================================
+           BUSCA
+           ============================================================ */
+        .search-wrap {
+            max-width: 560px;
+            margin: 18px auto 0;
+            padding: 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            font-size: 13px;
+            color: #999;
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+        .search-box input {
+            width: 100%;
+            height: 46px;
+            padding: 0 42px 0 42px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(34,34,34,0.10);
+            background: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            letter-spacing: -0.02em;
+            color: #222;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-box input::placeholder {
+            color: #aaa;
+            font-weight: 400;
+        }
+        .search-box input:focus {
+            border-color: #c20000;
+            box-shadow: 0 0 0 3px rgba(194,0,0,0.10);
+        }
+        .search-box input:focus + i,
+        .search-box:focus-within i {
+            color: #c20000;
+        }
+        .search-clear {
+            position: absolute;
+            right: 10px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 13px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .search-clear:hover { background: #f2f2f2; color: #222; }
+        .search-clear.visible { display: inline-flex; }
+
+        .search-empty {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal;
+            font-size: 17px;
+            color: #888;
+        }
+        .search-empty.visible { display: block; }
+        .search-empty i {
+            display: block;
+            font-size: 26px;
+            color: #c20000;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* ============================================================
+           GRID DE FERRAMENTAS
+           ============================================================ */
+        .tools-section {
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 16px 40px;
+        }
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(4, 3fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
+        @media (min-width: 640px) {
+            .tools-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        }
+        @media (min-width: 900px) {
+            .tools-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        }
+
+        /* CARD QUADRADINHO */
         .tool-card {
             position: relative;
             aspect-ratio: 1 / 1;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: 500;
-            font-size: 15px;
             border-radius: 18px;
             background: #ffffff;
             border: 1px solid rgba(34,34,34,0.06);
@@ -94,6 +305,7 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        /* Aura interna na cor do card */
         .tool-card::before {
             content: '';
             position: absolute;
@@ -132,168 +344,357 @@
             transform: scale(1.08) rotate(-2deg);
         }
 
-
-         /* FOOTER */
-         .site-footer {
-            width: 100%;
+        .tool-card-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: #222222;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
             text-align: center;
-            padding: 28px 20px 26px;
-            margin-top: 100px;
-            border-top: 1.5px dashed rgba(34, 34, 34, 0.18);
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: auto;
+            padding-bottom: 2px;
+        }
+
+        /* ============================================================
+           ÍCONE DO LAB (canto superior esquerdo)
+           ============================================================ */
+        .tool-card-lab-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: rgba(34,34,34,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: var(--lab-color, #222);
+            transition: background 0.2s ease, transform 0.3s ease;
+        }
+        .tool-card-lab-icon i {
+            font-size: 12px;
+            line-height: 1;
+        }
+        .tool-card:hover .tool-card-lab-icon {
+            background: rgba(34,34,34,0.07);
+            transform: scale(1.08);
+        }
+
+        /* ============================================================
+           BADGE "EM BREVE"
+           ============================================================ */
+        .tool-card.exclusive {
+            cursor: not-allowed;
+        }
+        .tool-card.exclusive::after {
+            content: 'Em breve';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #c20000;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 8px;
+            letter-spacing: 0.10em;
+            padding: 4px 7px;
+            border-radius: 6px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .tool-card.exclusive .tool-card-art {
+            filter: grayscale(0.35) drop-shadow(0 8px 16px var(--aura-shadow));
+            opacity: 0.7;
+        }
+        .tool-card.exclusive .tool-card-name {
+            color: #777;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            width: 100%; text-align: center;
+            padding: 32px 20px 28px;
+            margin-top: auto;
         }
         .footer-text {
-            font-size: 11px;
-            font-weight: 400;
-            color: var(--muted);
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em; font-weight: 400;
+            font-size: 11px; color: #666666;
             line-height: 1.7;
-            letter-spacing: -0.02em;
         }
         .footer-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            position: relative;
-            transition: color 0.25s ease;
+            color: #c20000; text-decoration: none; font-weight: 600;
+            position: relative; transition: color 0.25s ease;
             white-space: nowrap;
         }
         .footer-link::after {
-            content: '';
-            position: absolute;
-            left: 0; right: 0; bottom: -2px;
-            height: 1.5px;
-            background: currentColor;
-            transform: scaleX(0);
-            transform-origin: right;
+            content: ''; position: absolute; left: 0; bottom: -2px;
+            width: 100%; height: 1px; background-color: currentColor;
+            transform: scaleX(0); transform-origin: right;
             transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .footer-link:hover { color: var(--accent-dark); }
+        .footer-link:hover { color: #a30000; }
         .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
         .footer-ig {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 6px;
         }
         .footer-ig svg {
-            width: 14px; height: 14px;
-            stroke: currentColor; stroke-width: 2;
-            fill: none;
+            width: 14px; height: 14px; stroke: currentColor;
+            stroke-width: 2; fill: none;
         }
-/* width */
-::-webkit-scrollbar {
-width: 5px;
-}
 
-/* Track */
-::-webkit-scrollbar-track {
-background: #f1f1f12d;
-}
+        /* ============================================================
+           DESKTOP
+           ============================================================ */
+        @media (min-width: 768px) {
+            .topbar { padding: 24px 60px; }
+            .logo-title { font-size: 28px; }
+            .speech-balao { width: 40px; }
+            .back-link { font-size: 13px; padding: 8px 16px; }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-background: #8888882a;
-}
+            .page-hero { padding: 40px 40px 20px; }
+            .page-title { font-size: 48px; }
+            .page-subtitle { font-size: 20px; }
+            .page-kicker {
+                display: inline-flex; align-items: center; gap: 10px;
+                margin-top: 50px;
+                font-family: 'Poppins', sans-serif; font-weight: 600;
+                font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+                color: #c20000; margin-bottom: 12px;
+            }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-background: #555;
-}
+            .search-wrap { max-width: 640px; margin-top: 24px; }
+            .search-box input { height: 50px; font-size: 15px; }
 
-        @media(max-width: 1024px) {
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 3fr);
-            gap: 12px;
+            .tools-section { padding: 20px 60px 60px; }
+
+            .tool-card {
+                padding: 22px 16px 16px;
+                gap: 12px;
+                border-radius: 22px;
+            }
+            .tool-card-art { width: 64%; max-width: 150px; }
+            .tool-card-name { font-size: 15px; }
+
+            .tool-card-lab-icon {
+                top: 12px; left: 12px;
+                width: 30px; height: 30px;
+                border-radius: 9px;
+            }
+            .tool-card-lab-icon i { font-size: 14px; }
+
+            .tool-card.exclusive::after {
+                font-size: 9px;
+                padding: 5px 9px;
+                top: 12px;
+                right: 12px;
+            }
+
+            footer { padding: 50px 60px 40px; }
+            .footer-text { font-size: 13px; }
+            .footer-ig svg { width: 16px; height: 16px; }
         }
-        body {
-            padding: 100px 40px 30px 40px;
-            display: flex; flex-direction: column; justify-content: center;
-            overflow-y: auto;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-    }
-
-        
     </style>
 </head>
 <body>
-
-    <section class="view" id="page-tools">
-        <span class="page-kicker">Explore</span>
-        <h2 class="page-title">Laboratórios</h2>
-        <p class="page-subtitle">Escolha uma habilidade para treinar hoje</p>
-        <main class="tools-section">
-            <div class="tools-grid" id="toolsGrid" aria-live="polite"></div>
     
-            
-                </a>
-            </div>
-        </main>
+    
 
-        <footer class="site-footer">
-            <p class="footer-text">
-                Desenvolvido pela professora
-                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
-            </p>
-            <p class="footer-text">
-                <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                    Seguir no Instagram
-                </a>
-            </p>
-        </footer>
+    <section class="page-hero">
+        <span class="page-kicker">Todas as ferramentas</span>
+        <div class="search-wrap">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por nome ou lab (ex.: Listening, Guess...)" autocomplete="off" aria-label="Buscar ferramentas">
+                <button class="search-clear" id="searchClear" aria-label="Limpar busca">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
     </section>
 
+    <section class="tools-section">
+        <div class="tools-grid" id="toolsGrid"></div>
+        <div class="search-empty" id="searchEmpty">
+            <i class="fa-regular fa-face-frown"></i>
+            Nenhuma ferramenta encontrada.
+        </div>
+    </section>
+
+    <footer>
+        <p class="footer-text">
+            Desenvolvido por· 
+            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+        </p>
+        <p class="footer-text" style="margin-top:4px;">
+            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                Seguir no Instagram
+            </a>
+        </p>
+    </footer>
+
     <script>
-    const toolsData = [
+        /* ============================================================
+           MAPA DE LABS → ícone + cor
+           ============================================================ */
+        const LAB_META = {
+            listening: { icon: 'fa-solid fa-headphones', color: '#c20000', label: 'Listening' },
+            speaking:  { icon: 'fa-solid fa-microphone', color: '#c20000', label: 'Speaking' },
+            reading:   { icon: 'fa-solid fa-book-open',  color: '#2b2b2b', label: 'Reading' },
+            writing:   { icon: 'fa-solid fa-pen-fancy',  color: '#2b2b2b', label: 'Writing' },
+            group:     { icon: 'fa-solid fa-users',      color: '#c20000', label: 'Group' }
+        };
+
+        /* ============================================================
+           DADOS DAS FERRAMENTAS
+           ============================================================ */
+        const toolsData = [
             {
-                title: 'Listening (ouvir)',
-                link: '../../../pages/listening/',
-                art: '../../../assets/listen.png',
-                color: '#c20000',
-                auraShadow: 'rgba(120, 0, 0, 0.35)'
+                art: '../../../assets/mars.png', title: 'Praticar fala',
+                description: 'Simule uma conversa em Inglês em diferentes situações.',
+                link: 'https://dididoingles.github.io/marsroleplay/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking'
             },
             {
-                title: 'Speaking (Falar)',
-                link: '../../../pages/speaking/',
-                art: '../../../assets/mars.png',
-                color: '#c20000',
-                auraShadow: 'rgba(120, 0, 0, 0.35)'
+                art: '../../../assets/card2.png', title: 'Treinar gramática',
+                description: 'Treine suas habilidades em todos os tempos verbais',
+                link: 'https://dididoingles.github.io/mysketchbook/',
+                color: '#2b2b2b', auraShadow: 'rgba(15, 15, 15, 0.35)',
+                lab: 'Reading'
             },
             {
-                title: 'Writing (Escrever)',
-                link: '../../../pages/writing/',
-                art: '../../../assets/card2.png',
-                color: '#c20000',
-                auraShadow: 'rgba(120, 0, 0, 0.35)'
+                art: '../../../assets/card3.png', title: 'Leitor Interativo',
+                description: 'Aprenda a pronúncia de qualquer texto.',
+                link: 'https://dididoingles.github.io/leitor/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening'
             },
             {
-                title: 'Reading (Ler)',
-                link: '../../../pages/reading/',
-                art: '../../../assets/card3.png',
+                art: '../../../assets/listen.png', title: 'YouListen',
+                description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.',
+                link: 'https://dididoingles.github.io/youlisten/',
+                color: '#4a4a4a', auraShadow: 'rgba(35, 35, 35, 0.35)',
+                lab: 'Listening'
+            },
+            {
+                art: '../../../assets/wheel.png', title: 'Conversation wheel',
+                description: 'Uma roleta de temas de conversação em inglês com 3 níveis.',
+                link: 'https://dididoingles.github.io/conversationwheel/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking'
+            },
+            {
+                art: '../../../assets/stop.png', title: 'Stop!',
+                description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês.',
+                link: 'https://dididoingles.github.io/stopgame/',
+                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Group'
+            },
+            {
+                art: '../../../assets/card5.png', title: 'Você me conhece?',
+                description: 'Versão em Inglês do famoso "Perguntados" para casais.',
+                link: 'https://dididoingles.github.io/couples_trivia/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Group'
+            },
+            {
+                art: '../../../assets/7.webp', title: 'Airpaint Beta',
+                description: 'Desenhe usando gestos das mãos via webcam.',
+                link: 'https://dididoingles.github.io/airpaint/',
+                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Writing'
+            },
+            {
+                art: '../../../assets/helper.webp', title: 'Ajudante de escrita',
+                description: 'Escreva misturando os idiomas',
+                link: '#',
+                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)',
+                lab: 'Writing',
+                exclusive: true
+            },
+            {
+                title: 'Guess',
+                link: '#',
+                art: '../../../assets/guess.webp',
+                desc: 'Ditado interativo: ouça o trecho e escreva exatamente o que você ouviu.',
                 color: '#c20000',
-                auraShadow: 'rgba(120, 0, 0, 0.35)'
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening',
+                exclusive: true
+            },
+            {
+                title: 'Que som é esse?',
+                link: '#',
+                art: '../../../assets/som.webp',
+                desc: 'Ouça um trecho de música e adivinhe o que o cantor disse. Desafio de listening!',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Listening',
+                exclusive: true
+            },
+            {
+                title: 'Assistente de conversa',
+                link: '#',
+                art: '../../../assets/helper2.webp',
+                desc: 'Fale livremente, adicionando as palavras desconhecidas em português que o ajudante completa para você.',
+                color: '#c20000',
+                auraShadow: 'rgba(120, 0, 0, 0.35)',
+                lab: 'Speaking',
+                exclusive: true
             }
-        
         ];
 
+        /* ============================================================
+           BUILD GRID
+           ============================================================ */
         const toolsGrid = document.getElementById('toolsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        const searchEmpty = document.getElementById('searchEmpty');
+
+        const cardElements = [];
 
         toolsData.forEach((tool, i) => {
             const card = document.createElement('a');
-            card.className = 'tool-card';
+            card.className = 'tool-card' + (tool.exclusive ? ' exclusive' : '');
             card.href = tool.link;
-            if (tool.external) {
+            card.style.setProperty('--aura', tool.color);
+            card.style.setProperty('--aura-shadow', tool.auraShadow);
+            card.style.animationDelay = (i * 0.06) + 's';
+            card.setAttribute('aria-label',
+                (tool.exclusive ? 'Exclusivo para alunos: ' : 'Abrir ') + tool.title);
+
+            // Guarda dados para a busca
+            card.dataset.title = (tool.title || '').toLowerCase();
+            card.dataset.lab = (tool.lab || '').toLowerCase();
+
+            if (tool.exclusive) {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('Exclusivo para alunos da teacher @dicarvalho.prof.\n\nDisponível em breve!');
+                });
+            } else {
                 card.target = '_blank';
                 card.rel = 'noopener noreferrer';
             }
-            card.style.setProperty('--aura', tool.color || '#c20000');
-            card.style.setProperty('--aura-shadow', tool.auraShadow || 'rgba(120,0,0,0.35)');
-            card.style.animationDelay = (i * 0.06) + 's';
-            card.setAttribute('aria-label', 'Abrir ' + tool.title);
 
             const art = document.createElement('img');
             art.src = tool.art;
@@ -308,20 +709,89 @@ background: #555;
             card.appendChild(art);
             card.appendChild(name);
 
+            // Ícone do lab (canto superior esquerdo)
+            if (tool.lab) {
+                const labKey = tool.lab.toLowerCase();
+                const meta = LAB_META[labKey] || { icon: 'fa-solid fa-flask', color: '#222', label: tool.lab };
+                const labIcon = document.createElement('span');
+                labIcon.className = 'tool-card-lab-icon';
+                labIcon.style.setProperty('--lab-color', meta.color);
+                labIcon.title = meta.label;
+                labIcon.innerHTML = `<i class="${meta.icon}"></i>`;
+                card.appendChild(labIcon);
+            }
+
             toolsGrid.appendChild(card);
+            cardElements.push(card);
         });
 
+        /* ============================================================
+           BUSCA
+           ============================================================ */
+        function applyFilter(query) {
+            const q = query.trim().toLowerCase();
+            let visibleCount = 0;
+
+            cardElements.forEach(card => {
+                const matchesTitle = card.dataset.title.includes(q);
+                const matchesLab = card.dataset.lab.includes(q);
+                const show = q === '' || matchesTitle || matchesLab;
+
+                if (show) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            searchEmpty.classList.toggle('visible', visibleCount === 0);
+            searchClear.classList.toggle('visible', q !== '');
+        }
+
+        searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            applyFilter('');
+            searchInput.focus();
+        });
+
+        // ESC limpa a busca
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                applyFilter('');
+                searchInput.blur();
+            }
+        });
+
+        /* ============================================================
+           LOADER (mantido para compatibilidade)
+           ============================================================ */
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const loader = document.getElementById('loaderScreen');
                 if (loader) loader.classList.add('hidden');
-            }, 350);
+            }, 400);
         });
         setTimeout(() => {
             const loader = document.getElementById('loaderScreen');
             if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden');
         }, 4000);
-    </script>
 
+        /* ============================================================
+           BOTÃO VOLTAR (postMessage pro shell)
+           ============================================================ */
+        const btnVoltar = document.getElementById('btn-voltar');
+        if (btnVoltar) {
+            btnVoltar.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ action: 'navigate', route: 'start' }, '*');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
