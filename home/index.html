@@ -39,6 +39,15 @@
             background: var(--paper); font-family: var(--font-title); color: var(--ink);
             overflow: hidden; height: 100vh; display: flex;
             -webkit-tap-highlight-color: transparent;
+
+            /* =========================================
+               MALHA QUADRICULADA SUTIL
+               ========================================= */
+            background-image:
+                linear-gradient(rgba(34, 34, 34, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 34, 34, 0.035) 1px, transparent 1px);
+            background-size: 28px 28px;
+            background-position: -1px -1px;
         }
 
         /* =========================================
@@ -144,16 +153,86 @@
         .mars-drawer:hover {
             transform: translateY(0px) scale(1.1) rotate(-5deg);
         }
-        .mars-assistant { position: absolute; right: 40px; top: 40px; width: 80px; height: 80px; z-index: 30; cursor: pointer; transition: transform .3s; }
+
+        /* =========================================
+           MARS ASSISTANT + ANIMAÇÃO SLIDE-IN
+           ========================================= */
+        @keyframes marsSlideIn {
+            0% {
+                opacity: 0;
+                transform: translate(120px, -60px) scale(0.7) rotate(15deg);
+            }
+            60% {
+                opacity: 1;
+                transform: translate(-8px, 4px) scale(1.05) rotate(-3deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+        }
+
+        .mars-assistant {
+            position: absolute;
+            right: 40px;
+            top: 40px;
+            width: 80px;
+            height: 80px;
+            z-index: 30;
+            cursor: pointer;
+            transition: transform .3s;
+            animation: marsSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+        }
         .mars-assistant:hover { transform: scale(1.1) rotate(5deg); }
         .mars-assistant img { position: absolute; width: 100%; }
-        .mars-assistant .sketch { z-index: 1; }
-        .mars-assistant .mars { z-index: 2; opacity: 0; transition: opacity .8s; }
+
         .mars-tooltip { position: absolute; right: 130px; top: 50px; background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 16px; width: 260px; box-shadow: var(--shadow-hard-sm); z-index: 35; font-family: var(--font-hand); font-size: 16px; line-height: 1.4; color: var(--ink); opacity: 0; visibility: hidden; transform: translateX(20px); transition: all .3s cubic-bezier(.2,.8,.2,1); }
         .mars-tooltip::after { content: ''; position: absolute; right: -10px; top: 25px; border-left: 10px solid var(--ink); border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
         .mars-tooltip::before { content: ''; position: absolute; right: -8px; top: 26px; border-left: 9px solid var(--paper); border-top: 9px solid transparent; border-bottom: 9px solid transparent; z-index: 1; }
         .mars-tooltip.show { opacity: 1; visibility: visible; transform: translateX(0); }
         .tooltip-close { position: absolute; top: 6px; right: 12px; cursor: pointer; font-weight: bold; color: #999; }
+
+        /* =========================================
+           BOTÃO VOLTAR (ao lado do Mars)
+           ========================================= */
+        .shell-back-btn {
+            position: absolute;
+            right: 130px;
+            top: 52px;
+            width: 44px;
+            height: 44px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--paper);
+            border: 1.5px solid rgba(34,34,34,0.10);
+            border-radius: 12px;
+            color: var(--ink);
+            cursor: pointer;
+            font-size: 15px;
+            transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease, border-color 0.2s ease, opacity 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .shell-back-btn:hover {
+            color: var(--accent);
+            background: rgba(194,0,0,0.05);
+            border-color: rgba(194,0,0,0.25);
+        }
+        .shell-back-btn:active {
+            transform: translateX(-2px);
+        }
+        /* Estado desabilitado: visível, mas apagado e sem clique */
+        .shell-back-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .shell-back-btn:disabled:hover {
+            color: var(--ink);
+            background: var(--paper);
+            border-color: rgba(34,34,34,0.10);
+        }
 
         /* width */
 ::-webkit-scrollbar {
@@ -190,6 +269,16 @@ background: #555;
             .mars-assistant { right: 20px; top: 20px; width: 60px; height: 60px; }
             .mars-tooltip { right: 90px; top: 16px; width: 220px; font-size: 14px; padding: 12px; }
             .bg-dee { position: absolute; right: -50px; bottom: 0; width: 100%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; }
+
+            /* Botão voltar no mobile: ao lado do Mars, um pouco menor */
+            .shell-back-btn {
+                right: 90px;
+                top: 26px;
+                width: 50px;
+                height: 30px;
+                font-size: 12px;
+            }
+
              /* Logo container */
         .sidebar-logo {
             display: flex;
@@ -265,9 +354,15 @@ background: #555;
 
     <div class="main-wrapper">
         <img src="../assets/maps.webp" alt="" class="bg-dee">
+
+        <!-- Botão voltar (ao lado do Mars) -->
+        <button class="shell-back-btn" id="shell-back-btn" aria-label="Voltar" title="Voltar" disabled>
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <!-- Mars assistant (só o Mars, com animação de entrada) -->
         <div class="mars-assistant" id="mars-btn">
-            <img src="../assets/sketch.webp" class="sketch" alt="">
-            <img src="../assets/mars.webp" class="mars" alt="">
+            <img src="../assets/mars.webp" alt="Mars">
         </div>
         <div class="mars-tooltip" id="mars-tooltip">
             <span class="tooltip-close" id="mars-close">×</span>
@@ -286,14 +381,17 @@ background: #555;
             const overlay   = document.getElementById('sidebar-overlay');
             const tooltip   = document.getElementById('mars-tooltip');
             const messageEl = document.getElementById('mars-message');
+            const backBtn   = document.getElementById('shell-back-btn');
     
             let currentRoute = null;
             let isFirstLoad = true;
+            let navCount = 0; // quantas navegações internas já aconteceram
     
             const marsMessages = {
                 start:   'Olá! Eu sou o Mars!',
                 tools:   'Aqui estão todas as nossas ferramentas!',
-                profile: 'Aqui é só para quem é aluno.'
+                profile: 'Aqui é só para quem é aluno.',
+                todas:   'Essa é a lista completa de ferramentas!'
             };
     
             function toggleSidebar() {
@@ -308,6 +406,13 @@ background: #555;
             function routeFromHash() {
                 const hash = window.location.hash.replace(/^#\/?/, '');
                 return hash || 'start';
+            }
+
+            // Atualiza o estado do botão voltar (visível sempre, desabilitado sem histórico)
+            // Considera também o histórico do navegador (página anterior ao shell)
+            function updateBackBtn() {
+                const hasBrowserHistory = window.history.length > 1;
+                backBtn.disabled = !(navCount > 0 || hasBrowserHistory);
             }
     
             // Evento que dispara assim que o iframe TERMINA de carregar a página nova
@@ -329,6 +434,8 @@ background: #555;
     
                 if (updateUrl) {
                     history.pushState({ route }, '', '#/' + route);
+                    navCount++;
+                    updateBackBtn();
                 }
     
                 // 1. Esconde o iframe atual suavemente
@@ -352,17 +459,35 @@ background: #555;
             }
     
             window.addEventListener('popstate', () => {
+                if (navCount > 0) navCount--;
+                updateBackBtn();
                 navigateTo(routeFromHash(), false);
             });
 
             window.addEventListener('message', (event) => {
-    if (event.data && event.data.action === 'navigate') {
-        // Força a atualização se a rota for diferente da atual
-        if (event.data.route !== currentRoute) {
-            navigateTo(event.data.route);
-        }
-    }
-});
+                if (event.data && event.data.action === 'navigate') {
+                    // Se o iframe pedir para voltar, delega ao histórico do shell
+                    if (event.data.route === 'back') {
+                        if (!backBtn.disabled) backBtn.click();
+                        return;
+                    }
+                    // Força a atualização se a rota for diferente da atual
+                    if (event.data.route !== currentRoute) {
+                        navigateTo(event.data.route);
+                    }
+                }
+            });
+
+            // Clique no botão voltar
+            backBtn.addEventListener('click', () => {
+                if (navCount > 0) {
+                    history.back(); // popstate cuida de decrementar e navegar
+                } else if (window.history.length > 1) {
+                    // Não há rota interna para voltar, mas há histórico do navegador:
+                    // sai do shell e volta para a página anterior
+                    window.history.back();
+                }
+            });
     
             document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('sidebar-close').addEventListener('click', toggleSidebar);
@@ -383,14 +508,10 @@ background: #555;
                     tooltip.classList.remove('show');
                 });
     
-                setTimeout(() => {
-                    const m = document.querySelector('.mars-assistant .mars');
-                    if (m) m.style.opacity = '1';
-                }, 800);
-    
                 // Inicia o app
                 setTimeout(() => {
                     navigateTo(routeFromHash(), false);
+                    updateBackBtn(); // garante estado inicial
                 }, 150);
             });
         })();
