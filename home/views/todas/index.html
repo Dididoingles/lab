@@ -418,42 +418,7 @@
             color: #777;
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
-        footer {
-            width: 100%; text-align: center;
-            padding: 32px 20px 28px;
-            margin-top: auto;
-        }
-        .footer-text {
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: -0.05em; font-weight: 400;
-            font-size: 11px; color: #666666;
-            line-height: 1.7;
-        }
-        .footer-link {
-            color: #c20000; text-decoration: none; font-weight: 600;
-            position: relative; transition: color 0.25s ease;
-            white-space: nowrap;
-        }
-        .footer-link::after {
-            content: ''; position: absolute; left: 0; bottom: -2px;
-            width: 100%; height: 1px; background-color: currentColor;
-            transform: scaleX(0); transform-origin: right;
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .footer-link:hover { color: #a30000; }
-        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
-
-        .footer-ig {
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-top: 6px;
-        }
-        .footer-ig svg {
-            width: 14px; height: 14px; stroke: currentColor;
-            stroke-width: 2; fill: none;
-        }
+     
 
         /* ============================================================
            DESKTOP
@@ -502,9 +467,7 @@
                 right: 12px;
             }
 
-            footer { padding: 50px 60px 40px; }
-            .footer-text { font-size: 13px; }
-            .footer-ig svg { width: 16px; height: 16px; }
+          
         }
     </style>
 </head>
@@ -533,22 +496,7 @@
         </div>
     </section>
 
-    <footer>
-        <p class="footer-text">
-            Desenvolvido por· 
-            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
-        </p>
-        <p class="footer-text" style="margin-top:4px;">
-            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-                Seguir no Instagram
-            </a>
-        </p>
-    </footer>
+   
 
     <script>
         /* ============================================================
