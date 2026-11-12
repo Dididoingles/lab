@@ -61,6 +61,11 @@
             height: 100vh;
             min-height: 600px;
             background-color: #ffffff;
+            /* Malha cinza fina (grade de 24px) */
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
             display: flex;
             align-items: flex-end;
             padding: 0 50px 40px 50px;
@@ -132,7 +137,7 @@
             width: 65px;
             height: auto;
             transform: rotate(20deg);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .subtitle {
@@ -330,7 +335,7 @@
         .footer {
             position: absolute;
             right: 120px;
-            bottom: 30px;
+            bottom: 60px;
             display: flex;
             align-items: flex-end;
             gap: 15px;
@@ -339,13 +344,13 @@
 
         .footer p {
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 10px;
             color: #444;
             text-align: right;
         }
 
         .block-img {
-            width: 40px;
+            width: 20px;
             height: auto;
         }
 
@@ -455,19 +460,6 @@
                 animation: none !important;
             }
 
-            .footer {
-                position: relative;
-                right: auto; 
-                bottom: auto;
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: left;
-                width: 100%;
-                margin-top: 30px;
-                gap: 10px;
-            }
-
-            .footer p { text-align: left; font-size: 11px; }
             
             .lang-toggle {
                 margin-left: 0;
@@ -523,14 +515,12 @@
 
         <!-- Robô -->
         <div class="robot-box">
-            <img src="assets/sketch.webp" alt="Sketch" class="sketch">
-            <img src="assets/mars.webp" alt="Mars" class="mars">
+            <img src="assets/mars.png" alt="Mars" class="mars">
         </div>
 
         <!-- Rodapé -->
         <div class="footer">
-            <p id="footer-text">Somos uma iniciativa inclusiva: neurodivergentes, sejam bem vindos!</p>
-            <img src="assets/block.webp" alt="Blocos" class="block-img">
+            <p id="footer-text"></p>
         </div>
 
     </div>
@@ -575,7 +565,6 @@
                     welcome: 'Bem vindo ao meu <span class="red">Language lab!</span><br>Eu sou a Diandra, mas pode me chamar de “Di”. Você pode fazer login ou testar nossas ferramentas gratuitas agora mesmo.',
                     btnPrimary: 'Começar de graça',
                     btnOutline: 'Google',
-                    footer: 'Somos uma iniciativa inclusiva: neurodivergentes, sejam bem vindos!'
                 },
                 en: {
                     title: "Language Lab",
@@ -583,7 +572,6 @@
                     welcome: 'Welcome to my <span class="red">Language lab!</span><br>I am Diandra, but you can call me “Dee”.<br>You can either log-in or test our free tools right now.',
                     btnPrimary: 'Start free',
                     btnOutline: 'Google',
-                    footer: 'We are an inclusive initiative: neurodivergent people, be welcome!'
                 }
             };
 
