@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
     <meta property="og:title" content="Language Lab">
     <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
     <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
     <meta property="og:url" content="https://dididoingles.github.io/lab/">
     <meta property="og:type" content="website">
-    
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Language Lab">
     <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
     <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
     <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
     <title>Language Lab</title>
@@ -34,15 +31,11 @@
             --sidebar-width: 260px; --sidebar-collapsed: 80px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
         body {
             background: var(--paper); font-family: var(--font-title); color: var(--ink);
             overflow: hidden; height: 100vh; display: flex;
             -webkit-tap-highlight-color: transparent;
-
-            /* =========================================
-               MALHA QUADRICULADA SUTIL
-               ========================================= */
             background-image:
                 linear-gradient(rgba(34, 34, 34, 0.035) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(34, 34, 34, 0.035) 1px, transparent 1px);
@@ -62,9 +55,15 @@
             animation: shellFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
+        /* CORREÇÃO: removida a animação do .main-wrapper.
+           O "glitch" ao trocar de página vinha da animação shellFadeIn
+           ainda aplicada neste container, que mantinha uma camada GPU
+           promovida com transform residual e forçava recomposição
+           a cada troca de src do iframe. */
         .main-wrapper {
-            animation: shellFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards;
-            opacity: 0; /* Começa invisível para a animação pegar */
+            opacity: 1;
+            flex: 1; height: 100vh; position: relative;
+            display: flex; flex-direction: column; overflow: hidden;
         }
 
         /* Sidebar Base */
@@ -74,11 +73,8 @@
         .sidebar-close:hover { background: #f5f5f5; color: var(--accent); }
         .sidebar.sidebar--collapsed .sidebar-close i { transform: rotate(180deg); }
         .sidebar-close i { transition: transform .3s; }
-        .sidebar-logo { font-family: var(--font-title); font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -.05em; margin-bottom: 32px; text-decoration: none; white-space: nowrap; overflow: hidden; transition: opacity .3s; }
-        .sidebar-logo span { color: var(--ink); }
         .sidebar.sidebar--collapsed .sidebar-logo { opacity: 0; pointer-events: none; }
 
-    
         .nav-menu { display: flex; flex-direction: column; gap: 4px; }
         .nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; cursor: pointer; white-space: nowrap; overflow: hidden; transition: .2s; }
         .nav-item i { width: 20px; text-align: center; font-size: 16px; flex-shrink: 0; }
@@ -90,64 +86,60 @@
         .sidebar-footer { margin-top: auto; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; transition: opacity .3s; font-weight: 300; }
         .sidebar-footer p { margin-bottom: 4px; }
 
-        /* Main + iframe */
-        .main-wrapper { flex: 1; height: 100vh; position: relative; display: flex; flex-direction: column; overflow: hidden; }
-        .bg-dee { position: absolute; right: -50px; bottom: 0; width: 100%; max-width: 600px; opacity: 0.5; z-index: 1; pointer-events: none; }
+        .bg-dee { position: absolute; right: -50px; bottom: 0; width: 80%; max-width: 400px; opacity: 0.5; z-index: 1; pointer-events: none; }
 
         #app-frame-wrap {
             position: relative; z-index: 5;
             flex: 1; width: 100%; height: 100%;
             overflow: hidden;
         }
-        
-        /* Animação no iframe para transição entre páginas */
+
+        /* CORREÇÃO: transition reduzida para 0.2s, igual ao setTimeout
+           do JS, e removido o opacity inicial explícito (já é 1 por padrão).
+           Assim o fade-out termina antes de trocar o src. */
         #view-frame {
             display: block;
             width: 100%; height: 100%;
             border: 0;
             background: transparent;
-            transition: opacity 0.4s ease-out;
-            opacity: 1;
+            transition: opacity 0.2s ease-out;
         }
 
         /* Logo container */
         .sidebar-logo {
             display: flex;
             align-items: center;
-            gap: 8px; /* Espaço entre a imagem e o texto */
+            gap: 8px;
             text-decoration: none;
             margin-bottom: 32px;
-            white-space: nowrap; /* Impede de quebrar linha */
+            white-space: nowrap;
             overflow: hidden;
             transition: opacity .3s;
         }
 
-        /* Texto do Logo (o span externo) */
         .sidebar-logo > span {
-            display: inline-block; /* Impede o flex de esticar o texto */
+            display: inline-block;
             font-family: var(--font-title);
             font-size: 22px;
             font-weight: 700;
-            color: var(--accent); /* Vermelho para "Language" */
+            color: var(--accent);
             letter-spacing: -.05em;
             line-height: 1;
-            flex-shrink: 0; /* Impede que o texto seja esmagado */
+            flex-shrink: 0;
         }
 
-        /* A palavra "Lab" (o span interno) */
         .sidebar-logo .logo-highlight {
             display: inline-block;
-            color: var(--ink); /* Preto para "Lab" */
+            color: var(--ink);
             font-weight: 700;
         }
 
-        /* Mars */
         .mars-drawer {
-            width: 35px; 
+            width: 35px;
             height: 35px;
             object-fit: contain;
             transition: transform .3s;
-            flex-shrink: 0; /* Impede a imagem de ser esmagada */
+            flex-shrink: 0;
         }
 
         .mars-drawer:hover {
@@ -222,7 +214,6 @@
         .shell-back-btn:active {
             transform: translateX(-2px);
         }
-        /* Estado desabilitado: visível, mas apagado e sem clique */
         .shell-back-btn:disabled {
             opacity: 0.35;
             cursor: not-allowed;
@@ -234,25 +225,32 @@
             border-color: rgba(34,34,34,0.10);
         }
 
-        /* width */
-::-webkit-scrollbar {
-width: 5px;
-}
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #f1f1f12d; }
+        ::-webkit-scrollbar-thumb { background: #8888882a; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-/* Track */
-::-webkit-scrollbar-track {
-background: #f1f1f12d;
-}
+        /* =========================================
+           SIDEBAR DESKTOP FLUTUANTE
+           (aplica apenas acima de 1024px)
+           ========================================= */
+        @media (min-width: 1025px) {
+            .sidebar {
+                margin: 16px 0 16px 16px;
+                height: calc(100vh - 32px);
+                border: 1px solid rgba(34,34,34,.08);
+                border-right: 1px solid rgba(34,34,34,.08);
+                border-radius: 18px;
+                box-shadow: 0 10px 40px rgba(34,34,34,.2),
+                            0 2px 8px rgba(34,34,34,.04);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-background: #8888882a;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-background: #555;
-}
+            .sidebar.sidebar--collapsed {
+                border-radius: 18px;
+            }
+        }
 
         /* Mobile */
         .sidebar-open-btn { display: none; }
@@ -268,9 +266,8 @@ background: #555;
             .sidebar-open-btn { display: flex; position: fixed; top: 24px; left: 0; z-index: 55; background: var(--paper); border: 1px solid rgba(34,34,34,.1); border-left: none; box-shadow: 2px 2px 8px rgba(0,0,0,.06); width: 34px; height: 48px; border-radius: 0 10px 10px 0; color: var(--accent); opacity: .9; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
             .mars-assistant { right: 20px; top: 20px; width: 60px; height: 60px; }
             .mars-tooltip { right: 90px; top: 16px; width: 220px; font-size: 14px; padding: 12px; }
-            .bg-dee { position: absolute; right: -50px; bottom: 0; width: 100%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; }
+            .bg-dee { position: absolute; right: -50px; bottom: 0; width: 80%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; }
 
-            /* Botão voltar no mobile: ao lado do Mars, um pouco menor */
             .shell-back-btn {
                 right: 90px;
                 top: 26px;
@@ -279,50 +276,46 @@ background: #555;
                 font-size: 12px;
             }
 
-             /* Logo container */
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px; /* Espaço entre a imagem e o texto */
-            text-decoration: none;
-            margin-bottom: 32px;
-            white-space: nowrap; /* Impede de quebrar linha */
-            overflow: hidden;
-            transition: opacity .3s;
-        }
+            .sidebar-logo {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                margin-bottom: 32px;
+                white-space: nowrap;
+                overflow: hidden;
+                transition: opacity .3s;
+            }
 
-        /* Texto do Logo (o span externo) */
-        .sidebar-logo > span {
-            display: inline-block; /* Impede o flex de esticar o texto */
-            font-family: var(--font-title);
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--accent); /* Vermelho para "Language" */
-            letter-spacing: -.05em;
-            line-height: 1;
-            flex-shrink: 0; /* Impede que o texto seja esmagado */
-        }
+            .sidebar-logo > span {
+                display: inline-block;
+                font-family: var(--font-title);
+                font-size: 22px;
+                font-weight: 700;
+                color: var(--accent);
+                letter-spacing: -.05em;
+                line-height: 1;
+                flex-shrink: 0;
+            }
 
-        /* A palavra "Lab" (o span interno) */
-        .sidebar-logo .logo-highlight {
-            display: inline-block;
-            color: var(--ink); /* Preto para "Lab" */
-            font-weight: 700;
-        }
+            .sidebar-logo .logo-highlight {
+                display: inline-block;
+                color: var(--ink);
+                font-weight: 700;
+            }
 
-        /* Mars */
-        .mars-drawer {
-            width: 32px; 
-            height: 32px;
-            object-fit: contain;
-            transition: transform .3s;
-            transform: translateY(7px); /* Seu ajuste fino */
-            flex-shrink: 0; /* Impede a imagem de ser esmagada */
-        }
+            .mars-drawer {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                transition: transform .3s;
+                transform: translateY(7px);
+                flex-shrink: 0;
+            }
 
-        .mars-drawer:hover {
-            transform: translateY(7px) scale(1.1) rotate(-5deg);
-        }
+            .mars-drawer:hover {
+                transform: translateY(7px) scale(1.1) rotate(-5deg);
+            }
         }
     </style>
 </head>
@@ -337,17 +330,19 @@ background: #555;
         <button class="sidebar-close" id="sidebar-close" aria-label="Fechar menu">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <a href="#" class="sidebar-logo" data-route="start"> 
-            <img src="../assets/mars.webp" class="mars-drawer" alt="Mascote">
+        <a href="#" class="sidebar-logo" data-route="start">
+            <img src="../assets/labicon.webp" class="mars-drawer" alt="Mascote">
             <span>Language <span class="logo-highlight">Lab</span></span>
         </a>
         <nav class="nav-menu">
             <a class="nav-item active" data-route="start"><i class="fa-solid fa-house"></i><span class="nav-text">Início</span></a>
             <a class="nav-item" data-route="tools"><i class="fa-solid fa-flask"></i><span class="nav-text">Laboratórios</span></a>
-            <a class="nav-item" data-route="profile"><i class="fa-solid fa-user"></i><span class="nav-text">Exclusivos</span></a>
+            <a class="nav-item" data-route="profile"><i class="fa-solid fa-lock"></i><span class="nav-text">Exclusivos</span></a>
+            <a class="nav-item" data-route="biblioteca"><i class="fa-solid fa-book-skull"></i><span class="nav-text">Biblioteca</span></a>
+            <a class="nav-item" data-route="teacher"><i class="fa-solid fa-user"></i><span class="nav-text">Sobre a teacher</span></a>
         </nav>
         <div class="sidebar-footer">
-            <p>Idioma: <strong>PT-BR</strong></p>
+            <p>Desenvolvido por <strong>@dicarvalho.prof</strong></p>
             <p>© 2024 Language Lab</p>
         </div>
     </aside>
@@ -355,14 +350,12 @@ background: #555;
     <div class="main-wrapper">
         <img src="../assets/maps.webp" alt="" class="bg-dee">
 
-        <!-- Botão voltar (ao lado do Mars) -->
         <button class="shell-back-btn" id="shell-back-btn" aria-label="Voltar" title="Voltar" disabled>
             <i class="fa-solid fa-arrow-left"></i>
         </button>
 
-        <!-- Mars assistant (só o Mars, com animação de entrada) -->
         <div class="mars-assistant" id="mars-btn">
-            <img src="../assets/mars.webp" alt="Mars">
+            <img src="../assets/mars.png" alt="Mars">
         </div>
         <div class="mars-tooltip" id="mars-tooltip">
             <span class="tooltip-close" id="mars-close">×</span>
@@ -382,18 +375,18 @@ background: #555;
             const tooltip   = document.getElementById('mars-tooltip');
             const messageEl = document.getElementById('mars-message');
             const backBtn   = document.getElementById('shell-back-btn');
-    
+
             let currentRoute = null;
             let isFirstLoad = true;
-            let navCount = 0; // quantas navegações internas já aconteceram
-    
+            let navCount = 0;
+
             const marsMessages = {
                 start:   'Olá! Eu sou o Mars!',
                 tools:   'Aqui estão todas as nossas ferramentas!',
                 profile: 'Aqui é só para quem é aluno.',
                 todas:   'Essa é a lista completa de ferramentas!'
             };
-    
+
             function toggleSidebar() {
                 if (window.innerWidth <= 1024) {
                     sidebar.classList.toggle('sidebar--open');
@@ -402,62 +395,73 @@ background: #555;
                     sidebar.classList.toggle('sidebar--collapsed');
                 }
             }
-    
+
             function routeFromHash() {
                 const hash = window.location.hash.replace(/^#\/?/, '');
                 return hash || 'start';
             }
 
-            // Atualiza o estado do botão voltar (visível sempre, desabilitado sem histórico)
-            // Considera também o histórico do navegador (página anterior ao shell)
             function updateBackBtn() {
                 const hasBrowserHistory = window.history.length > 1;
                 backBtn.disabled = !(navCount > 0 || hasBrowserHistory);
             }
-    
-            // Evento que dispara assim que o iframe TERMINA de carregar a página nova
+
+            /* CORREÇÃO: o fade-in após a troca de página é feito no load.
+               Como o fade-out agora dura 0.2s (igual ao CSS), a troca de src
+               ocorre depois que o iframe já está invisível, sem pulo. */
             iframe.addEventListener('load', () => {
                 if (isFirstLoad) {
-                    iframe.style.opacity = '1';
                     isFirstLoad = false;
+                    iframe.style.opacity = '1';
                 } else {
-                    // Espera 50ms para garantir que o navegador renderizou o conteúdo, depois faz o fade-in
-                    setTimeout(() => {
+                    requestAnimationFrame(() => {
                         iframe.style.opacity = '1';
-                    }, 50);
+                    });
                 }
             });
-    
+
             function navigateTo(route, updateUrl = true) {
                 if (!route || route === currentRoute) return;
                 currentRoute = route;
-    
+
                 if (updateUrl) {
                     history.pushState({ route }, '', '#/' + route);
                     navCount++;
                     updateBackBtn();
                 }
-    
-                // 1. Esconde o iframe atual suavemente
-                iframe.style.opacity = '0';
-                
-                // 2. Espera o fade-out terminar antes de trocar o src
-                setTimeout(() => {
-                    iframe.src = 'views/' + route + '/index.html';
-                }, 200);
-    
+
                 document.querySelectorAll('.nav-item').forEach(link => {
                     link.classList.toggle('active', link.dataset.route === route);
                 });
-    
+
                 if (marsMessages[route]) messageEl.textContent = marsMessages[route];
-    
+
                 if (window.innerWidth <= 1024) {
                     sidebar.classList.remove('sidebar--open');
                     overlay.classList.remove('active');
                 }
+
+                // 1. Esconde o iframe
+                iframe.style.opacity = '0';
+
+                // 2. Só troca o src depois que o fade-out terminou.
+                //    Usa transitionend com fallback de segurança.
+                let swapped = false;
+                const swapSrc = () => {
+                    if (swapped) return;
+                    swapped = true;
+                    iframe.removeEventListener('transitionend', onEnd);
+                    iframe.src = 'views/' + route + '/index.html';
+                };
+                const onEnd = (e) => {
+                    if (e.propertyName === 'opacity') swapSrc();
+                };
+
+                iframe.addEventListener('transitionend', onEnd);
+                // fallback: se transitionend não disparar, troca em 250ms
+                setTimeout(swapSrc, 250);
             }
-    
+
             window.addEventListener('popstate', () => {
                 if (navCount > 0) navCount--;
                 updateBackBtn();
@@ -466,56 +470,50 @@ background: #555;
 
             window.addEventListener('message', (event) => {
                 if (event.data && event.data.action === 'navigate') {
-                    // Se o iframe pedir para voltar, delega ao histórico do shell
                     if (event.data.route === 'back') {
                         if (!backBtn.disabled) backBtn.click();
                         return;
                     }
-                    // Força a atualização se a rota for diferente da atual
                     if (event.data.route !== currentRoute) {
                         navigateTo(event.data.route);
                     }
                 }
             });
 
-            // Clique no botão voltar
             backBtn.addEventListener('click', () => {
                 if (navCount > 0) {
-                    history.back(); // popstate cuida de decrementar e navegar
+                    history.back();
                 } else if (window.history.length > 1) {
-                    // Não há rota interna para voltar, mas há histórico do navegador:
-                    // sai do shell e volta para a página anterior
                     window.history.back();
                 }
             });
-    
+
             document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('sidebar-close').addEventListener('click', toggleSidebar);
                 document.getElementById('sidebar-open-btn').addEventListener('click', toggleSidebar);
                 overlay.addEventListener('click', toggleSidebar);
-    
+
                 document.querySelectorAll('[data-route]').forEach(el => {
                     el.addEventListener('click', e => {
                         e.preventDefault();
                         navigateTo(el.dataset.route);
                     });
                 });
-    
+
                 document.getElementById('mars-btn').addEventListener('click', () => {
                     tooltip.classList.toggle('show');
                 });
                 document.getElementById('mars-close').addEventListener('click', () => {
                     tooltip.classList.remove('show');
                 });
-    
-                // Inicia o app
+
                 setTimeout(() => {
                     navigateTo(routeFromHash(), false);
-                    updateBackBtn(); // garante estado inicial
+                    updateBackBtn();
                 }, 150);
             });
         })();
-        </script>
+    </script>
 
 </body>
 </html>
