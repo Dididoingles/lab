@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Language Lab">
+    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Language Lab">
+    <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <title>Language Lab</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #B30000;
+            --accent-dark: #990000;
+            --ink: #222222;
+            --font-title: 'Poppins', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            font-family: var(--font-mono);
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+
+        .page-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            min-height: 600px;
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+            display: flex;
+            align-items: flex-end;         /* mantém o grupo esquerdo embaixo */
+            padding: 0 50px 40px 50px;     /* mantém o padding original */
+        }
+
+        /* --- GRUPO DA ESQUERDA (Dee + Título) --- */
+        .left-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+            height: 100%;
+            justify-content: flex-end;     /* título volta para baixo */
+            z-index: 3;
+        }
+
+        .dee-img {
+            position: absolute;
+            opacity: 0;
+            left: -30px;
+            bottom: 80px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            max-height: 95vh;
+            object-fit: contain;
+            object-position: bottom left;
+            z-index: 1;
+            transform: translateX(-100px);
+            will-change: transform, opacity;
+        }
+
+        .body-loaded .dee-img {
+            animation: slideIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 0.6; transform: translateX(0); }
+        }
+
+        .text-block {
+            position: relative;
+            z-index: 5;
+            padding-bottom: 10px;          /* volta ao original */
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 1), 0px 0px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .title-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .title-row h1 {
+            font-family: var(--font-title);
+            font-size: 55px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.07em;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        /* --- CONTEÚDO DA DIREITA (apenas bio, começa do topo) --- */
+        .right-content {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;   /* bio começa do topo */
+            padding-left: 20px;
+            padding-top: 60px;             /* alinha com o topo da página */
+            z-index: 4;
+        }
+
+        /* --- TOGGLE DE IDIOMAS --- */
+        .lang-toggle {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { color: var(--accent); }
+
+        .lang-btn.active {
+            background-color: #ffffff;
+            color: var(--accent);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* --- BIOGRAFIA ACADÊMICA --- */
+        .bio-academic {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.8;
+            color: #444;
+            max-width: 750px;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.75);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.9);
+            min-height: 120px;
+        }
+
+        .bio-academic .red {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 14px;
+            background-color: #333;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* =========================================
+           RESPONSIVIDADE (MOBILE)
+           ========================================= */
+        @media (max-width: 1024px) {
+            html, body { overflow: auto; }
+
+            .page-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+                padding: 20px;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+
+            .dee-img {
+                position: relative;
+                left: auto;
+                bottom: auto;
+                width: 100%;
+                max-width: 300px;
+                margin: 40px 0 0 0;
+                opacity: 0;
+                transform: none !important;
+            }
+
+            .body-loaded .dee-img {
+                animation: fadeInMobile 0.8s ease-out forwards;
+            }
+
+            @keyframes fadeInMobile {
+                to { opacity: 0.5; }
+            }
+
+            .left-group {
+                width: 100%;
+                height: auto;
+                padding-bottom: 0;
+                margin-top: -40px;
+            }
+
+            .text-block {
+                text-align: left;
+                padding-top: 0;
+                padding-bottom: 20px;
+                text-shadow: none;
+            }
+
+            .title-row {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .title-row h1 { font-size: 38px; }
+
+            .subtitle { margin-bottom: 25px; color: #555; font-weight: 400; }
+
+            .right-content {
+                width: 100%;
+                padding-left: 0;
+                padding-top: 0;
+                padding-bottom: 20px;
+                justify-content: flex-start;
+            }
+
+            .bio-academic {
+                font-size: 13px;
+                padding: 12px 14px;
+                min-height: auto;
+                max-width: 100%;
+            }
+
+            .lang-toggle { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+
+        <!-- Lado Esquerdo: Dee + Título (embaixo, como no original) -->
+        <div class="left-group">
+            <img src="../../../assets/dee.webp" alt="Dee" class="dee-img">
+
+            <div class="text-block">
+                <div class="title-row">
+                    <h1 id="title-text">About the teacher</h1>
+                </div>
+                <p class="subtitle" id="subtitle-text">Life, career, and education.</p>
+            </div>
+        </div>
+
+        <!-- Lado Direito: apenas toggle + bio, começando do topo -->
+        <div class="right-content">
+
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="en">EN-GB</button>
+                <button class="lang-btn" data-lang="pt">PT-BR</button>
+            </div>
+
+            <div class="bio-academic" id="bio-container"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- Evita o "salto" da imagem ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const deeImg = document.querySelector('.dee-img');
+
+            const liberarAnimacoes = () => {
+                setTimeout(() => {
+                    document.body.classList.add('body-loaded');
+                }, 50);
+            };
+
+            if (deeImg && deeImg.complete) {
+                liberarAnimacoes();
+            } else if (deeImg) {
+                deeImg.onload = liberarAnimacoes;
+                setTimeout(liberarAnimacoes, 1000);
+            } else {
+                liberarAnimacoes();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const translations = {
+                en: {
+                    title: "About the teacher",
+                    subtitle: "Life, career, and education.",
+                    bio: 'I am TESOL-certified (Teaching English to Students of Other Languages) and hold a specialization in Neurolinguistics from St. Petersburg University. I have over 10 years of experience in English language education, working both as a translator and as a teacher. My current research focuses on neurodiversity and language learning, with the goal of developing inclusive methodologies that respect diverse cognitive paces and learning styles.'
+                },
+                pt: {
+                    title: "Sobre a teacher",
+                    subtitle: "Vida, carreira e formação.",
+                    bio: 'Certificada TESOL (teaching english to students of other languages), e especialista em Neurolinguística pela St. Petesburg University. Atuo há mais de 10 anos no ensino de inglês, tanto como tradutora, quanto como professora. Minha pesquisa atual foca em neurodiversidade e aprendizagem de idiomas, buscando criar metodologias inclusivas que respeitem diferentes ritmos e estilos cognitivos.'
+                }
+            };
+
+            const bioContainer = document.getElementById("bio-container");
+
+            function startTypewriter(container, htmlContent, delay = 200, speed = 18) {
+                clearTimeout(container._typingTimeout);
+                container.innerHTML = '';
+
+                const template = document.createElement('div');
+                template.innerHTML = htmlContent;
+                const nodes = Array.from(template.childNodes);
+
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                container.appendChild(cursor);
+
+                let nodeIndex = 0;
+                let charIndex = 0;
+
+                function typeWriter() {
+                    if (nodeIndex >= nodes.length) return;
+
+                    const currentNode = nodes[nodeIndex];
+
+                    if (currentNode.nodeType === Node.TEXT_NODE) {
+                        if (charIndex < currentNode.textContent.length) {
+                            const charNode = document.createTextNode(currentNode.textContent.charAt(charIndex));
+                            container.insertBefore(charNode, cursor);
+                            charIndex++;
+                            container._typingTimeout = setTimeout(typeWriter, speed);
+                        } else {
+                            nodeIndex++;
+                            charIndex = 0;
+                            typeWriter();
+                        }
+                    } else {
+                        const clonedNode = currentNode.cloneNode(false);
+                        if (clonedNode.nodeName === 'SPAN') {
+                            clonedNode.textContent = '';
+                        }
+                        container.insertBefore(clonedNode, cursor);
+
+                        if (clonedNode.nodeName === 'BR' || !currentNode.hasChildNodes()) {
+                            nodeIndex++;
+                            charIndex = 0;
+                        } else {
+                            nodes[nodeIndex] = document.createTextNode(currentNode.textContent);
+                            charIndex = 0;
+                        }
+                        typeWriter();
+                    }
+                }
+
+                container._typingTimeout = setTimeout(typeWriter, delay);
+            }
+
+            function setLanguage(lang) {
+                const t = translations[lang];
+
+                document.getElementById('title-text').textContent = t.title;
+                document.getElementById('subtitle-text').textContent = t.subtitle;
+
+                startTypewriter(bioContainer, t.bio, 200, 18);
+
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setLanguage(btn.dataset.lang);
+                });
+            });
+
+            setLanguage('en');  // começa em inglês
+        });
+    </script>
+
+</body>
+</html>
