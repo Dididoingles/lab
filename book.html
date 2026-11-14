@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Metatags de Compartilhamento -->
+    <meta property="og:title" content="Language Lab">
+    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Language Lab">
+    <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <title>Livro 3D</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            touch-action: none;
+            position: fixed;
+            inset: 0;
+        }
+
+        body {
+            /* Fundo transparente para integrar ao Language Lab */
+            background-color: transparent;
+            font-family: 'Courier New', monospace;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            touch-action: none;
+            background: transparent;
+        }
+
+        #canvas-container canvas {
+            display: block;
+            touch-action: none;
+        }
+
+        .instrucao {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* Texto escuro sobre fundo claro */
+            color: rgba(34, 34, 34, 0.55);
+            font-size: 12px;
+            letter-spacing: 1px;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            left: 100px;
+            height: 40px;
+            padding: 0 18px;
+            border-radius: 20px;
+            /* Fundo claro translúcido + texto escuro para integrar ao tema claro */
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(34, 34, 34, 0.18);
+            color: #222;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(8px);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .close-btn.visible {
+            opacity: 0;
+            pointer-events: auto;
+        }
+
+        .close-btn:hover {
+            background: rgba(194, 0, 0, 0.08);
+            border-color: rgba(194, 0, 0, 0.35);
+            color: #c20000;
+        }
+
+        .close-btn:active {
+            transform: scale(0.95);
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .zoom-controls.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            /* Fundo claro + texto escuro */
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(34, 34, 34, 0.18);
+            color: #222;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(194, 0, 0, 0.08);
+            border-color: rgba(194, 0, 0, 0.35);
+            color: #c20000;
+            transform: scale(1.1);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (hover: none), (pointer: coarse) {
+            .zoom-controls {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .close-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+}
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+    <div class="instrucao" id="instrucao">Clique para abrir o livro</div>
+
+    <button class="close-btn" id="closeBtn">&#10005; FECHAR</button>
+
+    <div class="zoom-controls" id="zoomControls">
+        <div class="zoom-btn" id="zoomIn">+</div>
+        <div class="zoom-btn" id="zoomOut">-</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // ==========================================
+        // BLOQUEIO DO PINCH DO NAVEGADOR
+        // ==========================================
+        document.addEventListener('gesturestart', (e) => e.preventDefault());
+        document.addEventListener('gesturechange', (e) => e.preventDefault());
+        document.addEventListener('gestureend', (e) => e.preventDefault());
+
+        document.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+
+        // ==========================================
+        // CONFIGURACAO DA CENA
+        // ==========================================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 8);
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // ==========================================
+        // ILUMINACAO
+        // ==========================================
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        // ==========================================
+        // TEXTURAS E MATERIAIS
+        // ==========================================
+        const textureLoader = new THREE.TextureLoader();
+        
+        const capaTexture = textureLoader.load('assets/cover.webp');
+        const contracapaTexture = textureLoader.load('assets/back.webp');
+        const lombadaTexture = textureLoader.load('assets/spine.webp');
+        const paginaColoridaTexture = textureLoader.load('assets/page.webp');
+
+        // ==========================================
+        // TEXTURA DA SOMBRA (gradiente radial via canvas)
+        // ==========================================
+        function criarTexturaSombra() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+            grad.addColorStop(0,    'rgba(0, 0, 0, 0.35)');
+            grad.addColorStop(0.5,  'rgba(0, 0, 0, 0.15)');
+            grad.addColorStop(1,    'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 256, 256);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const contracapaMat = new THREE.MeshStandardMaterial({ 
+            color: 0xe8e3d9, roughness: 0.9, side: THREE.DoubleSide 
+        });
+        const capaMat = new THREE.MeshStandardMaterial({ 
+            map: capaTexture, roughness: 0.5, side: THREE.DoubleSide 
+        });
+        const capaTraseiraMat = new THREE.MeshStandardMaterial({ 
+            map: contracapaTexture, roughness: 0.5, side: THREE.DoubleSide 
+        });
+        const lombadaMat = new THREE.MeshStandardMaterial({ 
+            map: lombadaTexture, roughness: 0.5, side: THREE.DoubleSide 
+        });
+        const paginaColoridaMat = new THREE.MeshStandardMaterial({ 
+            map: paginaColoridaTexture, roughness: 0.8, side: THREE.DoubleSide 
+        });
+
+        // ==========================================
+        // CONSTRUCAO DO LIVRO
+        // ==========================================
+        const largura = 2.2;
+        const altura = 3.2;
+        const grossura = 0.3; 
+
+        const livro = new THREE.Group();
+        scene.add(livro);
+
+        // ---- SOMBRA SUAVE ATRÁS DO LIVRO ----
+        // Plano com textura radial em gradiente. Fica como filho do livro,
+        // então acompanha automaticamente pan, rotação e zoom.
+        const sombra = new THREE.Mesh(
+            new THREE.PlaneGeometry(largura * 2.2, altura * 1.6),
+            new THREE.MeshBasicMaterial({
+                map: criarTexturaSombra(),
+                transparent: true,
+                depthWrite: false,
+                opacity: 0.9
+            })
+        );
+        sombra.position.set(largura / 2, 0, -grossura / 2 - 0.1);
+        sombra.renderOrder = -1;
+        livro.add(sombra);
+
+        const mioloGeo = new THREE.BoxGeometry(largura, altura, grossura);
+        const mioloMat = new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.9 });
+        const miolo = new THREE.Mesh(mioloGeo, mioloMat);
+        miolo.position.set(largura / 2, 0, 0);
+        livro.add(miolo);
+
+        const backGeo = new THREE.BoxGeometry(largura, altura, 0.05);
+        const backCover = new THREE.Mesh(backGeo, capaTraseiraMat);
+        backCover.position.set(largura / 2, 0, -grossura / 2 - 0.025);
+        livro.add(backCover);
+
+        const lombadaGeo = new THREE.PlaneGeometry(grossura + 0.1, altura);
+        const spine = new THREE.Mesh(lombadaGeo, lombadaMat);
+        spine.position.set(-0.03, 0, 0);
+        spine.rotation.y = -Math.PI / 2;
+        spine.renderOrder = 1;
+        livro.add(spine);
+
+        const pageGeometry = new THREE.PlaneGeometry(largura, altura);
+        const colorPage = new THREE.Mesh(pageGeometry, paginaColoridaMat);
+        colorPage.position.set(largura / 2, 0, grossura / 2 + 0.01); 
+        livro.add(colorPage);
+
+        const coverPivot = new THREE.Group();
+        coverPivot.position.set(0, 0, grossura / 2 + 0.05); 
+        livro.add(coverPivot);
+
+        const frontCapaGeo = new THREE.BoxGeometry(largura, altura, 0.05);
+        const frontCover = new THREE.Mesh(frontCapaGeo, capaMat);
+        frontCover.position.set(largura / 2, 0, 0);
+        coverPivot.add(frontCover);
+
+        const insideCoverGeo = new THREE.PlaneGeometry(largura, altura);
+        const insideCover = new THREE.Mesh(insideCoverGeo, contracapaMat);
+        insideCover.position.set(largura / 2, 0, -0.03);
+        insideCover.rotation.y = Math.PI;
+        coverPivot.add(insideCover);
+
+        // ==========================================
+        // ESTADOS
+        // ==========================================
+        livro.position.x = -largura / 2;
+        livro.rotation.x = 0.2; 
+        livro.rotation.y = -0.4;
+
+        let isOpen = false;
+        let targetCoverRot = 0;
+        let currentCoverRot = 0;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotationX = 0.2;
+        let targetRotationY = -0.4;
+
+        // ==========================================
+        // ZOOM
+        // ==========================================
+        let currentZoom = 8;
+        let targetZoom = 8;
+        const minZoom = 3.5;
+        const maxZoom = 10;
+
+        // Zoom aplicado ao abrir o livro.
+        // Desktop: 1.6x (mais perto = distancia menor)
+        // Mobile: 1.0x (mantem distancia padrao para nao estourar a textura)
+        const isMobile = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+        const ZOOM_ABERTURA = isMobile ? 8.0 : 5.0;  // 8 / 1.6 = 5.0
+
+        // ==========================================
+        // PAN
+        // ==========================================
+        let panUsuario = { x: 0, y: 0 };
+
+        // Arrastar (mouse)
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let mouseDownTime = 0;
+        let mouseMovedDistance = 0;
+
+        // Flutuacao do mouse
+        let mouseHoverActive = true;
+
+        // ==========================================
+        // ANIMACAO DE ROTACAO SUAVE
+        // ==========================================
+        let rotAnim = null;
+
+        function easeInOutCubic(t) {
+            return t < 0.5
+                ? 4 * t * t * t
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function startRotationFromCurrent(endX, endY, duration) {
+            rotAnim = {
+                startX: livro.rotation.x,
+                startY: livro.rotation.y,
+                endX: endX,
+                endY: endY,
+                startTime: performance.now(),
+                duration: duration
+            };
+            targetRotationX = endX;
+            targetRotationY = endY;
+        }
+
+        // ==========================================
+        // FUNCOES AUXILIARES
+        // ==========================================
+        function isUIElement(el) {
+            return el && el.closest && el.closest('.zoom-controls, .close-btn');
+        }
+
+        // ==========================================
+        // ABRIR / FECHAR / RESET
+        // ==========================================
+        function openBook() {
+            if (isOpen) return;
+            isOpen = true;
+            mouseHoverActive = false;
+            rotAnim = null;
+            panUsuario = { x: 0, y: 0 };
+
+            document.getElementById('instrucao').style.opacity = '0';
+            document.getElementById('zoomControls').classList.add('visible');
+            document.getElementById('closeBtn').classList.add('visible');
+
+            targetCoverRot = -Math.PI;
+            targetRotationX = 0;
+            targetRotationY = 0;
+
+            targetPositionX = -largura / 2;
+            targetPositionY = 0;
+
+            // Aplica o zoom de abertura
+            targetZoom = ZOOM_ABERTURA;
+        }
+
+        function closeBook() {
+            if (!isOpen) return;
+            isOpen = false;
+            mouseHoverActive = false;
+            rotAnim = null;
+            panUsuario = { x: 0, y: 0 };
+
+            targetCoverRot = 0;
+            targetRotationX = 0.2;
+            targetRotationY = -0.4;
+            targetPositionX = -largura / 2;
+            targetPositionY = 0;
+            targetZoom = 8;
+
+            document.getElementById('instrucao').style.opacity = '1';
+            document.getElementById('zoomControls').classList.remove('visible');
+            document.getElementById('closeBtn').classList.remove('visible');
+        }
+
+        function resetView() {
+            mouseHoverActive = false;
+            rotAnim = null;
+            panUsuario = { x: 0, y: 0 };
+
+            if (isOpen) {
+                targetPositionX = -largura / 2;
+                targetPositionY = 0;
+                targetRotationX = 0;
+                targetRotationY = 0;
+                targetZoom = ZOOM_ABERTURA;
+            } else {
+                startRotationFromCurrent(0.2, -0.4, 800);
+                targetPositionX = -largura / 2;
+                targetPositionY = 0;
+                targetZoom = 8;
+            }
+        }
+
+        // ==========================================
+        // BOTAO FECHAR
+        // ==========================================
+        document.getElementById('closeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            closeBook();
+        });
+
+        document.getElementById('closeBtn').addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            closeBook();
+        }, { passive: false });
+
+        // ==========================================
+        // CONTROLES DE MOUSE
+        // ==========================================
+        container.addEventListener('mousedown', (e) => {
+            if (isUIElement(e.target)) return;
+            mouseDownTime = Date.now();
+            mouseMovedDistance = 0;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            isDragging = true;
+            mouseHoverActive = false;
+            rotAnim = null;
+            container.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isUIElement(e.target)) return;
+
+            if (!isDragging && !isOpen) {
+                const dx = e.clientX - previousMousePosition.x;
+                const dy = e.clientY - previousMousePosition.y;
+                if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+                    mouseHoverActive = true;
+                    rotAnim = null;
+                }
+            }
+
+            if (!isDragging) {
+                if (isOpen) return;
+                mouseX = (e.clientX / window.innerWidth) - 0.5;
+                mouseY = (e.clientY / window.innerHeight) - 0.5;
+                return;
+            }
+
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+            mouseMovedDistance += Math.abs(deltaX) + Math.abs(deltaY);
+
+            if (isOpen) {
+                const moveSpeed = (currentZoom / 8) * 0.01;
+                panUsuario.x += deltaX * moveSpeed;
+                panUsuario.y -= deltaY * moveSpeed;
+                targetPositionX = (-largura / 2) + panUsuario.x;
+                targetPositionY = 0 + panUsuario.y;
+            } else {
+                targetRotationY += deltaX * 0.01;
+                targetRotationX += deltaY * 0.01;
+                targetRotationX = Math.max(-1.2, Math.min(1.2, targetRotationX));
+            }
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (isUIElement(e.target)) {
+                isDragging = false;
+                container.style.cursor = isOpen ? 'grab' : 'pointer';
+                return;
+            }
+
+            const clickDuration = Date.now() - mouseDownTime;
+
+            if (mouseMovedDistance < 10 && clickDuration < 300) {
+                if (isOpen) {
+                    closeBook();
+                } else {
+                    openBook();
+                }
+            }
+
+            isDragging = false;
+            container.style.cursor = isOpen ? 'grab' : 'pointer';
+        });
+
+        // ==========================================
+        // CONTROLES DE TOUCH
+        // ==========================================
+        let touchStartPos = { x: 0, y: 0 };
+        let touchMovedDistance = 0;
+        let touchDownTime = 0;
+        let lastTapTime = 0;
+        const DOUBLE_TAP_DELAY = 350;
+        let touchActive = false;
+
+        let pinchStartDist = 0;
+        let pinchStartZoom = 8;
+        let isPinching = false;
+
+        container.addEventListener('touchstart', (e) => {
+            if (isUIElement(e.target)) return;
+
+            if (e.touches.length >= 2) {
+                e.preventDefault();
+                const t0 = e.touches[0];
+                const t1 = e.touches[1];
+                pinchStartDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                pinchStartZoom = currentZoom;
+                isPinching = true;
+                touchActive = false;
+                isDragging = false;
+                return;
+            }
+
+            const t = e.touches[0];
+            touchStartPos = { x: t.clientX, y: t.clientY };
+            previousMousePosition = { x: t.clientX, y: t.clientY };
+            touchMovedDistance = 0;
+            touchDownTime = Date.now();
+            touchActive = true;
+
+            isDragging = false;
+            mouseHoverActive = false;
+            rotAnim = null;
+        }, { passive: false });
+
+        container.addEventListener('touchmove', (e) => {
+            if (e.touches.length >= 2) {
+                e.preventDefault();
+                if (isPinching && pinchStartDist > 0) {
+                    const t0 = e.touches[0];
+                    const t1 = e.touches[1];
+                    const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                    const scale = dist / pinchStartDist;
+                    targetZoom = Math.max(minZoom, Math.min(maxZoom, pinchStartZoom / scale));
+                }
+                return;
+            }
+
+            if (!touchActive) return;
+            if (isUIElement(e.target)) return;
+
+            const t = e.touches[0];
+            const totalDx = t.clientX - touchStartPos.x;
+            const totalDy = t.clientY - touchStartPos.y;
+            touchMovedDistance = Math.sqrt(totalDx * totalDx + totalDy * totalDy);
+
+            if (!isDragging && touchMovedDistance > 8) {
+                isDragging = true;
+                previousMousePosition = { x: t.clientX, y: t.clientY };
+                return;
+            }
+
+            if (!isDragging) return;
+
+            const deltaX = t.clientX - previousMousePosition.x;
+            const deltaY = t.clientY - previousMousePosition.y;
+
+            if (isOpen) {
+                const moveSpeed = (currentZoom / 8) * 0.01;
+                panUsuario.x += deltaX * moveSpeed;
+                panUsuario.y -= deltaY * moveSpeed;
+                targetPositionX = (-largura / 2) + panUsuario.x;
+                targetPositionY = 0 + panUsuario.y;
+            } else {
+                targetRotationY += deltaX * 0.01;
+                targetRotationX += deltaY * 0.01;
+                targetRotationX = Math.max(-1.2, Math.min(1.2, targetRotationX));
+            }
+
+            previousMousePosition = { x: t.clientX, y: t.clientY };
+        }, { passive: false });
+
+        container.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                isPinching = false;
+            }
+
+            if (isUIElement(e.target)) {
+                touchActive = false;
+                isDragging = false;
+                return;
+            }
+
+            if (!touchActive) {
+                isDragging = false;
+                return;
+            }
+
+            touchActive = false;
+
+            const clickDuration = Date.now() - touchDownTime;
+            const wasDrag = isDragging || touchMovedDistance > 15;
+
+            isDragging = false;
+
+            if (wasDrag) return;
+            if (clickDuration > 500) return;
+
+            if (isOpen) {
+                closeBook();
+            } else {
+                const now = Date.now();
+                if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+                    lastTapTime = 0;
+                    openBook();
+                } else {
+                    lastTapTime = now;
+                }
+            }
+        }, { passive: true });
+
+        container.addEventListener('touchcancel', (e) => {
+            touchActive = false;
+            isDragging = false;
+            isPinching = false;
+        }, { passive: true });
+
+        // ==========================================
+        // ZOOM (BOTOES - DESKTOP)
+        // ==========================================
+        document.getElementById('zoomIn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (targetZoom > minZoom) targetZoom -= 1.0; 
+        });
+
+        document.getElementById('zoomOut').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (targetZoom < maxZoom) targetZoom += 1.0; 
+        });
+
+        // ==========================================
+        // LOOP DE ANIMACAO
+        // ==========================================
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (rotAnim) {
+                const now = performance.now();
+                let t = (now - rotAnim.startTime) / rotAnim.duration;
+                if (t >= 1) t = 1;
+
+                const eased = easeInOutCubic(t);
+
+                livro.rotation.x = rotAnim.startX + (rotAnim.endX - rotAnim.startX) * eased;
+                livro.rotation.y = rotAnim.startY + (rotAnim.endY - rotAnim.startY) * eased;
+
+                if (t >= 1) {
+                    targetRotationX = rotAnim.endX;
+                    targetRotationY = rotAnim.endY;
+                    rotAnim = null;
+                }
+            } else if (!isOpen && !isDragging) {
+                if (mouseHoverActive) {
+                    livro.rotation.x += ((0.2 + mouseY * 1.5) - livro.rotation.x) * 0.05;
+                    livro.rotation.y += ((-0.4 - mouseX * 1.5) - livro.rotation.y) * 0.05;
+                } else {
+                    livro.rotation.x += (targetRotationX - livro.rotation.x) * 0.1;
+                    livro.rotation.y += (targetRotationY - livro.rotation.y) * 0.1;
+                }
+            } else {
+                livro.rotation.x += (targetRotationX - livro.rotation.x) * 0.1;
+                livro.rotation.y += (targetRotationY - livro.rotation.y) * 0.1;
+            }
+
+            // Compensa a rotação do livro para a sombra "deitar" atrás dele.
+            // Acompanha só parte da rotação, evitando que a sombra vaze pra frente.
+            sombra.rotation.x = -livro.rotation.x * 0.5;
+            sombra.rotation.y = -livro.rotation.y * 0.5;
+
+            currentZoom += (targetZoom - currentZoom) * 0.1;
+            camera.position.z = currentZoom;
+
+            if (isOpen) {
+                const alvoX = (-largura / 2) + panUsuario.x;
+                const alvoY = 0 + panUsuario.y;
+                livro.position.x += (alvoX - livro.position.x) * 0.1;
+                livro.position.y += (alvoY - livro.position.y) * 0.1;
+            } else {
+                livro.position.x += (-largura / 2 - livro.position.x) * 0.1;
+                livro.position.y += (0 - livro.position.y) * 0.1;
+            }
+
+            currentCoverRot += (targetCoverRot - currentCoverRot) * 0.05;
+            coverPivot.rotation.y = currentCoverRot;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // ==========================================
+        // RESIZE
+        // ==========================================
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.style.height = window.innerHeight + 'px';
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }, 100);
+        });
+    </script>
+</body>
+</html>
