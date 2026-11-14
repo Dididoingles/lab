@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #222222; --paper: #ffffff;
+            --accent: #c20000; --accent-dark: #a30000; --muted: #666666;
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-hand: 'Gochi Hand', cursive;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            background: transparent; font-family: var(--font-title); color: var(--ink);
+            min-height: 100%;
+        }
+        body {
+            padding: 150px 40px 30px 40px;
+            display: flex; flex-direction: column; justify-content: center;
+            overflow-y: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; margin: 0 auto; }
+
+        .page-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-weight: 600; font-size: 10px; letter-spacing: .28em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+        }
+        .page-kicker::before, .page-kicker::after {
+            content: ''; width: 22px; height: 1.5px; background: currentColor;
+        }
+        .page-title { font-size: 38px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.05em; line-height: 1.1; }
+
+        .profile-card {
+            background: #fafafa; padding: 32px; border-radius: 18px;
+            max-width: 420px; border: 1px solid rgba(34,34,34,.06);
+        }
+        .profile-card p { margin-bottom: 10px; font-size: 14px; }
+        .profile-name  { font-weight: 700; font-size: 18px; }
+        .profile-stats { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            background: var(--accent); color: #fff;
+            padding: 0 24px; height: 46px;
+            font-family: var(--font-hand); font-size: 17px; letter-spacing: .02em;
+            border: 2px solid var(--ink); border-radius: 12px; cursor: pointer;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform .15s, box-shadow .15s, background .2s;
+            width: fit-content;
+        }
+        .btn-primary:hover { background: var(--accent-dark); transform: translate(1px, 1px); box-shadow: 1px 2px 0 rgba(34,34,34,.85); }
+        .btn-primary:active { transform: translate(3px, 3px); box-shadow: 0 0 0 rgba(34,34,34,.85); }
+
+        
+
+        /* width */
+::-webkit-scrollbar {
+width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f12d;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #8888882a;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+
+
+        @media (max-width: 1024px) {
+            body { padding-top: 80px; justify-content: flex-start; }
+            .page-title { font-size: 28px; }
+            .profile-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="view" id="page-profile">
+        <span class="page-kicker">Em breve</span>
+        <h2 class="page-title">Ainda estamos construindo essa página!</h2>
+        <div class="profile-card">
+            <p class="profile-name">Bem-vindo, Aluno!</p>
+            <p class="profile-stats">Em breve você vai ver aqui uma ferramenta exclusiva do language lab.</p>
+        </div>
+
+       
+    </section>
+
+   
+</body>
+</html>
