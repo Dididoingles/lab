@@ -2,669 +2,1530 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
-        <meta property="og:title" content="Language Lab">
-        <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
-        <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-        <meta property="og:url" content="https://dididoingles.github.io/lab/">
-        <meta property="og:type" content="website">
-        
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Language Lab">
-        <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
-        <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-    
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
-        <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- Metatags de Compartilhamento -->
+    <meta property="og:title" content="Language Lab">
+    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Language Lab">
+    <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
     <title>Language Lab</title>
-    
-    <!-- Fontes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gochi+Hand&family=Poppins:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --accent: #B30000;
-            --accent-dark: #990000;
-            --ink: #222222;
-            --shadow-hard-sm: 2px 3px 0 rgba(34, 34, 34, 0.85);
-            
-            --font-title: 'Poppins', sans-serif;
-            --font-mono: 'Space Mono', monospace;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@400;600&display=swap');
 
+        /* ============================================================ */
+        /* RESET GLOBAL */
+        /* ============================================================ */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            user-select: none;
         }
 
         html, body {
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* ============================================================ */
+        /* ESTRUTURA DE PÁGINAS */
+        /* ============================================================ */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffffff;
-            font-family: var(--font-mono);
             overflow: hidden;
         }
 
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-
-        /* Container Principal (Desktop) */
-        .page-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            min-height: 600px;
-            background-color: #ffffff;
-            /* Malha cinza fina (grade de 24px) */
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-            background-size: 24px 24px;
-            display: flex;
-            align-items: flex-end;
-            padding: 0 50px 40px 50px;
-        }
-
-        /* --- GRUPO DA ESQUERDA (Dee + Título) --- */
-        .left-group {
-            position: relative;
+        #page-mars {
+            background: #000000;
             display: flex;
             flex-direction: column;
-            width: 48%;
+            justify-content: center;
+            align-items: center;
+            cursor: crosshair;
+            font-family: 'Outfit', monospace;
+            padding: 24px;
+            z-index: 10;
+            transition: opacity 0.8s ease-out;
+        }
+
+        #page-lab {
+            background: #ffffff;
+            font-family: 'IBM Plex Mono', monospace;
+            z-index: 5;
+            display: none;
+        }
+
+        /* ============================================================ */
+        /* PÁGINA 1 (MARS) */
+        /* ============================================================ */
+        .scene-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
             height: 100%;
-            justify-content: flex-end;
+        }
+
+        .mars-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .robot-face {
+            width: 320px;
+            height: 272px;
+            background: #000000;
+            border-radius: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+        }
+
+        .robot-face.entered { opacity: 1; transform: scale(1); }
+
+        .eye-wrapper {
+            position: relative;
+            width: 72px;
+            height: 96px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .eye {
+            width: 56px;
+            height: 84px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 0.08s linear;
+            z-index: 4;
+            transform: scaleY(0.05);
+            transform-origin: center center;
+        }
+
+        .eye.awake {
+            transform: scaleY(1);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes naturalBlink {
+            0%   { transform: scaleY(1) scaleX(1); }
+            15%  { transform: scaleY(0.9) scaleX(1.02); }
+            35%  { transform: scaleY(0.05) scaleX(0.98); }
+            65%  { transform: scaleY(0.05) scaleX(0.98); }
+            85%  { transform: scaleY(0.9) scaleX(1.02); }
+            100% { transform: scaleY(1) scaleX(1); }
+        }
+
+        @keyframes shyEyes   { 0% { transform: translate(0,0); } 100% { transform: translate(6px,2px); } }
+        @keyframes unshyEyes { 0% { transform: translate(6px,2px); } 100% { transform: translate(0,0); } }
+
+        .eye.blinking    { animation: naturalBlink 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .eye.shy-left    { animation: shyEyes 0.3s ease-out forwards; }
+        .eye.shy-right   { animation: shyEyes 0.3s ease-out forwards; }
+        .eye.unshy-left  { animation: unshyEyes 0.3s ease-out forwards; }
+        .eye.unshy-right { animation: unshyEyes 0.3s ease-out forwards; }
+
+        .cheek {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background: #ff69b4;
+            border-radius: 50%;
+            bottom: 42px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: blur(2px);
             z-index: 3;
         }
+        .cheek.left-cheek  { left: 65px; }
+        .cheek.right-cheek { right: 65px; }
+        .cheek.visible     { opacity: 0.85; }
 
-        /* Estado inicial da imagem: Escondida e posicionada para o slide */
-        .dee-img {
-            position: absolute;
-            opacity: 0;
-            left: -30px;
-            bottom: 80px;
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            max-height: 95vh;
-            object-fit: contain;
-            object-position: bottom left;
-            z-index: 1;
-            transform: translateX(-100px);
-            /* Otimização para evitar o "salto" no navegador */
-            will-change: transform, opacity; 
+        .hint-text {
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-align: center;
+            opacity: 0.75;
+            z-index: 2;
+            min-height: 1.4em;
+            white-space: nowrap;
         }
 
-        /* Animação de slide + fade original aprovada */
-        .body-loaded .dee-img {
-            animation: slideIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes slideIn {
-            to { opacity: 0.6; transform: translateX(0); }
-        }
-
-        .text-block {
+        /* ============================================================ */
+        /* WRAPPER DO LIVRO */
+        /* ============================================================ */
+        .book-wrap {
             position: relative;
-            z-index: 5;
+            margin-top: 20px;
+            flex-shrink: 0;
+            z-index: 2;
+            animation: floatBook 4s ease-in-out infinite;
+            will-change: transform;
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .book-wrap.entered { opacity: 1; transform: translateY(0) scale(1); }
+
+        .book-wrap.is-open {
+            animation: none !important;
+            will-change: auto !important;
+        }
+
+        @keyframes floatBook {
+            0%   { transform: translateY(0px); }
+            50%  { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .book-glow {
+            position: absolute;
+            top: calc(50% + 14px);
+            left: 50%;
+            width: 70%;
+            height: 70%;
+            transform: translate(-30%, -50%);
+            border-radius: 90%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 248, 220, 0.6) 0%,
+                rgba(255, 236, 180, 0.4) 30%,
+                rgba(255, 210, 120, 0.2) 55%,
+                rgba(255, 180, 80, 0.08) 75%,
+                rgba(255, 160, 60, 0) 100%
+            );
+            filter: blur(20px);
+            pointer-events: none;
+            z-index: -1;
+            animation: glowPulse 4s ease-in-out infinite;
+            will-change: opacity, transform;
+        }
+
+        @keyframes glowPulse {
+            0%   { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+            50%  { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
+            100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* ============================================================ */
+        /* CONTAINER DO THREE.JS */
+        /* ============================================================ */
+        .book-panel {
+            width: 280px;
+            height: 280px;
+            position: relative;
+            cursor: pointer;
+            overflow: visible;
+            touch-action: none;
+            margin: -30px;
+        }
+
+        .book-panel.is-open {
+            position: fixed;
+            inset: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            z-index: 5000;
+            cursor: grab;
             background: transparent;
-            padding-bottom: 10px;
-            text-shadow: 0px 0px 10px rgba(255, 255, 255, 1), 0px 0px 5px rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+        }
+        .book-panel.is-open:active { cursor: grabbing; }
+
+        /* Fade-out suave do livro quando a luz o engole */
+        .book-panel.is-fading {
+            opacity: 0;
+            transition: opacity 1.85s ease-in;
+            pointer-events: none;
         }
 
-        .title-row {
+        .book-panel canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================================ */
+        /* GLOW QUENTE ATRÁS DO LIVRO ABERTO */
+        /* ============================================================ */
+        .book-panel .book-warm-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 120vmax;
+            height: 120vmax;
+            transform: translate(-50%, -50%) scale(0.3);
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 248, 220, 0.55) 0%,
+                rgba(255, 236, 180, 0.38) 20%,
+                rgba(255, 210, 120, 0.20) 40%,
+                rgba(255, 180, 80, 0.08) 65%,
+                rgba(255, 160, 60, 0) 100%
+            );
+            filter: blur(30px);
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 1.2s ease-out, transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .book-panel.is-open .book-warm-glow {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            animation: warmGlowPulse 3.5s ease-in-out infinite;
+        }
+
+        @keyframes warmGlowPulse {
+            0%   { opacity: 0.85; }
+            50%  { opacity: 1; }
+            100% { opacity: 0.85; }
+        }
+
+        .book-panel.is-fading .book-warm-glow {
+            opacity: 0;
+            transition: opacity 1.2s ease-in;
+        }
+
+        /* ============================================================ */
+        /* PÁGINA 2 (LAB) */
+        /* ============================================================ */
+        .lab-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-text {
+            position: absolute;
+            top: 80px;
+            left: 40px;
             display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            margin-bottom: 5px;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 10;
         }
 
-        .title-row h1 {
-            font-family: var(--font-title);
-            font-size: 55px;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: -0.07em;
+        .title {
+            font-family: 'Caveat', cursive;
+            font-size: 72px;
+            font-weight: 400;
+            color: #af0101;
+            opacity: 0.85;
             line-height: 1;
-        }
-
-        .pencil-img {
-            width: 65px;
-            height: auto;
-            transform: rotate(20deg);
-            margin-bottom: 10px;
+            white-space: nowrap;
+            letter-spacing: -0.08em;
+            margin-right: -0.08em;
         }
 
         .subtitle {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: #333;
-            font-weight: 400;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 15px;
+            color: #747474;
+            letter-spacing: 0.5px;
         }
 
-        /* --- CONTEÚDO DA DIREITA (Texto, Botões) --- */
-        .right-content {
-            position: relative;
-            flex: 1;
-            height: 100%;
+        .left-side {
+            position: absolute;
+            top: 220px;
+            left: -50px;
+            bottom: 40px;
+            width: 420px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .video-wrapper { width: 100%; }
+
+        .video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+            z-index: 9;
+            border-radius: 12px;
+            clip-path: inset(0 60px 0 0);
+        }
+
+        .right-side {
+            position: absolute;
+            bottom: 0;
+            right: -40px;
+            width: 90%;
+            max-width: 1100px;
+            z-index: 1;
+            pointer-events: none;
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
+            opacity: 0.2;
+        }
+
+        .city-wrapper {
+            width: 90%;
+            display: flex;
             justify-content: flex-end;
-            padding-left: 40px;
-            padding-bottom: 10px;
-            z-index: 4;
         }
 
-        /* --- TOGGLE DE IDIOMAS --- */
-        .lang-toggle {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            background: rgba(0, 0, 0, 0.05);
-            padding: 4px;
-            border-radius: 20px;
-            width: fit-content;
+        .city-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            object-position: bottom right;
         }
-
-        .lang-btn {
-            background: transparent;
-            border: none;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 700;
-            color: #666;
-            padding: 4px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .lang-btn:hover {
-            color: var(--accent);
-        }
-
-        .lang-btn.active {
-            background-color: #ffffff;
-            color: var(--accent);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .welcome-text {
-            font-size: 15px;
-            line-height: 1.8;
-            color: #333;
-            max-width: 750px;
-            min-height: 100px;
-            margin-bottom: 25px;
-        }
-
-        .welcome-text .red {
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        /* Cursor fino */
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 15px;
-            background-color: #333;
-            margin-left: 4px;
-            vertical-align: middle;
-            animation: blink 0.8s step-end infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* --- BOTÕES --- */
-        .btn-group {
-            display: flex;
-            margin-top: -30px;
-            margin-bottom: 5px;
-            gap: 15px;
-            opacity: 0;
-        }
-
-        .body-loaded .btn-group {
-            animation: fadeIn 0.5s ease-out 1.5s forwards;
-        }
-
-        @keyframes fadeIn { to { opacity: 1; } }
 
         .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background-color: var(--accent);
-            color: #ffffff;
-            font-family: 'Gochi Hand', cursive;
-            font-weight: 400;
-            font-size: 16px;
-            letter-spacing: 0.02em;
-            padding: 0 22px;
-            height: 46px;
-            border: 2px solid var(--ink);
-            border-radius: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: var(--shadow-hard-sm);
-            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background-color: var(--accent-dark);
-            transform: translateY(1px) translateX(1px);
-            box-shadow: 1px 2px 0 rgba(34, 34, 34, 0.85);
-        }
-
-        .action-btn:active {
-            transform: translateY(3px) translateX(2px);
-            box-shadow: 0 0 0 rgba(34, 34, 34, 0.85);
-        }
-
-        .action-btn svg {
-            width: 15px; height: 15px;
-            stroke: #ffffff; stroke-width: 2;
-            fill: none; stroke-linecap: round; stroke-linejoin: round;
-        }
-
-        .btn-outline {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background-color: transparent;
-            color: var(--accent);
-            font-family: 'Gochi Hand', cursive;
-            font-weight: 400;
-            font-size: 16px;
-            letter-spacing: 0.02em;
-            padding: 0 22px;
-            height: 46px;
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            text-decoration: none;
-            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(179, 0, 0, 0.05);
-            transform: translateY(1px) translateX(1px);
-            box-shadow: 1px 2px 0 rgba(179, 0, 0, 0.4);
-        }
-        
-        .btn-outline svg { width: 16px; height: 16px; }
-
-        .google-logo-svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-
-        /* --- ROBÔ --- */
-        .robot-box {
             position: absolute;
+            bottom: 120px;
             right: 50px;
-            top: 40px;
-            width: 150px;
-            height:150px;
-            z-index: 10;
-            opacity: 0;
-        }
-
-        .body-loaded .robot-box {
-            animation: fadeIn 0.1s ease-out 0.2s forwards;
-        }
-
-        .robot-box img {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-        }
-
-        .robot-box .sketch { z-index: 1; opacity: 1; }
-        .robot-box .mars { z-index: 2; opacity: 0; transition: opacity 0.8s ease; }
-
-        /* --- RODAPÉ --- */
-        .footer {
-            position: absolute;
-            right: 120px;
-            bottom: 60px;
+            z-index: 20;
+            background: #e23838;
+            border: 1px solid #2b2b2b;
+            color: #ffffff;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
             display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            z-index: 2;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 4px 4px 0px #2b2b2b;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+            pointer-events: auto;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .footer p {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: #444;
-            text-align: right;
+        .action-btn:hover, .action-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #2b2b2b;
+            background-color: #a82020;
         }
 
-        .block-img {
-            width: 20px;
-            height: auto;
+        .action-btn svg { width: 24px; height: 24px; }
+
+        .fade-in { opacity: 0; transition: opacity 1.5s ease-out; }
+        .fade-in.visible { opacity: 1; }
+
+        /* ============================================================ */
+        /* LUZ GLOBAL */
+        /* ============================================================ */
+        .white-fade {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #ffffff;
+            filter: blur(40px);
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.01);
+            transform-origin: center center;
+            will-change: transform, opacity, filter;
         }
 
-        /* =========================================
-           RESPONSIVIDADE (MOBILE)
-           ========================================= */
-        @media (max-width: 1024px) {
-            html, body {
-                overflow: auto;
-            }
+        /* ============================================================ */
+        /* SKIP INTRO */
+        /* ============================================================ */
+        .skip-btn {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
 
-            .page-container {
+        .skip-btn:hover { color: #ffffff; transform: translateX(3px); }
+        .skip-btn svg { width: 14px; height: 14px; }
+
+        .skip-btn.dark-text { color: rgba(43, 43, 43, 0.4); }
+        .skip-btn.dark-text:hover { color: #2b2b2b; }
+
+        /* ============================================================ */
+        /* MEDIA QUERIES */
+        /* ============================================================ */
+        @media (min-width: 900px) {
+            .scene-container { flex-direction: row; gap: 60px; }
+            .book-panel { width: 420px; height: 420px; margin: -40px; }
+            .book-wrap { animation: floatBookDesktop 6s ease-in-out infinite; }
+        }
+
+        @keyframes floatBookDesktop {
+            0%   { transform: translateY(0px); }
+            50%  { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 900px) {
+            .robot-face { width: 240px; height: 204px; gap: 36px; border-radius: 24px; }
+            .eye { width: 42px; height: 63px; }
+            .eye-wrapper { width: 54px; height: 72px; }
+            .cheek { width: 28px; height: 28px; bottom: 31px; }
+            .cheek.left-cheek  { left: 49px; }
+            .cheek.right-cheek { right: 49px; }
+            .book-panel { width: 260px; height: 260px; margin: -30px; }
+            .hint-text { font-size: 12px; white-space: normal; padding: 0 20px; }
+            .scene-container { gap: 8px; }
+            .book-wrap{ margin-top: 60px; letter-spacing: -0.08em }
+
+            .lab-container {
+                display: flex;
                 flex-direction: column;
-                height: auto;
-                min-height: 100vh;
+                justify-content: flex-start;
+                align-items: center;
                 padding: 20px;
-                align-items: flex-start;
-                justify-content: flex-start;
             }
-
-            /* NO MOBILE: Começa invisível e sem slide lateral */
-            .dee-img {
-                position: relative;
-                left: auto;
-                bottom: auto;
-                width: 100%;
-                max-width: 300px;
-                margin: 40px 0 0 0;
-                opacity: 0;
-                transform: none !important; /* Remove o slide */
+            .header-text {
+                position: relative; top: 0; left: 0;
+                align-items: center; text-align: center; margin-top: 60px;
             }
-
-            /* NO MOBILE: Animação apenas de fade-in suave */
-            .body-loaded .dee-img {
-                animation: fadeInMobile 0.8s ease-out forwards;
+            .title { font-size: 46px; white-space: normal; letter-spacing: -0.05em; line-height: 1.1; }
+            .subtitle { font-size: 13px; margin-bottom: 60px; }
+            .left-side {
+                position: relative; top: 0; left: 0; bottom: 0;
+                width: 90%; max-width: 320px; margin-top: 30px;
+                display: flex; justify-content: center;
             }
-
-            @keyframes fadeInMobile {
-                to { opacity: 0.5; }
+            .video-wrapper video { width: 100%; border-radius: 8px; clip-path: none; }
+            .right-side { display: none; }
+            .action-btn {
+                position: relative; bottom: 0; right: 0; margin-top: 30px;
+                padding: 12px 20px; font-size: 14px; box-shadow: 3px 3px 0px #2b2b2b;
             }
+            .action-btn:hover, .action-btn:active { transform: translate(3px, 3px); }
+        }
 
-            .left-group {
-                width: 100%;
-                height: auto;
-                padding-bottom: 0;
-                margin-top: -40px;
-            }
-
-            .text-block {
-                text-align: left;
-                background: transparent;
-                padding-top: 0;
-                padding-bottom: 20px;
-                text-shadow: none;
-            }
-
-            .title-row {
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-
-            .title-row h1 { font-size: 38px; }
-            .pencil-img { width: 40px; margin-bottom: 4px; }
-            .subtitle { margin-bottom: 25px; color: #555; font-weight: 400; }
-
-            .right-content {
-                width: 100%;
-                padding-left: 0;
-                padding-bottom: 20px;
-                justify-content: flex-start;
-            }
-
-            .welcome-text {
-                text-align: left;
-                font-size: 13px;
-                margin-bottom: 20px;
-                min-height: auto;
-            }
-
-            .btn-group {
-                flex-direction: row;
-                width: 100%;
-                gap: 10px;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                margin-top: 0px;
-                margin-bottom: 0px;
-                opacity: 1 !important;
-                animation: none !important;
-            }
-
-            .action-btn, .btn-outline {
-                font-size: 14px;
-                padding: 0 12px;
-                height: 40px;
-                flex: 1;
-                min-width: 130px;
-            }
-
-            .robot-box {
-                position: absolute;
-                right: 20px;
-                top: 20px;
-                width: 70px;
-                height: 70px;
-                opacity: 1 !important;
-                animation: none !important;
-            }
-
-            
-            .lang-toggle {
-                margin-left: 0;
-            }
+        @media (max-height: 700px) and (min-width: 900px) {
+            .book-panel { width: 340px; height: 340px; margin: -30px; }
+            .robot-face { width: 280px; height: 238px; gap: 42px; }
+            .eye { width: 48px; height: 72px; }
+            .eye-wrapper { width: 62px; height: 82px; }
+            .cheek { width: 32px; height: 32px; bottom: 36px; }
+            .cheek.left-cheek  { left: 56px; }
+            .cheek.right-cheek { right: 56px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="page-container">
-        
-        <!-- Lado Esquerdo: Dee + Título -->
-        <div class="left-group">
-            <img src="assets/dee.webp" alt="Dee" class="dee-img">
-            
-            <div class="text-block">
-                <div class="title-row">
-                    <h1 id="title-text">Language Lab</h1>
-                    <img src="assets/pencil.webp" alt="Lápis" class="pencil-img">
+    <!-- ============================================================ -->
+    <!-- PÁGINA 2 (LAB) -->
+    <!-- ============================================================ -->
+    <div class="page" id="page-lab">
+        <div class="lab-container">
+            <div class="header-text fade-in">
+                <h1 class="title">O conhecimento liberta.</h1>
+                <p class="subtitle">Language Lab | @adicarvalho.prof</p>
+            </div>
+
+            <div class="left-side">
+                <div class="video-wrapper">
+                    <video id="labMarsVideo" src="assets/marsvideo.mp4" preload="auto" muted playsinline disablepictureinpicture></video>
                 </div>
-                <p class="subtitle" id="subtitle-text">Um laboratório, dezenas de maneiras de aprender.</p>
-            </div>
-        </div>
-
-        <!-- Lado Direito: Conteúdo -->
-        <div class="right-content">
-            
-            <!-- TOGGLE DE IDIOMAS -->
-            <div class="lang-toggle">
-                <button class="lang-btn" data-lang="en">EN-GB</button>
-                <button class="lang-btn active" data-lang="pt">PT-BR</button>
             </div>
 
-            <div class="welcome-text" id="typewriter-container"></div>
-
-            <div class="btn-group">
-                <a href="home/" class="action-btn" id="btn-primary-text">
-                    Try it for free 
-                    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </a>
-                <a href="#" class="btn-outline" id="btn-outline-text">
-                    Google 
-                    <!-- Logo oficial do Google em SVG Colorido -->
-                    <svg class="google-logo-svg" viewBox="0 0 48 48">
-                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.7 17.74 9.5 24 9.5z"/>
-                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                    </svg>
-                </a>
+            <div class="right-side fade-in">
+                <div class="city-wrapper">
+                    <video id="cityVideo" src="assets/opening.mp4" preload="auto" muted playsinline disablepictureinpicture></video>
+                </div>
             </div>
-        </div>
 
-        <!-- Robô -->
-        <div class="robot-box">
-            <img src="assets/mars.png" alt="Mars" class="mars">
+            <a href="home/" class="action-btn fade-in" id="btnAcessar">
+                Acessar lab
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
         </div>
-
-        <!-- Rodapé -->
-        <div class="footer">
-            <p id="footer-text"></p>
-        </div>
-
     </div>
 
-    <script>
-        // --- LÓGICA PARA EVITAR O "SALTO" E O "FATIADO" ---
-        window.addEventListener('DOMContentLoaded', () => {
-            const deeImg = document.querySelector('.dee-img');
-            
-            const liberarAnimacoes = () => {
-                // O delay dá tempo do navegador "assentar" a imagem escondida antes de animar
-                setTimeout(() => {
-                    document.body.classList.add('body-loaded');
-                }, 50);
-                
-                // Animação do Robô (Mars)
-                setTimeout(() => {
-                    const marsImg = document.querySelector('.mars');
-                    if (marsImg) marsImg.style.opacity = "1";
-                }, 800);
-            };
+    <!-- ============================================================ -->
+    <!-- PÁGINA 1 (MARS) -->
+    <!-- ============================================================ -->
+    <div class="page" id="page-mars">
+        <div class="scene-container" id="sceneContainer">
+            <div class="mars-group">
+                <div class="robot-face" id="robotFace">
+                    <div class="cheek left-cheek" id="leftCheek"></div>
+                    <div class="cheek right-cheek" id="rightCheek"></div>
+                    <div class="eye-wrapper"><div class="eye left-eye" id="leftEye"></div></div>
+                    <div class="eye-wrapper"><div class="eye right-eye" id="rightEye"></div></div>
+                </div>
+                <div class="hint-text" id="hintText"></div>
+            </div>
 
-            // Se a imagem já estiver carregada no cache
-            if (deeImg && deeImg.complete) {
-                liberarAnimacoes();
-            } else if (deeImg) {
-                // Se não, espera a imagem baixar
-                deeImg.onload = liberarAnimacoes;
-                // Rede de segurança
-                setTimeout(liberarAnimacoes, 1000); 
-            } else {
-                liberarAnimacoes();
+            <!-- LIVRO 3D -->
+            <div class="book-wrap" id="bookWrap">
+                <div class="book-glow"></div>
+                <div class="book-panel" id="bookPanel">
+                    <div class="book-warm-glow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LUZ GLOBAL -->
+    <div class="white-fade" id="whiteFade"></div>
+
+    <!-- BOTÃO SKIP INTRO -->
+    <a href="home/" class="skip-btn" id="skipBtn">
+        pular intro
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- BIBLIOTECAS -->
+    <!-- ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPT PRINCIPAL -->
+    <!-- ============================================================ -->
+    <script>
+    (function () {
+        'use strict';
+
+        // ============================================================
+        // ELEMENTOS
+        // ============================================================
+        const pageMars     = document.getElementById('page-mars');
+        const pageLab      = document.getElementById('page-lab');
+        const btnAcessar   = document.getElementById('btnAcessar');
+        const skipBtn      = document.getElementById('skipBtn');
+
+        // Mars
+        const leftEye      = document.getElementById('leftEye');
+        const rightEye     = document.getElementById('rightEye');
+        const leftCheek    = document.getElementById('leftCheek');
+        const rightCheek   = document.getElementById('rightCheek');
+        const bookPanel    = document.getElementById('bookPanel');
+        const bookWrap     = document.getElementById('bookWrap');
+        const robotFace    = document.getElementById('robotFace');
+        const hintText     = document.getElementById('hintText');
+
+        // Lab
+        const labMarsVideo = document.getElementById('labMarsVideo');
+        const cityVideo    = document.getElementById('cityVideo');
+
+        // Luz
+        const whiteFade    = document.getElementById('whiteFade');
+
+        // ============================================================
+        // ÁUDIO / SFX
+        // ============================================================
+        const soundBookClick = new Audio('https://res.cloudinary.com/dbwqwgbtx/video/upload/v1794595704/freesound_community-fx-light-90387_al5qke.mp3');
+        const soundPageOpen  = new Audio('https://res.cloudinary.com/dbwqwgbtx/video/upload/v1794595344/u_op8btczor7-piano-f-508249_h1dn8o.mp3');
+        const soundBtnClick  = new Audio('https://res.cloudinary.com/dbwqwgbtx/video/upload/v1793834548/freesound_community-camera-manual-click-39929_ebukss.mp3');
+
+        soundBookClick.volume = 0.3;
+        soundPageOpen.volume  = 0.5;
+        soundBtnClick.volume  = 0.5;
+
+        soundBookClick.load();
+        soundPageOpen.load();
+        soundBtnClick.load();
+
+        function playSound(audioElement) {
+            if (!audioElement || !audioElement.src) return;
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.log('Áudio bloqueado:', e));
+        }
+
+        // ============================================================
+        // ESTADO DO MARS
+        // ============================================================
+        let leftEyeRect, rightEyeRect;
+        let eyesOpen = true;
+        let isBlinking = false;
+        let isAnimating = false;
+        let isBlushing = false;
+        let blinkSequenceTimer = null;
+        let isBlinkSequenceRunning = false;
+        let blushTimeout = null;
+        let isTransitioning = false;
+
+        let bookAPI = null;
+
+        // ============================================================
+        // LÓGICA DOS OLHOS
+        // ============================================================
+        function updateEyeRects() {
+            leftEyeRect  = leftEye.getBoundingClientRect();
+            rightEyeRect = rightEye.getBoundingClientRect();
+        }
+
+        function moveEyes(event) {
+            if (!eyesOpen || isBlinking || isAnimating || isBlushing) return;
+            if (isTransitioning) return;
+            const mouseX = event.clientX, mouseY = event.clientY;
+            moveSingleEye(mouseX, mouseY, leftEyeRect, leftEye);
+            moveSingleEye(mouseX, mouseY, rightEyeRect, rightEye);
+        }
+
+        function moveSingleEye(mouseX, mouseY, eyeRect, eyeElement) {
+            const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+            const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+            const deltaX = mouseX - eyeCenterX, deltaY = mouseY - eyeCenterY;
+            const angle = Math.atan2(deltaY, deltaX);
+            const maxMove = 18;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            let moveDistance = Math.min(maxMove, distance / 15);
+            if (distance < 100) moveDistance = maxMove;
+            const moveX = Math.cos(angle) * moveDistance;
+            const moveY = Math.sin(angle) * moveDistance;
+            eyeElement.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+
+        function performBlink() {
+            return new Promise((resolve) => {
+                if (isBlinking || !eyesOpen || isBlushing) { resolve(); return; }
+                isBlinking = true;
+                leftEye.classList.add('blinking');
+                rightEye.classList.add('blinking');
+                setTimeout(() => {
+                    leftEye.classList.remove('blinking');
+                    rightEye.classList.remove('blinking');
+                    isBlinking = false;
+                    if (window.lastMouseX && eyesOpen && !isBlushing) {
+                        moveEyes({ clientX: window.lastMouseX, clientY: window.lastMouseY });
+                    }
+                    resolve();
+                }, 200);
+            });
+        }
+
+        async function startBlinkSequence() {
+            if (isBlinkSequenceRunning || !eyesOpen || isBlushing) return;
+            isBlinkSequenceRunning = true;
+            await performBlink();
+            await performBlink();
+            await new Promise(r => setTimeout(r, 2500));
+            await performBlink();
+            await new Promise(r => setTimeout(r, 1000));
+            await performBlink();
+            isBlinkSequenceRunning = false;
+        }
+
+        function startBlinkingLoop() {
+            if (blinkSequenceTimer) clearTimeout(blinkSequenceTimer);
+            const runCycle = async () => {
+                if (!eyesOpen || isBlushing) {
+                    blinkSequenceTimer = setTimeout(runCycle, 1000);
+                    return;
+                }
+                await startBlinkSequence();
+                blinkSequenceTimer = setTimeout(runCycle, (eyesOpen && !isBlushing) ? 5000 : 1000);
+            };
+            runCycle();
+        }
+
+        function stopBlinkingLoop() {
+            if (blinkSequenceTimer) clearTimeout(blinkSequenceTimer);
+            isBlinkSequenceRunning = false;
+        }
+
+        function activateWake() {
+            if (blushTimeout) clearTimeout(blushTimeout);
+            if (isBlushing) {
+                leftCheek.classList.remove('visible');
+                rightCheek.classList.remove('visible');
+                isBlushing = false;
             }
+            eyesOpen = true;
+            isAnimating = true;
+            leftEye.classList.add('awake');
+            rightEye.classList.add('awake');
+            setTimeout(() => {
+                isAnimating = false;
+                leftEye.style.transform = '';
+                rightEye.style.transform = '';
+                if (window.lastMouseX) moveEyes({ clientX: window.lastMouseX, clientY: window.lastMouseY });
+                startBlinkingLoop();
+            }, 550);
+        }
+
+        function returnFromBlush() {
+            if (!isBlushing) return;
+            leftCheek.classList.remove('visible');
+            rightCheek.classList.remove('visible');
+            leftEye.classList.remove('shy-left');
+            rightEye.classList.remove('shy-right');
+            leftEye.classList.add('unshy-left');
+            rightEye.classList.add('unshy-right');
+            setTimeout(() => {
+                leftEye.classList.remove('unshy-left');
+                rightEye.classList.remove('unshy-right');
+                leftEye.classList.add('awake');
+                rightEye.classList.add('awake');
+                leftEye.style.transform = '';
+                rightEye.style.transform = '';
+                isBlushing = false;
+                isAnimating = false;
+                if (window.lastMouseX && eyesOpen) moveEyes({ clientX: window.lastMouseX, clientY: window.lastMouseY });
+                if (eyesOpen && !isTransitioning) startBlinkingLoop();
+            }, 300);
+        }
+
+        function activateBlush() {
+            if (blushTimeout) clearTimeout(blushTimeout);
+            stopBlinkingLoop();
+            if (isBlushing || isAnimating) return;
+            isBlushing = true;
+            isAnimating = true;
+            leftEye.classList.remove('awake', 'blinking', 'unshy-left', 'unshy-right');
+            rightEye.classList.remove('awake', 'blinking', 'unshy-left', 'unshy-right');
+            leftEye.style.transform = '';
+            rightEye.style.transform = '';
+            leftEye.classList.add('shy-left');
+            rightEye.classList.add('shy-right');
+            setTimeout(() => {
+                leftCheek.classList.add('visible');
+                rightCheek.classList.add('visible');
+                isAnimating = false;
+                blushTimeout = setTimeout(returnFromBlush, 2000);
+            }, 300);
+        }
+
+        // ============================================================
+        // TRANSIÇÃO DE PÁGINA (LUZ) — SUAVIZADA
+        // ============================================================
+        function triggerPageTransition(originX, originY) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const cx = originX;
+            const cy = originY;
+            const w  = window.innerWidth, h = window.innerHeight;
+            const maxDist = Math.max(
+                Math.hypot(cx, cy), Math.hypot(w - cx, cy),
+                Math.hypot(cx, h - cy), Math.hypot(w - cx, h - cy)
+            );
+
+            // Aumenta a cobertura final para garantir que os cantos sejam cobertos
+            // mesmo com o blur ainda ativo nas fases intermediárias.
+            const targetDiameter = 2 * maxDist * 2.0;
+            const startScale = 0.6;
+            const endScale   = targetDiameter / 100;
+
+            whiteFade.style.left = `${cx}px`;
+            whiteFade.style.top  = `${cy}px`;
+            whiteFade.style.opacity = '0';
+            whiteFade.style.transform = `translate(-50%, -50%) scale(${startScale})`;
+            void whiteFade.offsetWidth;
+
+            // FASE 1: luz cresce até cobrir a tela.
+            // O blur é zerado no final, então o "círculo" fica nítido
+            // e cobre 100% sem bordas translúcidas vazando o Mars.
+            const glowAnim = whiteFade.animate(
+                [
+                    { opacity: 0,    filter: 'blur(40px)', transform: `translate(-50%, -50%) scale(${startScale})` },
+                    { opacity: 0.95, filter: 'blur(40px)', transform: `translate(-50%, -50%) scale(${startScale * 1.5})`, offset: 0.06 },
+                    { opacity: 1,    filter: 'blur(2px)',  transform: `translate(-50%, -50%) scale(${endScale})` }
+                ],
+                { duration: 1800, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
+            );
+
+            // Em paralelo: o Mars começa a escurecer AGORA.
+            // A transition declarada no CSS (#page-mars) é 0.8s ease-out.
+            // Como a luz leva 1.8s para cobrir, o Mars já estará quase
+            // invisível quando o display:none entrar — sem pop.
+            pageMars.style.opacity = '0';
+
+            glowAnim.onfinish = () => {
+                playSound(soundPageOpen);
+                glowAnim.cancel();
+
+                // Fixa o estado final da luz (nítida, opaca, cobrindo tudo)
+                whiteFade.style.opacity   = '1';
+                whiteFade.style.filter    = 'blur(2px)';
+                whiteFade.style.transform = `translate(-50%, -50%) scale(${endScale})`;
+
+                // Mostra o Lab POR BAIXO da luz (ainda branca)
+                pageLab.style.display = 'block';
+
+                // Esconde o Mars só depois que a luz está 100% opaca
+                // E depois que o fade de opacity 0.8s já rodou (a luz
+                // já cobriu tudo muito antes disso, então o display:none
+                // é invisível para o usuário).
+                setTimeout(() => {
+                    pageMars.style.display = 'none';
+                    pageMars.style.opacity = '';   // reseta para reuso
+                }, 850);
+
+                if (skipBtn) {
+                    skipBtn.classList.add('dark-text');
+                    skipBtn.style.display = 'none';
+                }
+
+                if (bookPanel) {
+                    bookPanel.classList.remove('is-fading');
+                    bookPanel.style.display = 'none';
+                }
+
+                if (labMarsVideo) { labMarsVideo.currentTime = 0; labMarsVideo.play().catch(()=>{}); }
+                if (cityVideo)    { cityVideo.currentTime = 0; setTimeout(() => cityVideo.play().catch(()=>{}), 500); }
+
+                // Fade-in do Lab um pouco atrasado para não competir
+                // com a saída do Mars no mesmo frame.
+                setTimeout(() => {
+                    document.querySelectorAll('#page-lab .fade-in')
+                            .forEach(el => el.classList.add('visible'));
+                }, 300);
+
+                // A luz branca desaparece suavemente
+                setTimeout(() => {
+                    whiteFade.style.transition = 'opacity 1.5s ease-out, filter 1.5s ease-out';
+                    whiteFade.style.opacity = '0';
+                    whiteFade.style.filter  = 'blur(40px)';
+                }, 100);
+            };
+        }
+
+        // ============================================================
+        // SEQUÊNCIA DE ENTRADA
+        // ============================================================
+        const HINT_TEXT = "Está escuro aqui, por favor abra um livro.";
+
+        function typewriter(el, text, speed = 45) {
+            return new Promise((resolve) => {
+                let i = 0;
+                el.textContent = "";
+                function step() {
+                    if (i < text.length) {
+                        el.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(step, speed);
+                    } else { resolve(); }
+                }
+                step();
+            });
+        }
+
+        async function playIntroSequence() {
+            robotFace.classList.add('entered');
+            await new Promise(r => setTimeout(r, 900));
+            activateWake();
+            await new Promise(r => setTimeout(r, 900));
+            await typewriter(hintText, HINT_TEXT, 42);
+            await new Promise(r => setTimeout(r, 500));
+            bookWrap.classList.add('entered');
+        }
+
+        // ============================================================
+        // INICIALIZAÇÃO
+        // ============================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            updateEyeRects();
+            pageLab.style.display = 'none';
+            if (labMarsVideo) { labMarsVideo.pause(); labMarsVideo.currentTime = 0; }
+            if (cityVideo)    { cityVideo.pause();    cityVideo.currentTime = 0; }
+            if (skipBtn) skipBtn.classList.remove('dark-text');
+            playIntroSequence();
         });
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // 2. Configuração de Idiomas
-            const translations = {
-                pt: {
-                    title: "Language Lab",
-                    subtitle: "Um laboratório, dezenas de maneiras de aprender.",
-                    welcome: 'Bem vindo ao meu <span class="red">Language lab!</span><br>Eu sou a Diandra, mas pode me chamar de “Di”. Você pode fazer login ou testar nossas ferramentas gratuitas agora mesmo.',
-                    btnPrimary: 'Começar de graça',
-                    btnOutline: 'Google',
-                },
-                en: {
-                    title: "Language Lab",
-                    subtitle: "A lab, dozens of ways to learn.",
-                    welcome: 'Welcome to my <span class="red">Language lab!</span><br>I am Diandra, but you can call me “Dee”.<br>You can either log-in or test our free tools right now.',
-                    btnPrimary: 'Start free',
-                    btnOutline: 'Google',
+        window.addEventListener('mousemove', (event) => {
+            window.lastMouseX = event.clientX;
+            window.lastMouseY = event.clientY;
+            moveEyes(event);
+        });
+
+        window.addEventListener('resize', () => {
+            setTimeout(() => {
+                updateEyeRects();
+                if (window.lastMouseX && eyesOpen && !isBlinking && !isAnimating && !isBlushing) {
+                    moveEyes({ clientX: window.lastMouseX, clientY: window.lastMouseY });
                 }
-            };
+            }, 100);
+        });
 
-            let currentLang = 'pt';
-            const container = document.getElementById("typewriter-container");
-            let typingTimeout;
+        btnAcessar.addEventListener('click', () => playSound(soundBtnClick));
 
-            // Função Typewriter
-            function startTypewriter(htmlContent) {
-                clearTimeout(typingTimeout);
-                container.innerHTML = '';
-                
-                const template = document.createElement('div');
-                template.innerHTML = htmlContent;
-                const nodes = Array.from(template.childNodes);
-                
-                const cursor = document.createElement('span');
-                cursor.className = 'cursor';
-                container.appendChild(cursor);
+        // ============================================================
+        // API PÚBLICA PARA O LIVRO 3D
+        // ============================================================
+        window.__marsAPI = {
+            onBookOpened: function () {
+                activateBlush();
+                playSound(soundBookClick);
 
-                let nodeIndex = 0;
-                let charIndex = 0;
+                setTimeout(() => {
+                    // Fade-out suave do livro (a luz nasce e o engole)
+                    if (bookPanel) bookPanel.classList.add('is-fading');
 
-                function typeWriter() {
-                    if (nodeIndex >= nodes.length) return;
+                    // Luz nasce do CENTRO DA TELA (não da posição do livro)
+                    const cx = window.innerWidth / 2;
+                    const cy = window.innerHeight / 2;
+                    triggerPageTransition(cx, cy);
+                }, 3500);
+            }
+        };
 
-                    const currentNode = nodes[nodeIndex];
+        // ============================================================
+        // MÓDULO DO LIVRO 3D
+        // ============================================================
+        (function initBook3D() {
+            const container = document.getElementById('bookPanel');
+            if (!container) return;
 
-                    if (currentNode.nodeType === Node.TEXT_NODE) {
-                        if (charIndex < currentNode.textContent.length) {
-                            const charNode = document.createTextNode(currentNode.textContent.charAt(charIndex));
-                            container.insertBefore(charNode, cursor);
-                            
-                            charIndex++;
-                            typingTimeout = setTimeout(typeWriter, 25);
-                        } else {
-                            nodeIndex++;
-                            charIndex = 0;
-                            typeWriter();
-                        }
-                    } else {
-                        const clonedNode = currentNode.cloneNode(false);
-                        if (clonedNode.nodeName === 'SPAN') {
-                            clonedNode.textContent = '';
-                        }
-                        
-                        container.insertBefore(clonedNode, cursor);
-                        
-                        if (clonedNode.nodeName === 'BR' || !currentNode.hasChildNodes()) {
-                            nodeIndex++;
-                            charIndex = 0;
-                        } else {
-                            nodes[nodeIndex] = document.createTextNode(currentNode.textContent);
-                            charIndex = 0;
-                        }
-                        typeWriter(); 
-                    }
-                }
+            const bookWrapEl = document.getElementById('bookWrap');
+            const panelParentOriginal = container.parentNode;
 
-                typingTimeout = setTimeout(typeWriter, 100);
+            // ----- Cena -----
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // ----- Luzes -----
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(5, 5, 5);
+            scene.add(dirLight);
+
+            // ----- Texturas -----
+            const textureLoader = new THREE.TextureLoader();
+            const capaTexture        = textureLoader.load('assets/cover.webp');
+            const contracapaTexture  = textureLoader.load('assets/back.webp');
+            const lombadaTexture     = textureLoader.load('assets/spine.webp');
+            const paginaColorTexture = textureLoader.load('assets/page.webp');
+
+            const contracapaMat = new THREE.MeshStandardMaterial({ color: 0xe8e3d9, roughness: 0.9, side: THREE.DoubleSide });
+            const capaMat       = new THREE.MeshStandardMaterial({ map: capaTexture, roughness: 0.5, side: THREE.DoubleSide });
+            const capaTrasMat   = new THREE.MeshStandardMaterial({ map: contracapaTexture, roughness: 0.5, side: THREE.DoubleSide });
+            const lombadaMat    = new THREE.MeshStandardMaterial({ map: lombadaTexture, roughness: 0.5, side: THREE.DoubleSide });
+            const paginaMat     = new THREE.MeshStandardMaterial({ map: paginaColorTexture, roughness: 0.8, side: THREE.DoubleSide });
+
+            // ----- Geometria -----
+            const largura  = 2.2;
+            const altura   = 3.2;
+            const grossura = 0.3;
+
+            const livro = new THREE.Group();
+            scene.add(livro);
+
+            const miolo = new THREE.Mesh(
+                new THREE.BoxGeometry(largura, altura, grossura),
+                new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.9 })
+            );
+            miolo.position.set(largura / 2, 0, 0);
+            livro.add(miolo);
+
+            const backCover = new THREE.Mesh(
+                new THREE.BoxGeometry(largura, altura, 0.05),
+                capaTrasMat
+            );
+            backCover.position.set(largura / 2, 0, -grossura / 2 - 0.025);
+            livro.add(backCover);
+
+            const spine = new THREE.Mesh(
+                new THREE.PlaneGeometry(grossura + 0.1, altura),
+                lombadaMat
+            );
+            spine.position.set(-0.03, 0, 0);
+            spine.rotation.y = -Math.PI / 2;
+            spine.renderOrder = 1;
+            livro.add(spine);
+
+            const colorPage = new THREE.Mesh(
+                new THREE.PlaneGeometry(largura, altura),
+                paginaMat
+            );
+            colorPage.position.set(largura / 2, 0, grossura / 2 + 0.01);
+            livro.add(colorPage);
+
+            const coverPivot = new THREE.Group();
+            coverPivot.position.set(0, 0, grossura / 2 + 0.05);
+            livro.add(coverPivot);
+
+            const frontCover = new THREE.Mesh(
+                new THREE.BoxGeometry(largura, altura, 0.05),
+                capaMat
+            );
+            frontCover.position.set(largura / 2, 0, 0);
+            coverPivot.add(frontCover);
+
+            const insideCover = new THREE.Mesh(
+                new THREE.PlaneGeometry(largura, altura),
+                contracapaMat
+            );
+            insideCover.position.set(largura / 2, 0, -0.03);
+            insideCover.rotation.y = Math.PI;
+            coverPivot.add(insideCover);
+
+            // ----- Estado -----
+            livro.position.x = -largura / 2;
+            livro.rotation.x = 0.2;
+            livro.rotation.y = -0.4;
+
+            let isOpen = false;
+            let targetCoverRot = 0;
+            let currentCoverRot = 0;
+            let bookOpenedNotified = false;
+
+            let targetRotationX = 0.2;
+            let targetRotationY = -0.4;
+
+            const isMobile = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+            // ============================================================
+            // ZOOM — livro menor no fullscreen (respira melhor)
+            // ============================================================
+            const ZOOM_FECHADO = isMobile ? 6.5 : 6.2;
+            const ZOOM_ABERTO  = isMobile ? 5.0 : 4.5;
+
+            let currentZoom = ZOOM_FECHADO;
+            let targetZoom  = ZOOM_FECHADO;
+            const minZoom = 3.0;
+            const maxZoom = 9.0;
+
+            camera.position.set(0, 0, currentZoom);
+
+            // ----- Pan -----
+            let panUsuario = { x: 0, y: 0 };
+            const MAX_PAN = 1.6;
+
+            // ============================================================
+            // DRIFT CINEMATOGRÁFICO (só ida, reset invisível) — DESKTOP ONLY
+            // ============================================================
+            const DRIFT_X_MAX  = 0.22;
+            const DRIFT_Z_MAX  = 0.28;
+            const DRIFT_PERIOD = 15000;
+            const driftStart   = performance.now();
+            let   driftOffsetX = 0;
+            let   driftOffsetZ = 0;
+
+            // ============================================================
+            // SLIDE LENTO DO LIVRO EM FULLSCREEN
+            // Trajeto sutil (~50px) que dura MUITO mais que a luz.
+            // O livro nunca sai da tela — a luz o engole no caminho.
+            // ============================================================
+            const SLIDE_FULL_INICIO = -0.35;
+            const SLIDE_FULL_FIM    =  0.35;
+            const SLIDE_FULL_DUR    =  12000;
+            let   slideFullStart    = 0;
+
+            // ----- Drag -----
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            let mouseDownTime = 0;
+            let mouseMovedDistance = 0;
+
+            // ----- Rotação suave -----
+            let rotAnim = null;
+            function easeInOutCubic(t) {
+                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            }
+            function easeInOutSine(t) {
+                return -(Math.cos(Math.PI * t) - 1) / 2;
             }
 
-            // Função para aplicar o idioma
-            function setLanguage(lang) {
-                currentLang = lang;
-                const t = translations[lang];
-
-                document.getElementById('title-text').textContent = t.title;
-                document.getElementById('subtitle-text').textContent = t.subtitle;
-                document.getElementById('footer-text').textContent = t.footer;
-                
-                document.getElementById('btn-primary-text').childNodes[0].nodeValue = t.btnPrimary + ' ';
-                document.getElementById('btn-outline-text').childNodes[0].nodeValue = t.btnOutline + ' ';
-
-                startTypewriter(t.welcome);
-
-                document.querySelectorAll('.lang-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.lang === lang) {
-                        btn.classList.add('active');
-                    }
-                });
+            // ============================================================
+            // RESIZE DO RENDERER
+            // ============================================================
+            function resizeRendererToContainer() {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                if (w === 0 || h === 0) return;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h, false);
             }
 
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    setLanguage(btn.dataset.lang);
-                });
+            // ============================================================
+            // ABRIR / FECHAR
+            // ============================================================
+            function openBook() {
+                if (isOpen) return;
+                isOpen = true;
+                rotAnim = null;
+                panUsuario = { x: 0, y: 0 };
+
+                if (bookWrapEl) bookWrapEl.classList.add('is-open');
+
+                if (container.parentNode !== document.body) {
+                    document.body.appendChild(container);
+                }
+
+                container.classList.add('is-open');
+                void container.offsetWidth;
+                resizeRendererToContainer();
+
+                targetCoverRot = -Math.PI;
+                targetRotationX = 0;
+                targetRotationY = 0;
+                targetZoom = ZOOM_ABERTO;
+
+                // Arma o slide lento
+                slideFullStart = performance.now();
+            }
+
+            function closeBook() {
+                if (!isOpen) return;
+                isOpen = false;
+                rotAnim = null;
+                panUsuario = { x: 0, y: 0 };
+
+                container.classList.remove('is-open');
+
+                if (panelParentOriginal && container.parentNode !== panelParentOriginal) {
+                    panelParentOriginal.appendChild(container);
+                }
+
+                if (bookWrapEl) bookWrapEl.classList.remove('is-open');
+
+                void container.offsetWidth;
+                resizeRendererToContainer();
+
+                targetCoverRot = 0;
+                targetRotationX = 0.2;
+                targetRotationY = -0.4;
+                targetZoom = ZOOM_FECHADO;
+                bookOpenedNotified = false;
+                slideFullStart = 0;
+            }
+
+            // ============================================================
+            // MOUSE
+            // ============================================================
+            container.addEventListener('mousedown', (e) => {
+                mouseDownTime = Date.now();
+                mouseMovedDistance = 0;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+                isDragging = true;
+                rotAnim = null;
             });
 
-            setLanguage('pt');
-        });
-    </script>
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
 
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                mouseMovedDistance += Math.abs(deltaX) + Math.abs(deltaY);
+
+                if (isOpen) {
+                    const moveSpeed = (currentZoom / 10) * 0.01;
+                    panUsuario.x += deltaX * moveSpeed;
+                    panUsuario.y -= deltaY * moveSpeed;
+                    panUsuario.x = Math.max(-MAX_PAN, Math.min(MAX_PAN, panUsuario.x));
+                    panUsuario.y = Math.max(-MAX_PAN, Math.min(MAX_PAN, panUsuario.y));
+                } else {
+                    targetRotationY += deltaX * 0.01;
+                    targetRotationX += deltaY * 0.01;
+                    targetRotationX = Math.max(-1.2, Math.min(1.2, targetRotationX));
+                }
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (!isDragging) return;
+
+                const clickDuration = Date.now() - mouseDownTime;
+                const wasClick = mouseMovedDistance < 10 && clickDuration < 350;
+
+                isDragging = false;
+
+                if (wasClick) {
+                    if (isOpen) closeBook();
+                    else openBook();
+                }
+            });
+
+            // ============================================================
+            // TOUCH
+            // ============================================================
+            let touchStartPos = { x: 0, y: 0 };
+            let touchMovedDistance = 0;
+            let touchDownTime = 0;
+            let touchActive = false;
+            let lastTapTime = 0;
+            const DOUBLE_TAP_DELAY = 350;
+
+            let pinchStartDist = 0;
+            let pinchStartZoom = currentZoom;
+            let isPinching = false;
+
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length >= 2) {
+                    e.preventDefault();
+                    const t0 = e.touches[0], t1 = e.touches[1];
+                    pinchStartDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                    pinchStartZoom = currentZoom;
+                    isPinching = true;
+                    touchActive = false;
+                    isDragging = false;
+                    return;
+                }
+                const t = e.touches[0];
+                touchStartPos = { x: t.clientX, y: t.clientY };
+                previousMousePosition = { x: t.clientX, y: t.clientY };
+                touchMovedDistance = 0;
+                touchDownTime = Date.now();
+                touchActive = true;
+                isDragging = false;
+                rotAnim = null;
+            }, { passive: false });
+
+            container.addEventListener('touchmove', (e) => {
+                if (e.touches.length >= 2) {
+                    e.preventDefault();
+                    if (isPinching && pinchStartDist > 0) {
+                        const t0 = e.touches[0], t1 = e.touches[1];
+                        const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                        const scale = dist / pinchStartDist;
+                        targetZoom = Math.max(minZoom, Math.min(maxZoom, pinchStartZoom / scale));
+                    }
+                    return;
+                }
+                if (!touchActive) return;
+
+                const t = e.touches[0];
+                const totalDx = t.clientX - touchStartPos.x;
+                const totalDy = t.clientY - touchStartPos.y;
+                touchMovedDistance = Math.sqrt(totalDx * totalDx + totalDy * totalDy);
+
+                if (!isDragging && touchMovedDistance > 8) {
+                    isDragging = true;
+                    previousMousePosition = { x: t.clientX, y: t.clientY };
+                    return;
+                }
+                if (!isDragging) return;
+
+                const deltaX = t.clientX - previousMousePosition.x;
+                const deltaY = t.clientY - previousMousePosition.y;
+
+                if (isOpen) {
+                    const moveSpeed = (currentZoom / 10) * 0.01;
+                    panUsuario.x += deltaX * moveSpeed;
+                    panUsuario.y -= deltaY * moveSpeed;
+                    panUsuario.x = Math.max(-MAX_PAN, Math.min(MAX_PAN, panUsuario.x));
+                    panUsuario.y = Math.max(-MAX_PAN, Math.min(MAX_PAN, panUsuario.y));
+                } else {
+                    targetRotationY += deltaX * 0.01;
+                    targetRotationX += deltaY * 0.01;
+                    targetRotationX = Math.max(-1.2, Math.min(1.2, targetRotationX));
+                }
+                previousMousePosition = { x: t.clientX, y: t.clientY };
+            }, { passive: false });
+
+            container.addEventListener('touchend', (e) => {
+                if (e.touches.length < 2) isPinching = false;
+                if (!touchActive) { isDragging = false; return; }
+                touchActive = false;
+
+                const clickDuration = Date.now() - touchDownTime;
+                const wasDrag = isDragging || touchMovedDistance > 15;
+                isDragging = false;
+
+                if (wasDrag) return;
+                if (clickDuration > 500) return;
+
+                if (isOpen) {
+                    closeBook();
+                } else {
+                    const now = Date.now();
+                    if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+                        lastTapTime = 0;
+                        openBook();
+                    } else {
+                        lastTapTime = now;
+                    }
+                }
+            }, { passive: true });
+
+            container.addEventListener('touchcancel', () => {
+                touchActive = false;
+                isDragging = false;
+                isPinching = false;
+            }, { passive: true });
+
+            // ============================================================
+            // LOOP DE ANIMAÇÃO
+            // ============================================================
+            function animate() {
+                requestAnimationFrame(animate);
+
+                if (rotAnim) {
+                    const now = performance.now();
+                    let t = (now - rotAnim.startTime) / rotAnim.duration;
+                    if (t > 1) t = 1;
+                    const eased = easeInOutCubic(t);
+                    livro.rotation.x = rotAnim.startX + (rotAnim.endX - rotAnim.startX) * eased;
+                    livro.rotation.y = rotAnim.startY + (rotAnim.endY - rotAnim.startY) * eased;
+                    if (t >= 1) {
+                        targetRotationX = rotAnim.endX;
+                        targetRotationY = rotAnim.endY;
+                        rotAnim = null;
+                    }
+                } else if (!isOpen && !isDragging) {
+                    if (!isMobile && window.lastMouseX !== undefined) {
+                        const mx = (window.lastMouseX / window.innerWidth) - 0.5;
+                        const my = (window.lastMouseY / window.innerHeight) - 0.5;
+                        livro.rotation.x += ((0.2 + my * 1.2) - livro.rotation.x) * 0.05;
+                        livro.rotation.y += ((-0.4 - mx * 1.2) - livro.rotation.y) * 0.05;
+                    } else {
+                        livro.rotation.x += (targetRotationX - livro.rotation.x) * 0.1;
+                        livro.rotation.y += (targetRotationY - livro.rotation.y) * 0.1;
+                    }
+                } else {
+                    livro.rotation.x += (targetRotationX - livro.rotation.x) * 0.1;
+                    livro.rotation.y += (targetRotationY - livro.rotation.y) * 0.1;
+                }
+
+                currentZoom += (targetZoom - currentZoom) * 0.08;
+
+                // ----- Drift cinematográfico (só ida + reset invisível) — DESKTOP ONLY -----
+                const driftAtivo = !isOpen && !isDragging && !isMobile;
+
+                let alvoDriftX = 0;
+                let alvoDriftZ = 0;
+
+                if (driftAtivo) {
+                    const elapsed = performance.now() - driftStart;
+                    const fase    = (elapsed % DRIFT_PERIOD) / DRIFT_PERIOD;
+                    const eased = easeInOutSine(fase);
+
+                    alvoDriftX = -DRIFT_X_MAX + eased * (2 * DRIFT_X_MAX);
+                    alvoDriftZ = -Math.sin(fase * Math.PI) * DRIFT_Z_MAX;
+
+                    driftOffsetX = alvoDriftX;
+                    driftOffsetZ = alvoDriftZ;
+                } else {
+                    driftOffsetX += (0 - driftOffsetX) * 0.05;
+                    driftOffsetZ += (0 - driftOffsetZ) * 0.05;
+                }
+
+                camera.position.x = driftOffsetX;
+                camera.position.z = currentZoom + driftOffsetZ;
+
+                // ----- Posição do livro -----
+                if (isOpen) {
+                    // Slide lento da esquerda pra direita (nunca sai da tela)
+                    const tSlide = Math.min(1, (performance.now() - slideFullStart) / SLIDE_FULL_DUR);
+                    const easedSlide = easeInOutSine(tSlide);
+                    const slideX = SLIDE_FULL_INICIO + easedSlide * (SLIDE_FULL_FIM - SLIDE_FULL_INICIO);
+
+                    const alvoX = (-largura / 2) + panUsuario.x + slideX;
+                    const alvoY = 0 + panUsuario.y;
+                    livro.position.x += (alvoX - livro.position.x) * 0.1;
+                    livro.position.y += (alvoY - livro.position.y) * 0.1;
+                } else {
+                    livro.position.x += (-largura / 2 - livro.position.x) * 0.1;
+                    livro.position.y += (0 - livro.position.y) * 0.1;
+                }
+
+                currentCoverRot += (targetCoverRot - currentCoverRot) * 0.05;
+                coverPivot.rotation.y = currentCoverRot;
+
+                if (isOpen && !bookOpenedNotified && Math.abs(currentCoverRot - (-Math.PI)) < 0.15) {
+                    bookOpenedNotified = true;
+                    if (window.__marsAPI && window.__marsAPI.onBookOpened) {
+                        window.__marsAPI.onBookOpened();
+                    }
+                }
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // ============================================================
+            // RESIZE — window + ResizeObserver
+            // ============================================================
+            window.addEventListener('resize', resizeRendererToContainer);
+            if (window.ResizeObserver) {
+                new ResizeObserver(resizeRendererToContainer).observe(container);
+            }
+
+            // ============================================================
+            // API PÚBLICA DO LIVRO (mantida caso precise no futuro)
+            // ============================================================
+            bookAPI = {
+                getBookScreenCenter: function () {
+                    const v = new THREE.Vector3();
+                    v.set(
+                        livro.position.x + largura / 2,
+                        livro.position.y,
+                        grossura / 2
+                    );
+                    v.project(camera);
+
+                    const rect = container.getBoundingClientRect();
+                    return {
+                        x: (v.x * 0.5 + 0.5) * rect.width + rect.left,
+                        y: (-v.y * 0.5 + 0.5) * rect.height + rect.top
+                    };
+                }
+            };
+        })();
+
+    })();
+    </script>
 </body>
 </html>
