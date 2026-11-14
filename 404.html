@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>404 — Laboratório perdido | Language Lab</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="404 — Laboratório perdido | Language Lab">
+    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender. Esta página não foi encontrada.">
+    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/speak.webp">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/404.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="404 — Laboratório perdido | Language Lab">
+    <meta name="twitter:description" content="Esta página não existe. Volte ao laboratório.">
+    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/speak.webp">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #222222;
+            --paper: #ffffff;
+            --accent: #c20000;
+            --muted: #666666;
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-hand: 'Gochi Hand', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            background: #faf9f8;
+            font-family: var(--font-title);
+            color: var(--ink);
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* zero scroll no desktop */
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        /* fundo com gradiente suave e ruído sutil */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(194, 0, 0, 0.03) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 70%, rgba(194, 0, 0, 0.04) 0%, transparent 50%),
+                        repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .error-view {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem 3rem;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px;
+            box-shadow: 
+                0 30px 60px -20px rgba(34, 34, 34, 0.20),
+                0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+                0 0 0 2px rgba(194, 0, 0, 0.06);
+            animation: floatIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+
+        @keyframes floatIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .error-visual {
+            position: relative;
+            flex: 0 0 auto;
+            width: min(38vw, 300px);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 20px 30px rgba(120, 0, 0, 0.15));
+            animation: gentleFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+        }
+
+        .error-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .error-visual:hover img {
+            transform: scale(1.06) rotate(-3deg);
+        }
+
+        /* aura vermelha animada ao redor da imagem */
+        .error-visual::before {
+            content: '';
+            position: absolute;
+            inset: -8%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, rgba(194, 0, 0, 0.20) 0%, rgba(194, 0, 0, 0.05) 50%, transparent 75%);
+            filter: blur(20px);
+            animation: pulseAura 3.4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes pulseAura {
+            0%, 100% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.08); }
+        }
+
+        /* pequenos riscos decorativos (rabiscos) */
+        .scribble {
+            position: absolute;
+            font-family: var(--font-hand);
+            color: var(--accent);
+            opacity: 0.25;
+            font-size: 2.2rem;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            animation: scribbleMove 8s infinite alternate ease-in-out;
+        }
+
+        .scribble-1 { top: 8%; left: 5%; transform: rotate(-15deg); font-size: 2.8rem; }
+        .scribble-2 { bottom: 10%; right: 4%; transform: rotate(10deg); font-size: 2.2rem; animation-delay: 1s; }
+        .scribble-3 { top: 20%; right: 12%; transform: rotate(25deg); font-size: 1.8rem; opacity: 0.15; animation-delay: 2s; }
+
+        @keyframes scribbleMove {
+            0% { transform: translate(0, 0) rotate(-15deg); }
+            100% { transform: translate(8px, -8px) rotate(-8deg); }
+        }
+
+        .error-content {
+            flex: 1 1 320px;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        .page-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 11px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0;
+        }
+
+        .page-kicker::before,
+        .page-kicker::after {
+            content: '';
+            width: 26px;
+            height: 1.5px;
+            background: currentColor;
+        }
+
+        .error-code {
+            font-size: clamp(3.8rem, 10vw, 6.2rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -.06em;
+            color: var(--ink);
+            display: flex;
+            align-items: baseline;
+            gap: 0.15em;
+            margin-bottom: 0;
+            animation: codePop 0.8s 0.2s both;
+        }
+
+        .error-code span {
+            color: var(--accent);
+            font-size: 0.65em;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes codePop {
+            from { opacity: 0; transform: translateY(15px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .page-title {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -.04em;
+            line-height: 1.1;
+            margin: 0;
+            animation: fadeSlide 0.7s 0.35s both;
+        }
+
+        .page-subtitle {
+            font-family: var(--font-hand);
+            font-size: clamp(1rem, 2.2vw, 1.25rem);
+            color: var(--muted);
+            line-height: 1.45;
+            max-width: 380px;
+            margin: 0.25rem 0 0.5rem;
+            animation: fadeSlide 0.7s 0.45s both;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== BOTÃO FÍSICO CORRIGIDO ===== */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #e23838;
+            border: 1.5px solid #2b2b2b;
+            color: #ffffff;
+            font-family: 'IBM Plex Mono', 'Space Mono', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 4px 4px 0px #2b2b2b;
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            margin-top: 0.75rem;
+            animation: fadeSlide 0.7s 0.55s both;
+            /* garante que o botão não seja afetado pelo parallax do conteúdo */
+            position: relative;
+            z-index: 10;
+            line-height: 1;
+        }
+
+        .back-button:hover {
+            background: #d12e2e;
+        }
+
+        /* Efeito de pressionar físico */
+        .back-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #2b2b2b;
+            background: #c02626;
+        }
+
+        /* Ícone SVG branco */
+        .back-button svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.2s ease;
+        }
+
+        .back-button:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* pequeno texto decorativo "404" gigante no fundo */
+        .bg-404 {
+            position: fixed;
+            bottom: -0.15em;
+            right: 0.05em;
+            font-size: clamp(12rem, 32vw, 28rem);
+            font-weight: 800;
+            line-height: 0.75;
+            color: rgba(34, 34, 34, 0.025);
+            letter-spacing: -0.08em;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            font-family: var(--font-title);
+            animation: bgFade 1.2s 0.1s both;
+        }
+
+        @keyframes bgFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* responsividade para mobile */
+        @media (max-width: 700px) {
+            body {
+                overflow-y: auto;
+                align-items: flex-start;
+                padding-top: 28px;
+                padding-bottom: 28px;
+            }
+
+            .error-view {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+                padding: 2rem 1.5rem;
+                border-radius: 44px;
+                backdrop-filter: blur(10px);
+            }
+
+            .error-content {
+                align-items: center;
+                max-width: 100%;
+            }
+
+            .page-kicker {
+                justify-content: center;
+            }
+
+            .error-code {
+                justify-content: center;
+            }
+
+            .page-subtitle {
+                text-align: center;
+            }
+
+            .back-button {
+                align-self: center;
+            }
+
+            .error-visual {
+                width: min(60vw, 240px);
+            }
+
+            .bg-404 {
+                display: none;
+            }
+
+            .scribble {
+                display: none;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .error-view {
+                padding: 1.6rem 1rem;
+            }
+            .back-button {
+                padding: 12px 22px;
+                font-size: 13px;
+                gap: 8px;
+            }
+            .back-button svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        /* para telas muito baixas (landscape mobile) */
+        @media (max-height: 560px) and (orientation: landscape) {
+            body {
+                overflow-y: auto;
+                align-items: flex-start;
+            }
+            .error-view {
+                padding: 1.5rem 2rem;
+                gap: 1rem 2rem;
+            }
+            .error-visual {
+                width: min(28vw, 180px);
+            }
+            .page-title {
+                font-size: 1.6rem;
+            }
+            .error-code {
+                font-size: 3.8rem;
+            }
+            .page-subtitle {
+                font-size: 0.95rem;
+            }
+            .back-button {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento decorativo de fundo -->
+    <div class="bg-404" aria-hidden="true">404</div>
+
+    <!-- Rabiscos decorativos -->
+    <div class="scribble scribble-1" aria-hidden="true">✧</div>
+    <div class="scribble scribble-2" aria-hidden="true">✦</div>
+    <div class="scribble scribble-3" aria-hidden="true">⌁</div>
+
+    <main class="error-view" aria-label="Página não encontrada">
+
+        <!-- Imagem speak.webp com aura animada -->
+        <div class="error-visual">
+            <img src="https://dididoingles.github.io/lab/assets/speak.webp" 
+                 alt="Personagem falando — laboratório de idiomas" 
+                 loading="eager"
+                 width="300" height="300">
+        </div>
+
+        <!-- Conteúdo textual e botão de retorno -->
+        <div class="error-content">
+            <span class="page-kicker">Ops, laboratório perdido</span>
+
+            <div class="error-code">
+                4<span>0</span>4
+            </div>
+
+            <h1 class="page-title">Essa página não existe.</h1>
+
+            <p class="page-subtitle">
+                Parece que você se aventurou fora do laboratório. 
+                Vamos voltar e continuar praticando?
+            </p>
+
+            <a href="https://dididoingles.github.io/lab/" class="back-button" aria-label="Voltar para a página inicial do Language Lab">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Voltar ao Laboratório
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        // Pequeno efeito de parallax suave no mouse (apenas desktop)
+        (function() {
+            const visual = document.querySelector('.error-visual');
+            const content = document.querySelector('.error-content');
+            if (!visual || !content) return;
+
+            // Verifica se é um dispositivo com mouse (não touch)
+            const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+            if (isTouch) return;
+
+            let rafId = null;
+            let mouseX = 0, mouseY = 0;
+
+            function handleMouseMove(e) {
+                // Normaliza as coordenadas em relação ao centro da tela
+                const x = (e.clientX / window.innerWidth - 0.5) * 2;
+                const y = (e.clientY / window.innerHeight - 0.5) * 2;
+                mouseX = x;
+                mouseY = y;
+
+                if (!rafId) {
+                    rafId = requestAnimationFrame(updateParallax);
+                }
+            }
+
+            function updateParallax() {
+                // A imagem se move levemente na direção oposta ao mouse
+                const moveX = mouseX * 8;
+                const moveY = mouseY * 6;
+
+                if (visual) {
+                    visual.style.transform = `translate(${moveX * 0.6}px, ${moveY * 0.6}px) rotate(${mouseX * 0.6}deg)`;
+                }
+                if (content) {
+                    // Texto se move na direção do mouse, mas bem sutil
+                    content.style.transform = `translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`;
+                }
+                rafId = null;
+            }
+
+            document.addEventListener('mousemove', handleMouseMove);
+
+            // Reset ao sair da janela
+            document.addEventListener('mouseleave', () => {
+                if (visual) visual.style.transform = '';
+                if (content) content.style.transform = '';
+            });
+        })();
+
+        console.log('404 — Language Lab · laboratório perdido');
+    </script>
+
+</body>
+</html>
