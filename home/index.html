@@ -22,7 +22,7 @@
 
     <style>
         :root {
-            --ink: #222222; --paper: #ffffff;
+            --ink: #222222; --paper: #f5f0f0;
             --accent: #c20000; --accent-dark: #a30000; --muted: #666666;
             --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
             --font-title: 'Poppins', sans-serif;
@@ -30,6 +30,8 @@
             --font-hand: 'Gochi Hand', cursive;
             --sidebar-width: 260px; --sidebar-collapsed: 80px;
             --mobile-nav-h: 64px;
+            --mobile-topbar-h: 64px;
+            --mobile-safe-top: env(safe-area-inset-top, 0px);
             --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,6 +45,44 @@
                 linear-gradient(90deg, rgba(34, 34, 34, 0.035) 1px, transparent 1px);
             background-size: 28px 28px;
             background-position: -1px -1px;
+        }
+
+        /* Título ao lado do botão voltar — só mobile */
+        .mobile-title {
+            display: none;
+            position: absolute;
+            left: 68px;          /* 16px do botão + 40px de largura + 12px de gap */
+            top: 20px;
+            height: 40px;
+            align-items: center;
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 500;
+            color: #9b3232;
+            letter-spacing: -0.8px;
+            line-height: 1;
+            z-index: 30;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* =========================================
+           MOBILE TOP BAR — fundo de vidro no topo
+           (só aparece <=1024px; regra base fica oculta)
+           ========================================= */
+        .mobile-topbar {
+            display: none;
+            position: fixed;
+            left: 0; right: 0; top: 0;
+            z-index: 66;                   /* acima do conteúdo, abaixo da bottom nav (70) */
+            height: calc(var(--mobile-topbar-h) + var(--mobile-safe-top));
+            padding: var(--mobile-safe-top) 8px 0;
+            background: rgba(255, 255, 255, 0.699);
+            -webkit-backdrop-filter: saturate(180%) blur(14px);
+            backdrop-filter: saturate(180%) blur(14px);
+            border-bottom: 1px solid rgba(34,34,34,0.08);
+            box-shadow: 0 6px 24px rgba(34,34,34,0.06);
+            pointer-events: none;          /* faixa não bloqueia cliques no iframe */
         }
 
         /* =========================================
@@ -105,7 +145,7 @@
         .skeleton-overlay {
             position: absolute;
             inset: 0;
-            z-index: 20;                /* acima do iframe, abaixo do Mars (30) */
+            z-index: 20;
             padding: 40px;
             background: var(--paper);
             display: flex;
@@ -167,6 +207,20 @@
         }
 
         @media (max-width: 1024px) {
+
+            body {
+            background: var(--paper); font-family: var(--font-title); color: var(--ink);
+            overflow: hidden; height: 100vh; display: flex;
+            -webkit-tap-highlight-color: transparent;
+            background-image:
+                linear-gradient(rgba(34, 34, 34, 0) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 34, 34, 0) 1px, transparent 1px);
+            background-size: 28px 28px;
+            background-position: -1px -1px;
+        }
+        .mobile-title {
+        display: flex;
+    }
             .skeleton-overlay { padding: 24px 16px; gap: 14px; }
             .sk-title { height: 26px; width: 55%; }
             .sk-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
@@ -221,11 +275,11 @@
         @keyframes marsSlideIn {
             0% {
                 opacity: 0;
-                transform: translate(120px, -60px) scale(0.7) rotate(15deg);
+                transform: translate(40px, -0px) scale(0.1) rotate(15deg);
             }
             60% {
                 opacity: 1;
-                transform: translate(-8px, 4px) scale(1.05) rotate(-3deg);
+                transform: translate(-1px, 4px) scale(1) rotate(0deg);
             }
             100% {
                 opacity: 1;
@@ -336,7 +390,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--paper);
+            background: #ffffffcc;
             border: 1.5px solid rgba(34,34,34,0.10);
             border-radius: 12px;
             color: var(--ink);
@@ -461,30 +515,57 @@
         }
 
         /* =========================================
-           MOBILE (<= 1024px): sidebar oculta, bottom nav ativa
+           MOBILE (<= 1024px): sidebar oculta, bottom nav ativa, topbar visível
            ========================================= */
         @media (max-width: 1024px) {
             .sidebar { display: none !important; }
 
             .mobile-nav { display: block; }
 
+            /* Top bar de vidro no topo */
+            .mobile-topbar { display: block; }
+
             .main-wrapper {
                 height: 100vh;
                 height: 100dvh;
             }
+            /* Conteúdo começa abaixo da top bar e termina acima da bottom nav */
             #app-frame-wrap {
-                height: calc(100% - var(--mobile-nav-h) - var(--mobile-safe-bottom));
+                height: calc(100% - var(--mobile-nav-h) - var(--mobile-safe-bottom) - var(--mobile-topbar-h) - var(--mobile-safe-top));
+                margin-top: 10px; /*distancia entre a barra e o conteúdo da página*/
             }
 
-            .mars-assistant { right: 20px; top: 20px; width: 60px; height: 60px; }
+            /* Controles reposicionados para dentro da top bar */
+            .shell-back-btn {
+                left: 16px;
+                right: auto;
+                top: calc(var(--mobile-safe-top) + 12px);
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                z-index: 68;
+            }
+
+            .mobile-title {
+                top: calc(var(--mobile-safe-top) + 12px);
+                height: 40px;
+                z-index: 68;
+            }
+
+            .mars-assistant {
+                right: 20px;
+                top: calc(var(--mobile-safe-top) + 8px);
+                width: 60px; height: 60px;
+                z-index: 68;
+            }
 
             .mars-tooltip {
                 left: 16px;
                 right: 16px;
-                top: 24px;
+                top: calc(var(--mobile-safe-top) + var(--mobile-topbar-h) + 8px);
                 width: auto;
                 max-width: none;
-                max-height: calc(100dvh - 24px - 16px - var(--mobile-nav-h) - var(--mobile-safe-bottom));
+                max-height: calc(100dvh - var(--mobile-safe-top) - var(--mobile-topbar-h) - 16px - var(--mobile-nav-h) - var(--mobile-safe-bottom));
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
                 font-size: 12px;
@@ -514,16 +595,7 @@
                 z-index: 1;
             }
 
-            .bg-dee { position: absolute; right: -50px; bottom: 0; width: 60%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; }
-
-            .shell-back-btn {
-                left: 16px;
-                right: auto;
-                top: 20px;
-                width: 40px;
-                height: 40px;
-                font-size: 14px;
-            }
+            .bg-dee { position: absolute; right: -50px; bottom: 0; width: 60%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; opacity: 0; }
 
             .sidebar-logo > span { font-size: 22px; }
             .mars-drawer { width: 32px; height: 32px; transform: translateY(7px); }
@@ -532,6 +604,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Top bar mobile (fundo de vidro; controles vivem no .main-wrapper e são reposicionados por CSS) -->
+    <header class="mobile-topbar" aria-hidden="true"></header>
 
     <aside class="sidebar" id="sidebar">
         <button class="sidebar-close" id="sidebar-close" aria-label="Fechar menu">
@@ -560,6 +635,7 @@
         <button class="shell-back-btn" id="shell-back-btn" aria-label="Voltar" title="Voltar" disabled>
             <i class="fa-solid fa-arrow-left"></i>
         </button>
+        <span class="mobile-title">Language Lab.</span>
 
         <div class="mars-assistant" id="mars-btn">
             <img src="../assets/mars.png" alt="Mars">
