@@ -1,0 +1,31 @@
+{
+  "name": "Language Lab",
+  "short_name": "Language Lab",
+  "description": "Um laboratório, dezenas de maneiras de aprender.",
+  "start_url": "/lab/",
+  "scope": "/lab/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf3f3",
+  "theme_color": "#c20000",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
