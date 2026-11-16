@@ -6,7 +6,7 @@
     <meta property="og:title" content="Language Lab">
     <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
     <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-    <meta property="og:url" content="https://dididoingles.github.io/lab/">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/home/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Language Lab">
@@ -14,16 +14,10 @@
     <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
 
     <!-- Favicon -->
-<link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
-
-<!-- Ícone do atalho no iPhone/iPad (180×180) -->
-<link rel="apple-touch-icon" sizes="180x180" href="https://dididoingles.github.io/lab/assets/apple-touch-icon.png">
-
-<!-- Manifest (Android + PWA) -->
-<link rel="manifest" href="https://dididoingles.github.io/lab/manifest.json">
-
-<!-- Cor da barra do navegador no Android -->
-<meta name="theme-color" content="#c20000">
+    <link rel="icon" type="image/png" href="../assets/favilab.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#c20000">
     <title>Language Lab</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -56,11 +50,10 @@
             background-position: -1px -1px;
         }
 
-        /* Título ao lado do botão voltar — só mobile */
         .mobile-title {
             display: none;
             position: absolute;
-            left: 68px;          /* 16px do botão + 40px de largura + 12px de gap */
+            left: 68px;
             top: 20px;
             height: 40px;
             align-items: center;
@@ -75,15 +68,11 @@
             white-space: nowrap;
         }
 
-        /* =========================================
-           MOBILE TOP BAR — fundo de vidro no topo
-           (só aparece <=1024px; regra base fica oculta)
-           ========================================= */
         .mobile-topbar {
             display: none;
             position: fixed;
             left: 0; right: 0; top: 0;
-            z-index: 66;                   /* acima do conteúdo, abaixo da bottom nav (70) */
+            z-index: 66;
             height: calc(var(--mobile-topbar-h) + var(--mobile-safe-top));
             padding: var(--mobile-safe-top) 8px 0;
             background: rgba(255, 255, 255, 0.699);
@@ -91,12 +80,9 @@
             backdrop-filter: saturate(180%) blur(14px);
             border-bottom: 1px solid rgba(34,34,34,0.08);
             box-shadow: 0 6px 24px rgba(34,34,34,0.06);
-            pointer-events: none;          /* faixa não bloqueia cliques no iframe */
+            pointer-events: none;
         }
 
-        /* =========================================
-           ANIMAÇÃO DE ENTRADA DO SHELL
-           ========================================= */
         @keyframes shellFadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -112,7 +98,6 @@
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* Sidebar Base */
         .sidebar { width: var(--sidebar-width); height: 100vh; border-right: 1px solid rgba(34,34,34,.06); display: flex; flex-direction: column; padding: 24px 18px; background: var(--paper); z-index: 65; transition: width .3s cubic-bezier(.2,.8,.2,1), left .3s cubic-bezier(.2,.8,.2,1); position: relative; flex-shrink: 0; }
         .sidebar.sidebar--collapsed { width: var(--sidebar-collapsed); }
         .sidebar-close { background: none; border: none; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: var(--muted); margin-bottom: 24px; font-size: 16px; flex-shrink: 0; transition: .2s; }
@@ -148,9 +133,6 @@
             transition: opacity 0.2s ease-out;
         }
 
-        /* =========================================
-           NOVO: SKELETON LOADER (overlay do iframe)
-           ========================================= */
         .skeleton-overlay {
             position: absolute;
             inset: 0;
@@ -170,12 +152,7 @@
         }
 
         .sk-block {
-            background: linear-gradient(
-                90deg,
-                rgba(34,34,34,.05) 0%,
-                rgba(34,34,34,.10) 50%,
-                rgba(34,34,34,.05) 100%
-            );
+            background: linear-gradient(90deg, rgba(34,34,34,.05) 0%, rgba(34,34,34,.10) 50%, rgba(34,34,34,.05) 100%);
             background-size: 200% 100%;
             border-radius: 10px;
             animation: skShimmer 1.4s ease-in-out infinite;
@@ -186,114 +163,35 @@
             100% { background-position: -200% 0; }
         }
 
-        .sk-title {
-            height: 32px;
-            width: 45%;
-            max-width: 320px;
-            border-radius: 8px;
-        }
-        .sk-subtitle {
-            height: 14px;
-            width: 65%;
-            max-width: 420px;
-        }
-        .sk-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
-            margin-top: 12px;
-        }
-        .sk-card {
-            height: 140px;
-            border-radius: 14px;
-        }
+        .sk-title { height: 32px; width: 45%; max-width: 320px; border-radius: 8px; }
+        .sk-subtitle { height: 14px; width: 65%; max-width: 420px; }
+        .sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 12px; }
+        .sk-card { height: 140px; border-radius: 14px; }
         .sk-line { height: 12px; width: 100%; }
         .sk-line--short { width: 70%; }
         .sk-line--shorter { width: 40%; }
 
-        @media (prefers-reduced-motion: reduce) {
-            .sk-block { animation: none; }
-        }
+        @media (prefers-reduced-motion: reduce) { .sk-block { animation: none; } }
 
         @media (max-width: 1024px) {
-
-            body {
-            background: var(--paper); font-family: var(--font-title); color: var(--ink);
-            overflow: hidden; height: 100vh; display: flex;
-            -webkit-tap-highlight-color: transparent;
-            background-image:
-                linear-gradient(rgba(34, 34, 34, 0) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 34, 34, 0) 1px, transparent 1px);
-            background-size: 28px 28px;
-            background-position: -1px -1px;
-        }
-        .mobile-title {
-        display: flex;
-    }
+            body { background-image: none; }
+            .mobile-title { display: flex; }
             .skeleton-overlay { padding: 24px 16px; gap: 14px; }
             .sk-title { height: 26px; width: 55%; }
             .sk-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .sk-card { height: 110px; }
         }
-        /* FIM NOVO: SKELETON */
 
-        /* Logo container */
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            margin-bottom: 32px;
-            white-space: nowrap;
-            overflow: hidden;
-            transition: opacity .3s;
-        }
+        .sidebar-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; margin-bottom: 32px; white-space: nowrap; overflow: hidden; transition: opacity .3s; }
+        .sidebar-logo > span { display: inline-block; font-family: var(--font-title); font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -.05em; line-height: 1; flex-shrink: 0; }
+        .sidebar-logo .logo-highlight { display: inline-block; color: var(--ink); font-weight: 700; }
+        .mars-drawer { width: 35px; height: 35px; object-fit: contain; transition: transform .3s; flex-shrink: 0; }
+        .mars-drawer:hover { transform: translateY(0px) scale(1.1) rotate(-5deg); }
 
-        .sidebar-logo > span {
-            display: inline-block;
-            font-family: var(--font-title);
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: -.05em;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo .logo-highlight {
-            display: inline-block;
-            color: var(--ink);
-            font-weight: 700;
-        }
-
-        .mars-drawer {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            transition: transform .3s;
-            flex-shrink: 0;
-        }
-
-        .mars-drawer:hover {
-            transform: translateY(0px) scale(1.1) rotate(-5deg);
-        }
-
-        /* =========================================
-           MARS ASSISTANT + SLIDE-IN + FLOAT + GLOW
-           ========================================= */
         @keyframes marsSlideIn {
-            0% {
-                opacity: 0;
-                transform: translate(40px, -0px) scale(0.1) rotate(15deg);
-            }
-            60% {
-                opacity: 1;
-                transform: translate(-1px, 4px) scale(1) rotate(0deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
-            }
+            0% { opacity: 0; transform: translate(40px, -0px) scale(0.1) rotate(15deg); }
+            60% { opacity: 1; transform: translate(-1px, 4px) scale(1) rotate(0deg); }
+            100% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
         }
 
         @keyframes marsFloat {
@@ -324,10 +222,7 @@
             position: absolute;
             inset: -18%;
             border-radius: 50%;
-            background: radial-gradient(circle at center,
-                rgba(194, 0, 0, 0.55) 0%,
-                rgba(194, 0, 0, 0.28) 45%,
-                rgba(194, 0, 0, 0) 72%);
+            background: radial-gradient(circle at center, rgba(194, 0, 0, 0.55) 0%, rgba(194, 0, 0, 0.28) 45%, rgba(194, 0, 0, 0) 72%);
             filter: blur(8px);
             z-index: -1;
             pointer-events: none;
@@ -344,9 +239,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .mars-assistant,
-            .mars-assistant::before,
-            .mars-assistant img { animation: none !important; }
+            .mars-assistant, .mars-assistant::before, .mars-assistant img { animation: none !important; }
         }
 
         .mars-tooltip {
@@ -375,237 +268,148 @@
         .mars-tooltip.show { opacity: 1; visibility: visible; transform: translateX(0); }
         .tooltip-close { position: absolute; top: 6px; right: 12px; cursor: pointer; font-weight: bold; color: #999; }
 
-        .footer-link {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dashed rgba(194,0,0,.5);
-            transition: color .15s, border-color .15s;
+        /* Botão de Instalação dentro do Tooltip */
+        .btn-install {
+            display: none;
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-title);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(194,0,0,0.2);
+            transition: transform 0.2s, background 0.2s;
         }
-        .footer-link:hover {
-            color: var(--accent-dark);
-            border-bottom-color: var(--accent-dark);
+        .btn-install:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
         }
 
-        /* =========================================
-           BOTÃO VOLTAR
-           ========================================= */
-        .shell-back-btn {
-            position: absolute;
-            right: 130px;
-            top: 52px;
-            width: 44px;
-            height: 44px;
-            z-index: 30;
-            display: flex;
+        /* NOVO: Modal de Instruções iOS */
+        .ios-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
             align-items: center;
             justify-content: center;
-            background: #ffffffcc;
-            border: 1.5px solid rgba(34,34,34,0.10);
-            border-radius: 12px;
-            color: var(--ink);
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .ios-modal-overlay.show {
+            display: flex;
+        }
+        .ios-modal {
+            background: var(--paper);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-family: var(--font-title);
+        }
+        .ios-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
             cursor: pointer;
-            font-size: 15px;
+            color: var(--muted);
+            line-height: 1;
+        }
+        .ios-modal h3 { margin-bottom: 12px; font-size: 18px; color: var(--ink); }
+        .ios-modal p { font-size: 14px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+        .ios-modal-steps {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .ios-modal-steps ol {
+            margin: 0;
+            padding-left: 20px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--ink);
+        }
+        .ios-modal-steps li { margin-bottom: 8px; }
+        .ios-modal-icon { font-size: 32px; color: var(--accent); margin-bottom: 12px; }
+
+        .footer-link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(194,0,0,.5); transition: color .15s, border-color .15s; }
+        .footer-link:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+
+        .shell-back-btn {
+            position: absolute;
+            right: 130px; top: 52px; width: 44px; height: 44px; z-index: 30;
+            display: flex; align-items: center; justify-content: center;
+            background: #ffffffcc; border: 1.5px solid rgba(34,34,34,0.10); border-radius: 12px;
+            color: var(--ink); cursor: pointer; font-size: 15px;
             transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease, border-color 0.2s ease, opacity 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
-        .shell-back-btn:hover {
-            color: var(--accent);
-            background: rgba(194,0,0,0.05);
-            border-color: rgba(194,0,0,0.25);
-        }
+        .shell-back-btn:hover { color: var(--accent); background: rgba(194,0,0,0.05); border-color: rgba(194,0,0,0.25); }
         .shell-back-btn:active { transform: translateX(-2px); }
         .shell-back-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
         .shell-back-btn:disabled:hover { color: var(--ink); background: var(--paper); border-color: rgba(34,34,34,0.10); }
 
-        /* =========================================
-           MOBILE NAV BAR (bottom)
-           ========================================= */
         .mobile-nav {
-            display: none;
-            position: fixed;
-            left: 0; right: 0;
-            bottom: 0;
-            z-index: 70;
+            display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
             height: calc(var(--mobile-nav-h) + var(--mobile-safe-bottom));
             padding: 0 8px var(--mobile-safe-bottom);
             background: rgba(255, 255, 255, 0.82);
-            -webkit-backdrop-filter: saturate(180%) blur(14px);
-            backdrop-filter: saturate(180%) blur(14px);
-            border-top: 1px solid rgba(34,34,34,0.08);
-            box-shadow: 0 -6px 24px rgba(34,34,34,0.06);
+            -webkit-backdrop-filter: saturate(180%) blur(14px); backdrop-filter: saturate(180%) blur(14px);
+            border-top: 1px solid rgba(34,34,34,0.08); box-shadow: 0 -6px 24px rgba(34,34,34,0.06);
         }
 
-        .mobile-nav__inner {
-            position: relative;
-            height: var(--mobile-nav-h);
-            display: flex;
-            align-items: stretch;
-            justify-content: space-around;
-            overflow: hidden;
-        }
-
-        .mobile-nav__item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: .01em;
-            cursor: pointer;
-            border-radius: 12px;
-            padding: 6px 2px;
-            transition: color .2s, background .2s;
-            -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 2;
-        }
-
-        .mobile-nav__item i {
-            font-size: 19px;
-            line-height: 1;
-        }
-
-        .mobile-nav__item span {
-            font-size: 10px;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
+        .mobile-nav__inner { position: relative; height: var(--mobile-nav-h); display: flex; align-items: stretch; justify-content: space-around; overflow: hidden; }
+        .mobile-nav__item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--muted); text-decoration: none; font-size: 10px; font-weight: 500; letter-spacing: .01em; cursor: pointer; border-radius: 12px; padding: 6px 2px; transition: color .2s, background .2s; -webkit-tap-highlight-color: transparent; position: relative; z-index: 2; }
+        .mobile-nav__item i { font-size: 19px; line-height: 1; }
+        .mobile-nav__item span { font-size: 10px; line-height: 1; white-space: nowrap; }
         .mobile-nav__item:hover { color: var(--ink); }
-
         .mobile-nav__item.active { color: var(--accent); }
 
         .mobile-nav__thumb {
-            position: absolute;
-            top: 2px;
-            left: 0;
-            width: calc(100% / 5);
-            height: 3px;
-            border-radius: 2px;
-            background: var(--accent);
-            box-shadow: 0 0 8px rgba(194, 0, 0, 0.35);
-            transform: translateX(calc(var(--idx, 0) * 100%));
-            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-            pointer-events: none;
-            will-change: transform;
-            z-index: 1;
+            position: absolute; top: 2px; left: 0; width: calc(100% / 5); height: 3px; border-radius: 2px;
+            background: var(--accent); box-shadow: 0 0 8px rgba(194, 0, 0, 0.35);
+            transform: translateX(calc(var(--idx, 0) * 100%)); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none; will-change: transform; z-index: 1;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .mobile-nav__thumb { transition: none; }
-        }
-
+        @media (prefers-reduced-motion: reduce) { .mobile-nav__thumb { transition: none; } }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #f1f1f12d; }
         ::-webkit-scrollbar-thumb { background: #8888882a; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* =========================================
-           SIDEBAR DESKTOP FLUTUANTE
-           ========================================= */
         @media (min-width: 1025px) {
-            .sidebar {
-                margin: 16px 0 16px 16px;
-                height: calc(100vh - 32px);
-                border: 1px solid rgba(34,34,34,.08);
-                border-right: 1px solid rgba(34,34,34,.08);
-                border-radius: 18px;
-                box-shadow: 0 10px 40px rgba(34,34,34,.2),
-                            0 2px 8px rgba(34,34,34,.04);
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
+            .sidebar { margin: 16px 0 16px 16px; height: calc(100vh - 32px); border: 1px solid rgba(34,34,34,.08); border-right: 1px solid rgba(34,34,34,.08); border-radius: 18px; box-shadow: 0 10px 40px rgba(34,34,34,.2), 0 2px 8px rgba(34,34,34,.04); overflow-y: auto; overflow-x: hidden; }
             .sidebar.sidebar--collapsed { border-radius: 18px; }
         }
 
-        /* =========================================
-           MOBILE (<= 1024px): sidebar oculta, bottom nav ativa, topbar visível
-           ========================================= */
         @media (max-width: 1024px) {
             .sidebar { display: none !important; }
-
             .mobile-nav { display: block; }
-
-            /* Top bar de vidro no topo */
             .mobile-topbar { display: block; }
-
-            .main-wrapper {
-                height: 100vh;
-                height: 100dvh;
-            }
-            /* Conteúdo começa abaixo da top bar e termina acima da bottom nav */
-            #app-frame-wrap {
-                height: calc(100% - var(--mobile-nav-h) - var(--mobile-safe-bottom) - var(--mobile-topbar-h) - var(--mobile-safe-top));
-                margin-top: 10px; /*distancia entre a barra e o conteúdo da página*/
-            }
-
-            /* Controles reposicionados para dentro da top bar */
-            .shell-back-btn {
-                left: 16px;
-                right: auto;
-                top: calc(var(--mobile-safe-top) + 12px);
-                width: 40px;
-                height: 40px;
-                font-size: 14px;
-                z-index: 68;
-            }
-
-            .mobile-title {
-                top: calc(var(--mobile-safe-top) + 12px);
-                height: 40px;
-                z-index: 68;
-            }
-
-            .mars-assistant {
-                right: 20px;
-                top: calc(var(--mobile-safe-top) + 8px);
-                width: 60px; height: 60px;
-                z-index: 68;
-            }
-
-            .mars-tooltip {
-                left: 16px;
-                right: 16px;
-                top: calc(var(--mobile-safe-top) + var(--mobile-topbar-h) + 8px);
-                width: auto;
-                max-width: none;
-                max-height: calc(100dvh - var(--mobile-safe-top) - var(--mobile-topbar-h) - 16px - var(--mobile-nav-h) - var(--mobile-safe-bottom));
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-                font-size: 12px;
-                padding: 12px 14px;
-                line-height: 1.4;
-                transform: translateY(-8px);
-            }
+            .main-wrapper { height: 100vh; height: 100dvh; }
+            #app-frame-wrap { height: calc(100% - var(--mobile-nav-h) - var(--mobile-safe-bottom) - var(--mobile-topbar-h) - var(--mobile-safe-top)); margin-top: 10px; }
+            .shell-back-btn { left: 16px; right: auto; top: calc(var(--mobile-safe-top) + 12px); width: 40px; height: 40px; font-size: 14px; z-index: 68; }
+            .mobile-title { top: calc(var(--mobile-safe-top) + 12px); height: 40px; z-index: 68; }
+            .mars-assistant { right: 20px; top: calc(var(--mobile-safe-top) + 8px); width: 60px; height: 60px; z-index: 68; }
+            .mars-tooltip { left: 16px; right: 16px; top: calc(var(--mobile-safe-top) + var(--mobile-topbar-h) + 8px); width: auto; max-width: none; max-height: calc(100dvh - var(--mobile-safe-top) - var(--mobile-topbar-h) - 16px - var(--mobile-nav-h) - var(--mobile-safe-bottom)); overflow-y: auto; -webkit-overflow-scrolling: touch; font-size: 12px; padding: 12px 14px; line-height: 1.4; transform: translateY(-8px); }
             .mars-tooltip.show { transform: translateY(0); }
-
-            .mars-tooltip::after {
-                right: 20px;
-                top: -10px;
-                left: auto;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                border-top: none;
-                border-bottom: 10px solid var(--ink);
-            }
-            .mars-tooltip::before {
-                right: 21px;
-                top: -8px;
-                left: auto;
-                border-left: 9px solid transparent;
-                border-right: 9px solid transparent;
-                border-top: none;
-                border-bottom: 9px solid var(--paper);
-                z-index: 1;
-            }
-
+            .mars-tooltip::after { right: 20px; top: -10px; left: auto; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: none; border-bottom: 10px solid var(--ink); }
+            .mars-tooltip::before { right: 21px; top: -8px; left: auto; border-left: 9px solid transparent; border-right: 9px solid transparent; border-top: none; border-bottom: 9px solid var(--paper); z-index: 1; }
             .bg-dee { position: absolute; right: -50px; bottom: 0; width: 60%; max-width: 300px; opacity: 0.3; z-index: 1; pointer-events: none; opacity: 0; }
-
             .sidebar-logo > span { font-size: 22px; }
             .mars-drawer { width: 32px; height: 32px; transform: translateY(7px); }
             .mars-drawer:hover { transform: translateY(7px) scale(1.1) rotate(-5deg); }
@@ -614,7 +418,6 @@
 </head>
 <body>
 
-    <!-- Top bar mobile (fundo de vidro; controles vivem no .main-wrapper e são reposicionados por CSS) -->
     <header class="mobile-topbar" aria-hidden="true"></header>
 
     <aside class="sidebar" id="sidebar">
@@ -649,15 +452,17 @@
         <div class="mars-assistant" id="mars-btn">
             <img src="../assets/mars.png" alt="Mars">
         </div>
+        
         <div class="mars-tooltip" id="mars-tooltip">
             <span class="tooltip-close" id="mars-close">×</span>
             <p id="mars-message">Olá! Eu sou o Mars.</p>
+            <!-- Botão de instalação -->
+            <button class="btn-install" id="pwa-install-btn">Instalar Lab</button>
         </div>
 
         <main id="app-frame-wrap">
             <iframe id="view-frame" title="Conteúdo" src=""></iframe>
 
-            <!-- NOVO: SKELETON OVERLAY — começa escondido, só aparece via JS após delay -->
             <div class="skeleton-overlay is-hidden" id="skeleton-overlay" aria-hidden="true">
                 <div class="sk-block sk-title"></div>
                 <div class="sk-block sk-subtitle"></div>
@@ -673,11 +478,9 @@
                 <div class="sk-block sk-line sk-line--short"></div>
                 <div class="sk-block sk-line sk-line--shorter"></div>
             </div>
-            <!-- FIM NOVO: SKELETON OVERLAY -->
         </main>
     </div>
 
-    <!-- Bottom nav (mobile only) -->
     <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação principal">
         <div class="mobile-nav__inner">
             <span class="mobile-nav__thumb" id="mobile-nav-thumb" aria-hidden="true"></span>
@@ -689,7 +492,33 @@
         </div>
     </nav>
 
+    <!-- NOVO: Modal de instruções para iOS -->
+    <div class="ios-modal-overlay" id="ios-modal">
+        <div class="ios-modal">
+            <span class="ios-modal-close" id="ios-modal-close">×</span>
+            <i class="fa-brands fa-apple ios-modal-icon"></i>
+            <h3>Instalar no iPhone/iPad</h3>
+            <p>Como a Apple não permite instalação direta, siga estes passos no <strong>Safari</strong>:</p>
+            <div class="ios-modal-steps">
+                <ol>
+                    <li>Toque no ícone de <strong>Compartilhar</strong> (quadrado com seta para cima).</li>
+                    <li>Role a lista e toque em <strong>Adicionar à Tela de Início</strong>.</li>
+                    <li>Confirme o nome e toque em <strong>Adicionar</strong>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Registrar o Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../sw.js')
+                    .then(reg => console.log('Service Worker registrado!', reg))
+                    .catch(err => console.log('Erro no Service Worker:', err));
+            });
+        }
+
         (function () {
             const iframe    = document.getElementById('view-frame');
             const sidebar   = document.getElementById('sidebar');
@@ -698,16 +527,71 @@
             const backBtn   = document.getElementById('shell-back-btn');
             const mobileThumb = document.getElementById('mobile-nav-thumb');
             const skeleton  = document.getElementById('skeleton-overlay');
+            
+            // Lógica de Instalação PWA
+            const pwaBtn = document.getElementById('pwa-install-btn');
+            const iosModal = document.getElementById('ios-modal');
+            const iosModalClose = document.getElementById('ios-modal-close');
+            let deferredPrompt;
+
+            // Detecta se é iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+            // No iPhone, sempre mostra o botão (já que não tem o evento nativo)
+            if (isIOS) {
+                if (pwaBtn) pwaBtn.style.display = 'block';
+            }
+
+            // No Android/Windows, o navegador avisa que pode instalar
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (pwaBtn) pwaBtn.style.display = 'block';
+            });
+
+            // Clique no botão de instalar
+            if (pwaBtn) {
+                pwaBtn.addEventListener('click', async () => {
+                    if (isIOS) {
+                        // Se for iOS, abre o modal de instruções
+                        iosModal.classList.add('show');
+                    } else if (deferredPrompt) {
+                        // Se for Android/Windows, abre a janelinha do sistema
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            pwaBtn.style.display = 'none';
+                            tooltip.classList.remove('show');
+                        }
+                        deferredPrompt = null;
+                    } else {
+                        // Fallback para navegadores que não suportam
+                        alert('Para instalar, use o menu do seu navegador e escolha "Adicionar à tela inicial" ou "Instalar App".');
+                    }
+                });
+            }
+
+            // Fechar o modal iOS
+            if (iosModalClose) {
+                iosModalClose.addEventListener('click', () => {
+                    iosModal.classList.remove('show');
+                });
+            }
+            // Fechar o modal iOS ao clicar fora
+            if (iosModal) {
+                iosModal.addEventListener('click', (e) => {
+                    if (e.target === iosModal) {
+                        iosModal.classList.remove('show');
+                    }
+                });
+            }
 
             let currentRoute = null;
             let isFirstLoad = true;
             let navCount = 0;
 
-            /* =========================================
-               NOVO: SKELETON — só aparece se demorar
-               ========================================= */
-            const SKELETON_DELAY = 500;   // ms antes de mostrar o skeleton
-            const SKELETON_SAFETY = 8000; // ms — evita ficar travado pra sempre
+            const SKELETON_DELAY = 500;
+            const SKELETON_SAFETY = 8000;
 
             let skeletonShowTimer = null;
             let skeletonSafetyTimer = null;
@@ -718,9 +602,7 @@
                 clearTimeout(skeletonSafetyTimer);
                 skeletonShowTimer = setTimeout(() => {
                     skeleton.classList.remove('is-hidden');
-                    // Se depois de SKELETON_SAFETY ainda não veio load, esconde
                     skeletonSafetyTimer = setTimeout(() => {
-                        console.warn('[shell] Skeleton safety timeout — forçando hide.');
                         skeleton.classList.add('is-hidden');
                     }, SKELETON_SAFETY);
                 }, SKELETON_DELAY);
@@ -730,12 +612,10 @@
                 if (!skeleton) return;
                 clearTimeout(skeletonShowTimer);
                 clearTimeout(skeletonSafetyTimer);
-                // Se já apareceu, faz fade-out suave
                 if (!skeleton.classList.contains('is-hidden')) {
                     skeleton.classList.add('is-hidden');
                 }
             }
-            /* FIM NOVO: SKELETON */
 
             const marsMessages = {
                 start:   '<strong>Welcome, Student!</strong> Você está usando o Language Lab, cortesia da teacher <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a> | <a href="https://wa.me/5516993272278/" target="_blank" rel="noopener noreferrer" class="footer-link">Torne-se aluno</a> e tenha um tutor só para você por um valor justo.',
@@ -765,7 +645,6 @@
             }
 
             iframe.addEventListener('load', () => {
-                /* NOVO: SKELETON — cancela (ou esconde, se já apareceu) */
                 cancelSkeleton();
                 requestAnimationFrame(() => {
                     iframe.style.opacity = '1';
@@ -792,7 +671,6 @@
                 if (marsMessages[route]) messageEl.innerHTML = marsMessages[route];
 
                 iframe.style.opacity = '0';
-                /* NOVO: SKELETON — agenda (só mostra se demorar > SKELETON_DELAY) */
                 scheduleSkeleton();
 
                 let swapped = false;
@@ -801,7 +679,6 @@
                     swapped = true;
                     iframe.removeEventListener('transitionend', onEnd);
                     iframe.src = 'views/' + route + '/index.html';
-                    /* NÃO cancela o skeleton aqui — o listener de 'load' cuida disso */
                 };
                 const onEnd = (e) => {
                     if (e.propertyName === 'opacity') swapSrc();
