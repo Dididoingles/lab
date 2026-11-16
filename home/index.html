@@ -83,20 +83,10 @@
             pointer-events: none;
         }
 
-        @keyframes shellFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes shellFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .sidebar { animation: shellFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
-        .sidebar {
-            animation: shellFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        .main-wrapper {
-            opacity: 1;
-            flex: 1; height: 100vh; position: relative;
-            display: flex; flex-direction: column; overflow: hidden;
-        }
+        .main-wrapper { opacity: 1; flex: 1; height: 100vh; position: relative; display: flex; flex-direction: column; overflow: hidden; }
 
         .sidebar { width: var(--sidebar-width); height: 100vh; border-right: 1px solid rgba(34,34,34,.06); display: flex; flex-direction: column; padding: 24px 18px; background: var(--paper); z-index: 65; transition: width .3s cubic-bezier(.2,.8,.2,1), left .3s cubic-bezier(.2,.8,.2,1); position: relative; flex-shrink: 0; }
         .sidebar.sidebar--collapsed { width: var(--sidebar-collapsed); }
@@ -119,50 +109,13 @@
 
         .bg-dee { position: absolute; right: -50px; bottom: 0; width: 30%; max-width: 400px; opacity: 0.2; z-index: 1; pointer-events: none; }
 
-        #app-frame-wrap {
-            position: relative; z-index: 5;
-            flex: 1; width: 100%; height: 100%;
-            overflow: hidden;
-        }
+        #app-frame-wrap { position: relative; z-index: 5; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+        #view-frame { display: block; width: 100%; height: 100%; border: 0; background: transparent; transition: opacity 0.2s ease-out; }
 
-        #view-frame {
-            display: block;
-            width: 100%; height: 100%;
-            border: 0;
-            background: transparent;
-            transition: opacity 0.2s ease-out;
-        }
-
-        .skeleton-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 20;
-            padding: 40px;
-            background: var(--paper);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            opacity: 1;
-            transition: opacity 0.3s ease-out;
-            pointer-events: none;
-        }
-        .skeleton-overlay.is-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .sk-block {
-            background: linear-gradient(90deg, rgba(34,34,34,.05) 0%, rgba(34,34,34,.10) 50%, rgba(34,34,34,.05) 100%);
-            background-size: 200% 100%;
-            border-radius: 10px;
-            animation: skShimmer 1.4s ease-in-out infinite;
-        }
-
-        @keyframes skShimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
+        .skeleton-overlay { position: absolute; inset: 0; z-index: 20; padding: 40px; background: var(--paper); display: flex; flex-direction: column; gap: 20px; opacity: 1; transition: opacity 0.3s ease-out; pointer-events: none; }
+        .skeleton-overlay.is-hidden { opacity: 0; pointer-events: none; }
+        .sk-block { background: linear-gradient(90deg, rgba(34,34,34,.05) 0%, rgba(34,34,34,.10) 50%, rgba(34,34,34,.05) 100%); background-size: 200% 100%; border-radius: 10px; animation: skShimmer 1.4s ease-in-out infinite; }
+        @keyframes skShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .sk-title { height: 32px; width: 45%; max-width: 320px; border-radius: 8px; }
         .sk-subtitle { height: 14px; width: 65%; max-width: 420px; }
         .sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 12px; }
@@ -172,7 +125,6 @@
         .sk-line--shorter { width: 40%; }
 
         @media (prefers-reduced-motion: reduce) { .sk-block { animation: none; } }
-
         @media (max-width: 1024px) {
             body { background-image: none; }
             .mobile-title { display: flex; }
@@ -188,89 +140,23 @@
         .mars-drawer { width: 35px; height: 35px; object-fit: contain; transition: transform .3s; flex-shrink: 0; }
         .mars-drawer:hover { transform: translateY(0px) scale(1.1) rotate(-5deg); }
 
-        @keyframes marsSlideIn {
-            0% { opacity: 0; transform: translate(40px, -0px) scale(0.1) rotate(15deg); }
-            60% { opacity: 1; transform: translate(-1px, 4px) scale(1) rotate(0deg); }
-            100% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
-        }
+        @keyframes marsSlideIn { 0% { opacity: 0; transform: translate(40px, -0px) scale(0.1) rotate(15deg); } 60% { opacity: 1; transform: translate(-1px, 4px) scale(1) rotate(0deg); } 100% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); } }
+        @keyframes marsFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes marsGlowPulse { 0%, 100% { opacity: .35; transform: scale(1); } 50% { opacity: .65; transform: scale(1.15); } }
 
-        @keyframes marsFloat {
-            0%, 100% { transform: translateY(0); }
-            50%      { transform: translateY(-6px); }
-        }
-
-        @keyframes marsGlowPulse {
-            0%, 100% { opacity: .35; transform: scale(1); }
-            50%      { opacity: .65; transform: scale(1.15); }
-        }
-
-        .mars-assistant {
-            position: absolute;
-            right: 40px;
-            top: 40px;
-            width: 80px;
-            height: 80px;
-            z-index: 30;
-            cursor: pointer;
-            transition: transform .3s;
-            animation: marsSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
-            isolation: isolate;
-        }
-
-        .mars-assistant::before {
-            content: '';
-            position: absolute;
-            inset: -18%;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(194, 0, 0, 0.55) 0%, rgba(194, 0, 0, 0.28) 45%, rgba(194, 0, 0, 0) 72%);
-            filter: blur(8px);
-            z-index: -1;
-            pointer-events: none;
-            animation: marsGlowPulse 3.2s ease-in-out infinite;
-        }
-
+        .mars-assistant { position: absolute; right: 40px; top: 40px; width: 80px; height: 80px; z-index: 30; cursor: pointer; transition: transform .3s; animation: marsSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; isolation: isolate; }
+        .mars-assistant::before { content: ''; position: absolute; inset: -18%; border-radius: 50%; background: radial-gradient(circle at center, rgba(194, 0, 0, 0.55) 0%, rgba(194, 0, 0, 0.28) 45%, rgba(194, 0, 0, 0) 72%); filter: blur(8px); z-index: -1; pointer-events: none; animation: marsGlowPulse 3.2s ease-in-out infinite; }
         .mars-assistant:hover { transform: scale(1.1) rotate(5deg); }
+        .mars-assistant img { position: absolute; width: 100%; animation: marsFloat 3.4s ease-in-out infinite; will-change: transform; }
+        @media (prefers-reduced-motion: reduce) { .mars-assistant, .mars-assistant::before, .mars-assistant img { animation: none !important; } }
 
-        .mars-assistant img {
-            position: absolute;
-            width: 100%;
-            animation: marsFloat 3.4s ease-in-out infinite;
-            will-change: transform;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .mars-assistant, .mars-assistant::before, .mars-assistant img { animation: none !important; }
-        }
-
-        .mars-tooltip {
-            position: absolute;
-            right: 130px; top: 50px;
-            background: var(--paper);
-            border: 2px solid var(--ink);
-            border-radius: 12px;
-            padding: 16px;
-            width: 300px;
-            max-width: calc(100vw - 32px);
-            overflow-wrap: anywhere;
-            word-break: break-word;
-            box-shadow: var(--shadow-hard-sm);
-            z-index: 35;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            line-height: 1.45;
-            color: var(--ink);
-            opacity: 0; visibility: hidden;
-            transform: translateX(20px);
-            transition: all .3s cubic-bezier(.2,.8,.2,1);
-        }
+        .mars-tooltip { position: absolute; right: 130px; top: 50px; background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 16px; width: 300px; max-width: calc(100vw - 32px); overflow-wrap: anywhere; word-break: break-word; box-shadow: var(--shadow-hard-sm); z-index: 35; font-family: var(--font-mono); font-size: 12px; line-height: 1.45; color: var(--ink); opacity: 0; visibility: hidden; transform: translateX(20px); transition: all .3s cubic-bezier(.2,.8,.2,1); }
         .mars-tooltip::after { content: ''; position: absolute; right: -10px; top: 25px; border-left: 10px solid var(--ink); border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
         .mars-tooltip::before { content: ''; position: absolute; right: -8px; top: 26px; border-left: 9px solid var(--paper); border-top: 9px solid transparent; border-bottom: 9px solid transparent; z-index: 1; }
         .mars-tooltip.show { opacity: 1; visibility: visible; transform: translateX(0); }
         .tooltip-close { position: absolute; top: 6px; right: 12px; cursor: pointer; font-weight: bold; color: #999; }
 
-        /* Botão de Instalação dentro do Tooltip */
         .btn-install {
-            display: none;
             margin-top: 12px;
             padding: 8px 12px;
             background: var(--accent);
@@ -286,106 +172,39 @@
             box-shadow: 0 4px 10px rgba(194,0,0,0.2);
             transition: transform 0.2s, background 0.2s;
         }
-        .btn-install:hover {
-            background: var(--accent-dark);
-            transform: translateY(-1px);
-        }
+        .btn-install:hover { background: var(--accent-dark); transform: translateY(-1px); }
 
-        /* NOVO: Modal de Instruções iOS */
-        .ios-modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(4px);
-        }
-        .ios-modal-overlay.show {
-            display: flex;
-        }
-        .ios-modal {
-            background: var(--paper);
-            padding: 24px;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            font-family: var(--font-title);
-        }
-        .ios-modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--muted);
-            line-height: 1;
-        }
+        /* Modal de Instruções iOS */
+        .ios-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+        .ios-modal-overlay.show { display: flex; }
+        .ios-modal { background: var(--paper); padding: 24px; border-radius: 16px; max-width: 400px; width: 100%; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-family: var(--font-title); }
+        .ios-modal-close { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: var(--muted); line-height: 1; }
         .ios-modal h3 { margin-bottom: 12px; font-size: 18px; color: var(--ink); }
         .ios-modal p { font-size: 14px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-        .ios-modal-steps {
-            background: #fff;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .ios-modal-steps ol {
-            margin: 0;
-            padding-left: 20px;
-            text-align: left;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--ink);
-        }
+        .ios-modal-steps { background: #fff; border-radius: 12px; padding: 16px; border: 1px solid rgba(0,0,0,0.05); }
+        .ios-modal-steps ol { margin: 0; padding-left: 20px; text-align: left; font-size: 14px; line-height: 1.6; color: var(--ink); }
         .ios-modal-steps li { margin-bottom: 8px; }
         .ios-modal-icon { font-size: 32px; color: var(--accent); margin-bottom: 12px; }
 
         .footer-link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(194,0,0,.5); transition: color .15s, border-color .15s; }
         .footer-link:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
 
-        .shell-back-btn {
-            position: absolute;
-            right: 130px; top: 52px; width: 44px; height: 44px; z-index: 30;
-            display: flex; align-items: center; justify-content: center;
-            background: #ffffffcc; border: 1.5px solid rgba(34,34,34,0.10); border-radius: 12px;
-            color: var(--ink); cursor: pointer; font-size: 15px;
-            transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease, border-color 0.2s ease, opacity 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .shell-back-btn { position: absolute; right: 130px; top: 52px; width: 44px; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: center; background: #ffffffcc; border: 1.5px solid rgba(34,34,34,0.10); border-radius: 12px; color: var(--ink); cursor: pointer; font-size: 15px; transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease, border-color 0.2s ease, opacity 0.2s ease; -webkit-tap-highlight-color: transparent; }
         .shell-back-btn:hover { color: var(--accent); background: rgba(194,0,0,0.05); border-color: rgba(194,0,0,0.25); }
         .shell-back-btn:active { transform: translateX(-2px); }
         .shell-back-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
         .shell-back-btn:disabled:hover { color: var(--ink); background: var(--paper); border-color: rgba(34,34,34,0.10); }
 
-        .mobile-nav {
-            display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
-            height: calc(var(--mobile-nav-h) + var(--mobile-safe-bottom));
-            padding: 0 8px var(--mobile-safe-bottom);
-            background: rgba(255, 255, 255, 0.82);
-            -webkit-backdrop-filter: saturate(180%) blur(14px); backdrop-filter: saturate(180%) blur(14px);
-            border-top: 1px solid rgba(34,34,34,0.08); box-shadow: 0 -6px 24px rgba(34,34,34,0.06);
-        }
-
+        .mobile-nav { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 70; height: calc(var(--mobile-nav-h) + var(--mobile-safe-bottom)); padding: 0 8px var(--mobile-safe-bottom); background: rgba(255, 255, 255, 0.82); -webkit-backdrop-filter: saturate(180%) blur(14px); backdrop-filter: saturate(180%) blur(14px); border-top: 1px solid rgba(34,34,34,0.08); box-shadow: 0 -6px 24px rgba(34,34,34,0.06); }
         .mobile-nav__inner { position: relative; height: var(--mobile-nav-h); display: flex; align-items: stretch; justify-content: space-around; overflow: hidden; }
         .mobile-nav__item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--muted); text-decoration: none; font-size: 10px; font-weight: 500; letter-spacing: .01em; cursor: pointer; border-radius: 12px; padding: 6px 2px; transition: color .2s, background .2s; -webkit-tap-highlight-color: transparent; position: relative; z-index: 2; }
         .mobile-nav__item i { font-size: 19px; line-height: 1; }
         .mobile-nav__item span { font-size: 10px; line-height: 1; white-space: nowrap; }
         .mobile-nav__item:hover { color: var(--ink); }
         .mobile-nav__item.active { color: var(--accent); }
-
-        .mobile-nav__thumb {
-            position: absolute; top: 2px; left: 0; width: calc(100% / 5); height: 3px; border-radius: 2px;
-            background: var(--accent); box-shadow: 0 0 8px rgba(194, 0, 0, 0.35);
-            transform: translateX(calc(var(--idx, 0) * 100%)); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-            pointer-events: none; will-change: transform; z-index: 1;
-        }
-
+        .mobile-nav__thumb { position: absolute; top: 2px; left: 0; width: calc(100% / 5); height: 3px; border-radius: 2px; background: var(--accent); box-shadow: 0 0 8px rgba(194, 0, 0, 0.35); transform: translateX(calc(var(--idx, 0) * 100%)); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); pointer-events: none; will-change: transform; z-index: 1; }
         @media (prefers-reduced-motion: reduce) { .mobile-nav__thumb { transition: none; } }
+
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #f1f1f12d; }
         ::-webkit-scrollbar-thumb { background: #8888882a; }
@@ -456,7 +275,6 @@
         <div class="mars-tooltip" id="mars-tooltip">
             <span class="tooltip-close" id="mars-close">×</span>
             <p id="mars-message">Olá! Eu sou o Mars.</p>
-            <!-- Botão de instalação -->
             <button class="btn-install" id="pwa-install-btn">Instalar Lab</button>
         </div>
 
@@ -492,7 +310,7 @@
         </div>
     </nav>
 
-    <!-- NOVO: Modal de instruções para iOS -->
+    <!-- Modal de instruções para iOS -->
     <div class="ios-modal-overlay" id="ios-modal">
         <div class="ios-modal">
             <span class="ios-modal-close" id="ios-modal-close">×</span>
@@ -534,29 +352,18 @@
             const iosModalClose = document.getElementById('ios-modal-close');
             let deferredPrompt;
 
-            // Detecta se é iOS
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-            // No iPhone, sempre mostra o botão (já que não tem o evento nativo)
-            if (isIOS) {
-                if (pwaBtn) pwaBtn.style.display = 'block';
-            }
-
-            // No Android/Windows, o navegador avisa que pode instalar
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                if (pwaBtn) pwaBtn.style.display = 'block';
             });
 
-            // Clique no botão de instalar
             if (pwaBtn) {
                 pwaBtn.addEventListener('click', async () => {
                     if (isIOS) {
-                        // Se for iOS, abre o modal de instruções
                         iosModal.classList.add('show');
                     } else if (deferredPrompt) {
-                        // Se for Android/Windows, abre a janelinha do sistema
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
@@ -565,19 +372,18 @@
                         }
                         deferredPrompt = null;
                     } else {
-                        // Fallback para navegadores que não suportam
-                        alert('Para instalar, use o menu do seu navegador e escolha "Adicionar à tela inicial" ou "Instalar App".');
+                        // Fallback silencioso: em vez de abrir um alerta feio, 
+                        // a gente substitui o botão por uma instrução discreta.
+                        pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center;">Mars explica: Vá no menu do navegador (⋮) e desça até a opção instalar ou criar atalho. Clique em criar atalho e pronto, o site fica salvo para você acessar facilmente.</p>';
                     }
                 });
             }
 
-            // Fechar o modal iOS
             if (iosModalClose) {
                 iosModalClose.addEventListener('click', () => {
                     iosModal.classList.remove('show');
                 });
             }
-            // Fechar o modal iOS ao clicar fora
             if (iosModal) {
                 iosModal.addEventListener('click', (e) => {
                     if (e.target === iosModal) {
