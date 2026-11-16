@@ -330,14 +330,14 @@
             width: 220px; height: 270px;
             border-radius: 20px; overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-            padding: 40px 14px 12px; gap: 8px;
+            padding: 10px 24px 12px; gap: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,.15); flex-shrink: 0;
         }
         
         .card-art {
-            width: 65%; max-width: 130px;
+            width: 50%; max-width: 130px;
             height: var(--art-height, 100px); object-fit: contain; display: block; flex-shrink: 0;
-            filter: drop-shadow(0 10px 20px var(--card-shadow, rgba(0,0,0,.3))) brightness(1.05);
+            filter: drop-shadow(0 10px 20px var(--card-shadow, rgba(0, 0, 0, 0))) brightness(1.05);
             -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
             mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
         }
@@ -455,7 +455,7 @@
         @media(max-width: 1024px) {
            
             body {
-                padding: 80px 20px calc(48px + env(safe-area-inset-bottom, 0px) + 32px) 20px;
+                padding: 100px 20px calc(48px + env(safe-area-inset-bottom, 0px) + 32px) 20px;
             }
 
             .welcome-hero {
@@ -464,10 +464,16 @@
                 margin-right: -20px;
                 width: calc(100% + 40px);
                 margin-bottom: 24px;
+                opacity: 0;
                 /* Sem altura fixa no mobile também */
             }
 
             .section-title { font-size: 18px; }
+
+            .quick-access {
+            margin-bottom: 20px;
+            margin-top: -100px;
+        }
 
             .quick-grid { gap: 10px; }
             .quick-card { padding: 12px 8px 10px; gap: 8px; border-radius: 14px; }
@@ -475,7 +481,7 @@
             .quick-card-name { font-size: 14px; }
             .quick-card-desc { font-size: 12px; }
 
-            .book-egg { margin: 15px 0 22px; }
+            .book-egg { margin: 80px 0 22px; }
             .book-egg-text { font-size: 10px; }
 
             .hand-hint {
@@ -488,7 +494,7 @@
 
             .carousel-section { height: 280px; margin: 10px 0; }
             .card { width: 190px; height: 240px; padding: 12px 10px; }
-            .card-art { height: 70px; }
+            .card-art { height: 70px; padding-top: 20px; }
             .card-title { font-size: var(--title-size, 14px); }
             .card-desc { font-size: var(--desc-size, 10px); }
             
@@ -520,7 +526,7 @@
             .see-all-wrapper {
                 display: flex;
                 justify-content: center;
-                margin: 4px 0 0 0;
+                margin: 20px 0 0 0;
                 padding-left: 0px;
             }
         }
@@ -533,7 +539,7 @@
         <!-- #1 — Banner de boas-vindas (imagem integrada ao fundo, full-bleed) -->
         <div class="welcome-hero">
             <img class="welcome-hero-img"
-                 src="../../../assets/welcome.webp"
+                 src="../../../assets/welcome1.webp"
                  alt="Bem-vindo ao Language Lab">
         </div>
 
@@ -549,7 +555,7 @@
                     <span class="quick-card-name">Plano de estudos</span>
                     <span class="quick-card-desc">Monte seu cronograma</span>
                     <a class="quick-card" href="https://dididoingles.github.io/testyourenglish/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
-                        <img src="../../../assets/level.webp" alt="Nivelamento">
+                        <img src="../../../assets/level1.webp" alt="Nivelamento">
                         <span class="quick-card-name">Teste de nível</span>
                         <span class="quick-card-desc">Descubra seu inglês</span>
                     </a>
@@ -570,7 +576,7 @@
        <section class="highlight">
         <div class="section-head-highlight">
             <span class="section-kicker">Highlight</span>
-            <h2 class="section-title">Ferramentas mais buscadas</h2>
+            <h2 class="section-title">Mais buscadas</h2> 
         </div>
     </section>
         <!-- #5 — Carrossel (inalterado) -->
@@ -607,7 +613,8 @@
             { art: '../../../assets/card3.png',  title: 'Leitor Interativo', description: 'Aprenda a pronúncia de qualquer texto', link: 'https://dididoingles.github.io/leitor/', color: '#c20000', shadow: 'rgba(120,0,0,.55)', layout: { artHeight: 100, titleSize: '15px', descSize: '11px', titleLines: 2, descLines: 2 } },
             { art: '../../../assets/stop.webp',   title: 'Stop game',        description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês', link: 'https://dididoingles.github.io/stopgame/', color: '#3d3d3d', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
             { art: '../../../assets/wheel.png',  title: 'Conversation wheel',description: 'Ideal para estimular as aulas de conversação', link: 'https://dididoingles.github.io/conversationwheel/', color: '#3a5466', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
-            { art: '../../../assets/sketchbook.png',  title: 'My Sketchbook',    description: 'Pratique a gramática com tempos verbais', link: 'https://dididoingles.github.io/mysketchbook/', color: '#be634a', shadow: '', layout: { artHeight: 70, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
+            { art: '../../../assets/sketchbook.png',  title: 'My Sketchbook',    description: 'Pratique a gramática com tempos verbais', link: 'https://dididoingles.github.io/mysketchbook/', color: '#d15252', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
+
             { art: '../../../assets/mars.png',   title: 'Role play',        description: 'Simule uma conversa em Inglês em diferentes situações.', link: 'https://dididoingles.github.io/marsroleplay/', color: '#c20000', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
             { art: '../../../assets/listen.png', title: 'YouListen',        description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.', link: 'https://dididoingles.github.io/youlisten/', color: '#a10000', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 3 } },
             { art: '../../../assets/card5.png',  title: 'Você me conhece?', description: 'Versão em Inglês do famoso "Perguntados" para casais.', link: 'https://dididoingles.github.io/couples_trivia/', color: '#695c78', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
