@@ -48,7 +48,7 @@
         ::-webkit-scrollbar-track { background: #f1f1f100; }
         ::-webkit-scrollbar-thumb { background: #88888800; }
         ::-webkit-scrollbar-thumb:hover { background: #55555500; }
-        
+
         .content-wrapper {
             width: 100%; 
             max-width: 800px; 
@@ -256,25 +256,25 @@
             {
                 title: 'Teste Rápido',
                 link: 'testerapido.html',
-                desc: 'Focado na sua gramática e vocabulário em apenas 15 questões de múltipla escolha.',
+                desc: '25 questões de multipla escolha',
                 icon: 'fa-solid fa-bolt',
                 badges: [
                     '<i class="fa-regular fa-clock"></i> ~3 min',
-                    '<i class="fa-solid fa-list-check"></i> 15 questões'
+                    '<i class="fa-solid fa-list-check"></i> 25 questões'
                 ]
                 // Sem "soon: true" = está ativo
             },
             {
                 title: 'Teste Completo',
                 link: 'testecompleto.html', // Quando publicar, só apagar o "soon: true" abaixo
-                desc: 'Avalie as 4 habilidades: Listening, Reading, Writing e Speaking com nota detalhada por área.',
+                desc: 'Avalia as 4 habilidades: Listening, Reading, Writing e Speaking.',
                 icon: 'fa-solid fa-bullseye',
                 badges: [
                     '<i class="fa-regular fa-clock"></i> ~12 min',
-                    '<i class="fa-solid fa-list-check"></i> 17 questões',
-                    '<i class="fa-solid fa-microphone"></i> Áudio'
+                    '<i class="fa-solid fa-list-check"></i> 15 questões',
+                    '<i class="fa-solid fa-microphone"></i> áudio'
                 ],
-                soon: true // <-- APAGUE OU COMENTE ESTA LINHA PARA ATIVAR O TESTE
+                soon: false // <-- APAGUE OU COMENTE ESTA LINHA PARA ATIVAR O TESTE
             }
         ];
 
@@ -322,6 +322,10 @@
         if (window.parent && window.parent !== window) {
             window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
         }
+
+        if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
+}
     </script>
 
 </body>
