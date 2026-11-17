@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- Metatags de Compartilhamento (Open Graph / WhatsApp / Twitter) -->
-     <meta property="og:title" content="Language Lab">
-     <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
-     <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
-     <meta property="og:url" content="https://dididoingles.github.io/lab/">
-     <meta property="og:type" content="website">
-     
-     <meta name="twitter:card" content="summary_large_image">
-     <meta name="twitter:title" content="Language Lab">
-     <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
-     <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
- 
-     <!-- Favicon -->
-     <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
-     <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <meta property="og:title" content="Language Lab">
+    <meta property="og:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta property="og:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <meta property="og:url" content="https://dididoingles.github.io/lab/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Language Lab">
+    <meta name="twitter:description" content="Um laboratório, dezenas de maneiras de aprender.">
+    <meta name="twitter:image" content="https://dididoingles.github.io/lab/assets/metalab.png">
+    <link rel="icon" type="image/png" href="https://dididoingles.github.io/lab/assets/favilab.png">
+    <link rel="apple-touch-icon" href="https://dididoingles.github.io/lab/assets/favilab.png">
     <title>Início — Language Lab</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -48,43 +44,31 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            overflow-x: hidden; 
             overflow-y: auto;
             -webkit-tap-highlight-color: transparent;
         }
 
         .view { display: flex; flex-direction: column; width: 100%; max-width: 800px; }
 
-        /* =========================================
-           #1 — BANNER DE BOAS-VINDAS (imagem)
-           Integrado ao fundo: sem borda, sombra ou caixa.
-           Full-bleed: ocupa a largura toda da tela.
-           Altura automática: cresce proporcionalmente.
-           ========================================= */
         .welcome-hero {
             position: relative;
-            /* Full-bleed: vaza o padding do body (40px em cada lado) */
             margin-left: -20px;
             margin-right: -40px;
             width: calc(100% + 80px);
             margin-bottom: 32px;
-            /* Sem altura fixa: o container acompanha a proporção da imagem */
         }
 
         .welcome-hero-img {
             display: block;
             width: 110%;
-            height: auto;       /* cresce proporcionalmente à largura */
+            height: auto;
             object-fit: contain;
             object-position: center;
             opacity: 30%;
         }
 
-        /* =========================================
-           #2 — ACESSO RÁPIDO
-           ========================================= */
-        .quick-access {
-            margin-bottom: 20px;
-        }
+        .quick-access { margin-bottom: 20px; }
 
         .section-head {
             display: flex;
@@ -92,8 +76,6 @@
             gap: 10px;
             margin-bottom: 14px;
         }
-
-        
 
         .section-kicker {
             font-family: var(--font-title);
@@ -126,16 +108,19 @@
 
         .section-head-highlight {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 10px;
             margin-bottom: 14px;
         }
+
+        .section-head-highlight .section-kicker,
+        .section-head-highlight .section-title { align-self: baseline; }
+        .section-head-highlight .btn-see-all { margin-left: auto; }
 
         @media (min-width: 640px) {
             .quick-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
         }
 
-        /* CARD DE ACESSO RÁPIDO */
         .quick-card {
             position: relative;
             aspect-ratio: 1 / 1;
@@ -152,10 +137,7 @@
             overflow: hidden;
             text-decoration: none;
             color: inherit;
-            transition:
-                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 0.4s ease,
-                border-color 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.3s ease;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
@@ -173,167 +155,114 @@
 
         .quick-card:hover {
             transform: translateY(-4px) scale(1.02);
-            box-shadow:
-                0 16px 32px rgba(0,0,0,0.10),
-                0 6px 14px var(--aura-shadow, rgba(120,0,0,0.15));
+            box-shadow: 0 16px 32px rgba(0,0,0,0.10), 0 6px 14px var(--aura-shadow, rgba(120,0,0,0.15));
             border-color: rgba(34,34,34,0.02);
         }
         .quick-card:hover::before { opacity: 0.16; }
         .quick-card:active { transform: translateY(-1px) scale(0.99); }
 
-        /* Imagem do card de acesso rápido — sem container, direto no card */
         .quick-card > img {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            display: block;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
+            width: 70px; height: 70px; object-fit: contain; display: block; flex-shrink: 0; transition: transform 0.3s ease;
         }
-        .quick-card:hover > img {
-            transform: scale(1.08) rotate(-3deg);
-        }
+        .quick-card:hover > img { transform: scale(1.08) rotate(-3deg); }
 
         .quick-card-name {
-            font-family: var(--font-title);
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--ink);
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-            text-align: center;
-            width: 100%;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-family: var(--font-title); font-weight: 700; font-size: 16px; color: var(--ink);
+            letter-spacing: -0.03em; line-height: 1.2; text-align: center; width: 100%;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
         .quick-card-desc {
-            font-family: var(--font-title);
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: -0.02em;
-            line-height: 1.3;
-            text-align: center;
-            width: 100%;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-family: var(--font-title); font-weight: 400; font-size: 12px; color: var(--muted);
+            letter-spacing: -0.02em; line-height: 1.3; text-align: center; width: 100%;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
-        /* =========================================
-           #4 — EASTER EGG (livro)
-           ========================================= */
         .book-egg {
-            display: flex;
-            align-items: center;
-            justify-content: left;
-            gap: 10px;
-            margin: 4px 0 28px;
-            flex-wrap: wrap;
+            display: flex; align-items: center; justify-content: left; gap: 10px; margin: 4px 0 28px; flex-wrap: wrap;
         }
 
         .book-egg-text {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--muted);
-            letter-spacing: normal;
-            line-height: 1.3;
+            font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--muted); letter-spacing: normal; line-height: 1.3;
         }
 
         .book-egg-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(34,34,34,0.12);
-            background: var(--paper);
-            color: var(--ink);
-            text-decoration: none;
-            font-size: 13px;
-            transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%;
+            border: 1.5px solid rgba(34,34,34,0.12); background: var(--paper); color: var(--ink);
+            text-decoration: none; font-size: 13px; transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
-        .book-egg-btn:hover {
-            color: var(--accent);
-            border-color: rgba(194,0,0,0.35);
-            background: rgba(194,0,0,0.05);
-            transform: translateX(3px);
-        }
+        .book-egg-btn:hover { color: var(--accent); border-color: rgba(194,0,0,0.35); background: rgba(194,0,0,0.05); transform: translateX(3px); }
         .book-egg-btn:active { transform: translateX(1px) scale(0.95); }
 
         /* =========================================
-           #5 — CARROSSEL (inalterado)
+           CARROSSEL — ELIPSE 3D HARMÔNICA
            ========================================= */
         .carousel-area {
             position: relative;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .hand-hint {
-            position: absolute;
-            top: 40px;
-            right: 30px;
-            width: 300px;
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .hand-hint-img {
-            display: block;
-            width: 100%;
-            height: auto;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-bottom: 6px;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
         }
 
         .carousel-section {
-            position: relative; 
-            width: 100%; 
-            height: 320px;
-            display: flex; 
-            align-items: flex-start; 
-            justify-content: flex-start; 
-            overflow: hidden; 
-            margin: 20px 0 10px 0;
-            touch-action: pan-y; user-select: none;
-        }
-        .carousel-track {
-            position: relative; 
-            width: 100%; 
-            height: 100%;
-            display: flex; 
-            align-items: center; 
-            justify-content: flex-start; 
+            position: relative;
+            width: 100%;
+            height: 440px;
+            margin: 20px 0 0 0;
+            touch-action: pan-y;
+            user-select: none;
             cursor: grab;
+            perspective: 2500px;
+            perspective-origin: 50% 45%;
+            overflow: hidden;
         }
-        .carousel-track:active { cursor: grabbing; }
-        
-        .card-scale {
-            position: absolute; 
-            top: 50%; 
-            left: 50px; 
-            transform: translate(0, -50%) scale(.7);
-            opacity: 0; filter: blur(4px); z-index: 0; pointer-events: none;
-            transition: transform .7s cubic-bezier(.22,1,.36,1),
-                        opacity .7s cubic-bezier(.22,1,.36,1),
-                        filter .7s cubic-bezier(.22,1,.36,1);
-            will-change: transform, opacity, filter;
+        .carousel-section.dragging { cursor: grabbing; }
+
+        .carousel-track {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0; height: 0;
+            transform-style: preserve-3d;
         }
-        
-        .card {
+
+        .slide-card {
+            position: absolute;
+            top: 50%; left: 50%;
             width: 220px; height: 270px;
-            border-radius: 20px; overflow: hidden;
+            margin-top: -135px;
+            margin-left: -110px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: filter 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity;
+        }
+
+        .slide-card .card {
+            width: 100%; height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
             padding: 10px 24px 12px; gap: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15); flex-shrink: 0;
+            box-shadow: -10px 10px 20px rgba(0,0,0,.15), 0 2px 4px rgba(0,0,0,.06), 0 22px 44px rgba(0,0,0,.25);
+            
+            /* Transição do hover foi movida para cá */
+            transition: box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-style: preserve-3d;
         }
-        
+
+        /* NOVO HOVER: Sobe, aumenta levemente e ganha uma sombra mais forte */
+        .slide-card:hover .card {
+            transform: translateY(-25px) scale(1.05);
+            box-shadow: 
+                -10px 20px 30px rgba(0,0,0,.2), 
+                0 5px 10px rgba(0,0,0,.1), 
+                0 30px 60px rgba(0,0,0,.3);
+        }
+
         .card-art {
             width: 50%; max-width: 130px;
             height: var(--art-height, 100px); object-fit: contain; display: block; flex-shrink: 0;
@@ -341,9 +270,9 @@
             -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
             mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
         }
-        
+
         .card-text { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; flex-shrink: 0; }
-        
+
         .card-title {
             font-family: var(--font-title); font-weight: 700; font-size: var(--title-size, 16px);
             color: #fff; letter-spacing: -.03em; line-height: 1.1; text-align: center; width: 100%;
@@ -351,7 +280,7 @@
             -webkit-box-orient: vertical; overflow: hidden;
             min-height: calc(1.1em * var(--title-lines, 2));
         }
-        
+
         .card-desc {
             font-family: var(--font-title); font-weight: 400; font-size: var(--desc-size, 11px);
             color: rgba(255,255,255,.85); letter-spacing: -.02em; line-height: 1.3;
@@ -360,175 +289,65 @@
             -webkit-box-orient: vertical; overflow: hidden;
             min-height: calc(1.3em * var(--desc-lines, 2));
         }
-        
-        .card-scale.active {
-            transform: translate(0, -50%) scale(1);
-            opacity: 1; filter: blur(0); z-index: 3; pointer-events: auto; cursor: pointer;
-        }
-        
-        .card-scale.thumbnail-left {
-            transform: translate(-60px, -50%) scale(.4);
-            opacity: 0; filter: blur(2px); z-index: 1; pointer-events: none;
-        }
-        
-        .card-scale.thumbnail-right {
-            transform: translate(200px, -50%) scale(.45);
-            opacity: .35; filter: blur(2px); z-index: 1;
-        }
-        
-        .card-scale.hidden-card {
-            transform: translate(200px, -50%) scale(.3);
-            opacity: 0; filter: blur(4px); z-index: 0;
-        }
-        
-        .carousel-dots {
-            position: absolute; bottom: -10px; left: 50px; 
-            display: flex; gap: 8px; z-index: 5;
-        }
-        
-        .dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background-color: var(--accent); opacity: .25; cursor: pointer;
-            transition: opacity .4s, transform .4s cubic-bezier(.22,1,.36,1),
-                        width .4s cubic-bezier(.22,1,.36,1);
-        }
-        .dot.active { opacity: 1; width: 20px; border-radius: 4px; }
-        
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 36px; height: 36px; padding: 0;
-            margin-left: 10px;
-            background: var(--paper); border: 1px solid rgba(34,34,34,.1);
-            border-radius: 50%; color: var(--accent); font-size: 14px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10;
-            box-shadow: 0 4px 12px rgba(0,0,0,.06);
-            transition: transform .2s, background-color .2s, color .2s;
-        }
-        .nav-btn:hover { background: var(--accent); color: #fff; transform: translateY(-50%) scale(1.08); }
-        .nav-btn:active { transform: translateY(-50%) scale(.95); }
-        
-        .prev-btn { left: -5px; } 
-        .next-btn { left: 272px; }
 
-        /* =========================================
-           BOTÃO VER TUDO
-           ========================================= */
-        .see-all-wrapper {
-            display: flex;
-            justify-content: flex-start;
-            margin: 4px 0 0 0;
-            padding-left: 504px;
+        .carousel-controls {
+            position: relative; display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+            margin: 6px auto 0; max-width: 800px; width: 100%; padding-left: 0; z-index: 10;
         }
+
+        .carousel-btn {
+            display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%;
+            border: 1px solid rgba(34,34,34,.12); background: var(--paper); color: var(--ink);
+            font-size: 12px; cursor: pointer; transition: transform .18s ease, color .18s ease, border-color .18s ease, background .18s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .carousel-btn:hover { color: var(--accent); border-color: rgba(194,0,0,.35); background: rgba(194,0,0,.05); }
+        .carousel-btn:active { transform: scale(0.94); }
 
         .btn-see-all {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-family: var(--font-hand);
-            letter-spacing: normal;
-            font-size: 14px;
-            padding: 0 10px;
-            height: 38px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: 1px solid var(--ink);
-            text-decoration: none;
-            background: #d15252;
-            color: #fff;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            font-family: var(--font-hand); letter-spacing: normal; font-size: 14px;
+            padding: 0 10px; height: 38px; border-radius: 5px; cursor: pointer;
+            border: 1px solid var(--ink); text-decoration: none; background: #d15252; color: #fff;
             box-shadow: var(--shadow-hard-sm);
             transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+            white-space: nowrap; flex-shrink: 0;
         }
-        .btn-see-all:hover {
-            background: var(--accent-dark);
-            transform: translate(1px, 1px);
-            box-shadow: 1px 2px 0 rgba(34,34,34,0.85);
-        }
+        .btn-see-all:hover { background: var(--accent-dark); transform: translate(1px, 1px); box-shadow: 1px 2px 0 rgba(34,34,34,0.85); }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #f1f1f12d; }
-        ::-webkit-scrollbar-thumb { background: #8888882a; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-track { background: #f1f1f100; }
+        ::-webkit-scrollbar-thumb { background: #88888800; }
+        ::-webkit-scrollbar-thumb:hover { background: #55555500; }
 
         @media(max-width: 1024px) {
-           
-            body {
-                padding: 100px 20px calc(48px + env(safe-area-inset-bottom, 0px) + 32px) 20px;
-            }
-
-            .welcome-hero {
-                /* Full-bleed no mobile: vaza o padding lateral de 20px */
-                margin-left: -10px;
-                margin-right: -20px;
-                width: calc(100% + 40px);
-                margin-bottom: 24px;
-                opacity: 0;
-                /* Sem altura fixa no mobile também */
-            }
-
+            body { padding: 100px 20px calc(48px + env(safe-area-inset-bottom, 0px) + 32px) 20px; }
+            .welcome-hero { margin-left: -10px; margin-right: -20px; width: calc(100% + 40px); margin-bottom: 24px; opacity: 0; }
             .section-title { font-size: 18px; }
-
-            .quick-access {
-            margin-bottom: 20px;
-            margin-top: -100px;
-        }
-
+            .quick-access { margin-bottom: 20px; margin-top: -100px; }
             .quick-grid { gap: 10px; }
             .quick-card { padding: 12px 8px 10px; gap: 8px; border-radius: 14px; }
             .quick-card > img { width: 60px; height: 60px; }
             .quick-card-name { font-size: 14px; }
             .quick-card-desc { font-size: 12px; }
-
             .book-egg { margin: 20px 0 100px; }
             .book-egg-text { font-size: 10px; }
 
-            .hand-hint {
-                position: relative;
-                top: auto;
-                right: auto;
-                width: 220px;
-                margin: 10px 0 10px 150px;
-            }
-
-            .carousel-section { height: 280px; margin: 10px 0; }
-            .card { width: 190px; height: 240px; padding: 12px 10px; }
+            .carousel-section { height: 340px; margin: 10px 0 0 0; perspective: 1500px; }
+            .slide-card { width: 180px; height: 230px; margin-top: -115px; margin-left: -90px; }
+            .slide-card .card { padding: 12px 10px; }
             .card-art { height: 70px; padding-top: 20px; }
             .card-title { font-size: var(--title-size, 14px); }
             .card-desc { font-size: var(--desc-size, 10px); }
-            
-            .carousel-section { justify-content: center; }
-            .carousel-track { justify-content: center; }
-            
-            .card-scale { left: 50%; transform: translate(-50%, -50%) scale(.7); }
-            .card-scale.active { transform: translate(-50%, -50%) scale(1); }
-            .card-scale.thumbnail-left  { transform: translate(calc(-50% - 20px), -50%) scale(.4); opacity: .3; pointer-events: auto; }
-            .card-scale.thumbnail-right { transform: translate(calc(30% + 20px), -50%) scale(.4); opacity: .3; }
-            .card-scale.hidden-card { transform: translate(calc(50% + 60px), -50%) scale(.3); }
-            
-            .carousel-dots { bottom: 0; left: 50%; transform: translateX(-50%); }
-            .nav-btn { width: 30px; height: 30px; font-size: 12px; }
-            .prev-btn { left: 0px; }
-            .next-btn { right: 0px; left: auto; }
-            .btn-see-all {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                font-family: var(--font-hand);
-                letter-spacing: normal;
-                font-size: 14px;
-                padding: 0 16px;
-                height: 38px;
+
+            /* Hover no mobile: sobe um pouco menos para não cortar na tela */
+            .slide-card:hover .card {
+                transform: translateY(-15px) scale(1.02);
             }
 
-            .see-all-wrapper {
-                display: flex;
-                justify-content: center;
-                margin: 20px 0 0 0;
-                padding-left: 0px;
-            }
+            .carousel-controls { padding-left: 20px; margin: 6px 0 0 0; }
+            .section-head-highlight { flex-wrap: wrap; }
+            .btn-see-all { height: 34px; font-size: 13px; padding: 0 12px; }
         }
     </style>
 </head>
@@ -536,14 +355,10 @@
 
     <section class="view" id="page-home">
 
-        <!-- #1 — Banner de boas-vindas (imagem integrada ao fundo, full-bleed) -->
         <div class="welcome-hero">
-            <img class="welcome-hero-img"
-                 src="../../../assets/welcome1.webp"
-                 alt="Bem-vindo ao Language Lab">
+            <img class="welcome-hero-img" src="../../../assets/welcome1.webp" alt="Bem-vindo ao Language Lab">
         </div>
 
-        <!-- #2 — Acesso rápido -->
         <section class="quick-access">
             <div class="section-head">
                 <span class="section-kicker">Atalhos</span>
@@ -554,55 +369,47 @@
                     <img src="../../../assets/study.webp" alt="Gerador de plano de estudos">
                     <span class="quick-card-name">Plano de estudos</span>
                     <span class="quick-card-desc">Monte seu cronograma</span>
-                    <a class="quick-card" href="https://dididoingles.github.io/testyourenglish/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
-                        <img src="../../../assets/level1.webp" alt="Nivelamento">
-                        <span class="quick-card-name">Teste de nível</span>
-                        <span class="quick-card-desc">Descubra seu inglês</span>
-                    </a>
-                    <a class="quick-card" href="https://dididoingles.github.io/discoveryourprofile/" target="_blank" rel="noopener noreferrer" style="--aura:#c20000;--aura-shadow:rgba(120,0,0,0.18);">
-                        <img src="../../../assets/brain.webp" alt="Perfil de aprendizagem">
-                        <span class="quick-card-name">Perfil de aprendizagem</span>
-                        <span class="quick-card-desc">Como você aprende</span>
-                    </a>
-                    <a class="quick-card" href="https://dididoingles.github.io/Whiteboard/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
-                        <img src="../../../assets/board.webp" alt="Whiteboard">
-                        <span class="quick-card-name">Whiteboard</span>
-                        <span class="quick-card-desc">Nossa lousinha de aula</span>
-                    </a>
+                </a>
+                <a class="quick-card" href="https://dididoingles.github.io/testyourenglish/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
+                    <img src="../../../assets/level1.webp" alt="Nivelamento">
+                    <span class="quick-card-name">Teste de nível</span>
+                    <span class="quick-card-desc">Descubra seu inglês</span>
+                </a>
+                <a class="quick-card" href="https://dididoingles.github.io/discoveryourprofile/" target="_blank" rel="noopener noreferrer" style="--aura:#c20000;--aura-shadow:rgba(120,0,0,0.18);">
+                    <img src="../../../assets/brain.webp" alt="Perfil de aprendizagem">
+                    <span class="quick-card-name">Perfil de aprendizagem</span>
+                    <span class="quick-card-desc">Como você aprende</span>
+                </a>
+                <a class="quick-card" href="https://dididoingles.github.io/Whiteboard/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
+                    <img src="../../../assets/board.webp" alt="Whiteboard">
+                    <span class="quick-card-name">Whiteboard</span>
+                    <span class="quick-card-desc">Nossa lousinha de aula</span>
+                </a>
             </div>
         </section>
 
-       <!-- #2 — Acesso rápido -->
-       <section class="highlight">
-        <div class="section-head-highlight">
-            <span class="section-kicker">Highlight</span>
-            <h2 class="section-title">Mais buscadas</h2> 
-        </div>
-    </section>
-        <!-- #5 — Carrossel (inalterado) -->
+        <section class="highlight">
+            <div class="section-head-highlight">
+                <span class="section-kicker">Highlight</span>
+                <h2 class="section-title">Mais buscadas</h2>
+                <a href="../todas/index.html" class="btn-see-all">Ver tudo <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
 
-
-            <section class="carousel-section">
-                <button class="nav-btn prev-btn" aria-label="Anterior">&#10094;</button>
+        <div class="carousel-area">
+            <section class="carousel-section" id="carouselSection">
                 <div class="carousel-track" id="carouselTrack"></div>
-                <button class="nav-btn next-btn" aria-label="Próximo">&#10095;</button>
-                <div class="carousel-dots" id="carouselDots"></div>
             </section>
+
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="btnPrev" aria-label="Voltar carrossel"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="carousel-btn" id="btnNext" aria-label="Avançar carrossel"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
         </div>
 
-        <!-- Botão Ver Tudo abaixo do carrossel -->
-        <div class="see-all-wrapper">
-            <a href="../todas/index.html" class="btn-see-all">
-                Ver tudo <i class="fa-solid fa-arrow-right"></i>
-            </a>
-        </div>
-
-          <!-- #4 — Easter egg -->
-          <div class="book-egg">
+        <div class="book-egg">
             <span class="book-egg-text">O que tinha no livro</span>
-            <a class="book-egg-btn" href="../../../book.html" aria-label="Abrir o livro">
-                <i class="fa-solid fa-arrow-right"></i>
-            </a>
+            <a class="book-egg-btn" href="../../../book.html" aria-label="Abrir o livro"><i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
     </section>
@@ -614,13 +421,11 @@
             { art: '../../../assets/stop.webp',   title: 'Stop game',        description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês', link: 'https://dididoingles.github.io/stopgame/', color: '#3d3d3d', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
             { art: '../../../assets/wheel.png',  title: 'Conversation wheel',description: 'Ideal para estimular as aulas de conversação', link: 'https://dididoingles.github.io/conversationwheel/', color: '#3a5466', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
             { art: '../../../assets/sketchbook.png',  title: 'My Sketchbook',    description: 'Pratique a gramática com tempos verbais', link: 'https://dididoingles.github.io/mysketchbook/', color: '#d15252', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
-
             { art: '../../../assets/mars.png',   title: 'Role play',        description: 'Simule uma conversa em Inglês em diferentes situações.', link: 'https://dididoingles.github.io/marsroleplay/', color: '#c20000', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } },
             { art: '../../../assets/listen.png', title: 'YouListen',        description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.', link: 'https://dididoingles.github.io/youlisten/', color: '#a10000', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 3 } },
             { art: '../../../assets/card5.png',  title: 'Você me conhece?', description: 'Versão em Inglês do famoso "Perguntados" para casais.', link: 'https://dididoingles.github.io/couples_trivia/', color: '#695c78', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 2, descLines: 2 } },
             { art: '../../../assets/paint.webp',     title: 'Airpaint Beta',    description: 'Desenhe usando gestos das mãos via webcam.', link: 'https://dididoingles.github.io/airpaint/', color: '#a55c5c', shadow: '', layout: { artHeight: 110, titleSize: '16px', descSize: '11px', titleLines: 1, descLines: 2 } }
         ];
-        let currentIndex = 0;
 
         function applyLayout(el, layout) {
             if (!layout) return;
@@ -631,15 +436,24 @@
             if (layout.descLines)  el.style.setProperty('--desc-lines',  layout.descLines);
         }
 
+        let cards = [];
+        let animId = null;
+        let angle = 0;           
+        let userPaused = false;
+        let lastTime = 0;
+        
+        const SPEED = 0.015;     
+        
+        let RADIUS_X = 350;
+        let RADIUS_Z = 175;
+
         function buildCarousel() {
             const track = document.getElementById('carouselTrack');
-            const dotsContainer = document.getElementById('carouselDots');
             track.innerHTML = '';
-            dotsContainer.innerHTML = '';
 
-            cardsData.forEach((data, i) => {
-                const scale = document.createElement('div');
-                scale.className = 'card-scale hidden-card';
+            cardsData.forEach((data) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide-card';
 
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -663,102 +477,156 @@
                 textBlock.appendChild(desc);
                 card.appendChild(art);
                 card.appendChild(textBlock);
-                scale.appendChild(card);
-                track.appendChild(scale);
+                slide.appendChild(card);
+                track.appendChild(slide);
+                cards.push(slide);
 
-                scale.addEventListener('click', () => {
-                    if (i === currentIndex) window.open(data.link, '_blank');
+                slide.addEventListener('click', (e) => {
+                    if (dragMoved) return;
+                    window.open(data.link, '_blank', 'noopener');
                 });
 
-                const dot = document.createElement('div');
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.addEventListener('click', () => { stopAutoRotate(); goToCard(i); });
-                dotsContainer.appendChild(dot);
+                slide.addEventListener('mouseenter', pauseDrift);
+                slide.addEventListener('mouseleave', resumeDrift);
+                slide.addEventListener('focusin', pauseDrift);
+                slide.addEventListener('focusout', resumeDrift);
             });
 
-            initCarouselGestures();
-            updateCarousel();
-            startAutoRotate();
+            calculateRadius();
+            updatePositions();
+            
+            initDrag();
+            initButtons();
+            
+            lastTime = performance.now();
+            animId = requestAnimationFrame(step);
         }
 
-        function updateCarousel() {
-            const allScales = document.querySelectorAll('.card-scale');
-            const total = cardsData.length;
-            const prevIndex = (currentIndex - 1 + total) % total;
-            const nextIndex = (currentIndex + 1) % total;
-
-            allScales.forEach((scale, i) => {
-                scale.classList.remove('active', 'thumbnail-left', 'thumbnail-right', 'hidden-card');
-                if (i === currentIndex) scale.classList.add('active');
-                else if (i === prevIndex) scale.classList.add('thumbnail-left');
-                else if (i === nextIndex) scale.classList.add('thumbnail-right');
-                else scale.classList.add('hidden-card');
-            });
-
-            document.querySelectorAll('.dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentIndex);
-            });
-        }
-
-        function goToCard(index) { currentIndex = index; updateCarousel(); }
-        function nextCard() { currentIndex = (currentIndex + 1) % cardsData.length; updateCarousel(); }
-        function prevCard() { currentIndex = (currentIndex - 1 + cardsData.length) % cardsData.length; updateCarousel(); }
-
-        let autoRotateTimer = null;
-        const AUTO_ROTATE_DELAY = 4000;
-
-        function startAutoRotate() {
-            stopAutoRotate();
-            autoRotateTimer = setInterval(() => {
-                nextCard();
-            }, AUTO_ROTATE_DELAY);
-        }
-
-        function stopAutoRotate() {
-            if (autoRotateTimer) {
-                clearInterval(autoRotateTimer);
-                autoRotateTimer = null;
+        function calculateRadius() {
+            const isMobile = window.innerWidth <= 1024;
+            if (isMobile) {
+                RADIUS_X = 200;
+                RADIUS_Z = 125;
+            } else {
+                RADIUS_X = 350;
+                RADIUS_Z = 175;
             }
         }
 
-        function initCarouselGestures() {
-            const track = document.getElementById('carouselTrack');
-            let startX = 0;
-            let isDragging = false;
-            const threshold = 30;
+        function step(now) {
+            const dt = Math.min((now - lastTime) / 1000, 0.05);
+            lastTime = now;
 
-            const interactionEvents = ['touchstart', 'mousedown'];
-            interactionEvents.forEach(evt => {
-                track.addEventListener(evt, () => stopAutoRotate(), { passive: true });
-            });
-
-            track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
-            track.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                const diff = e.touches[0].clientX - startX;
-                if (Math.abs(diff) > threshold) {
-                    if (diff > 0) prevCard(); else nextCard();
-                    isDragging = false;
-                }
-            }, { passive: true });
-            track.addEventListener('touchend', () => { isDragging = false; });
-
-            track.addEventListener('mousedown', (e) => { startX = e.clientX; isDragging = true; track.style.cursor = 'grabbing'; });
-            track.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const diff = e.clientX - startX;
-                if (Math.abs(diff) > threshold) {
-                    if (diff > 0) prevCard(); else nextCard();
-                    isDragging = false;
-                    track.style.cursor = 'grab';
-                }
-            });
-            track.addEventListener('mouseup', () => { isDragging = false; track.style.cursor = 'grab'; });
-            track.addEventListener('mouseleave', () => { isDragging = false; track.style.cursor = 'grab'; });
+            if (!userPaused) {
+                angle += SPEED * dt;
+                updatePositions();
+            }
+            animId = requestAnimationFrame(step);
         }
 
-        document.querySelector('.prev-btn').addEventListener('click', () => { stopAutoRotate(); prevCard(); });
-        document.querySelector('.next-btn').addEventListener('click', () => { stopAutoRotate(); nextCard(); });
+        function updatePositions() {
+            const total = cards.length;
+            const angleStep = (Math.PI * 2) / total; 
+
+            cards.forEach((card, i) => {
+                const cardAngle = angle + (i * angleStep);
+                
+                const x = Math.sin(cardAngle) * RADIUS_X;
+                const z = Math.cos(cardAngle) * RADIUS_Z;
+                
+                const rotY = cardAngle * (180 / Math.PI);
+
+                const normalizedZ = (z + RADIUS_Z) / (RADIUS_Z * 2);
+                
+                const baseScale = window.innerWidth <= 1024 ? 0.7 : 0.9;
+                const scale = baseScale * (0.8 + 0.2 * normalizedZ); 
+                
+                const opacity = Math.max(0.05, (normalizedZ - 0.1) * 1.2);
+                
+                const zIndex = Math.round(z + RADIUS_Z);
+
+                card.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${rotY}deg) scale(${scale})`;
+                card.style.opacity = opacity;
+                card.style.zIndex = zIndex;
+                
+                card.style.pointerEvents = z < 0 ? 'none' : 'auto';
+            });
+        }
+
+        function pauseDrift() { userPaused = true; }
+        function resumeDrift() { userPaused = false; }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) userPaused = true;
+            else userPaused = false;
+        });
+
+        let dragMoved = false;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartAngle = 0;
+
+        function initDrag() {
+            const section = document.getElementById('carouselSection');
+
+            const onDown = (clientX) => {
+                isDragging = true;
+                dragMoved = false;
+                dragStartX = clientX;
+                dragStartAngle = angle;
+                pauseDrift();
+                section.classList.add('dragging');
+            };
+
+            const onMove = (clientX) => {
+                if (!isDragging) return;
+                const dx = clientX - dragStartX;
+                if (Math.abs(dx) > 4) dragMoved = true;
+                angle = dragStartAngle - (dx * 0.005);
+                updatePositions();
+            };
+
+            const onUp = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                section.classList.remove('dragging');
+                setTimeout(() => { if (!isDragging) resumeDrift(); }, 80);
+            };
+
+            section.addEventListener('mousedown', (e) => { e.preventDefault(); onDown(e.clientX); });
+            window.addEventListener('mousemove', (e) => onMove(e.clientX));
+            window.addEventListener('mouseup', onUp);
+
+            section.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) onDown(e.touches[0].clientX);
+            }, { passive: true });
+            section.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) onMove(e.touches[0].clientX);
+            }, { passive: true });
+            section.addEventListener('touchend', onUp);
+            section.addEventListener('touchcancel', onUp);
+            
+            window.addEventListener('resize', () => {
+                calculateRadius();
+                updatePositions();
+            });
+        }
+
+        function initButtons() {
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+
+            const nudge = (delta) => {
+                pauseDrift();
+                angle += delta;
+                updatePositions();
+                clearTimeout(nudge._t);
+                nudge._t = setTimeout(resumeDrift, 1200);
+            };
+
+            btnPrev.addEventListener('click', () => nudge(-0.5));
+            btnNext.addEventListener('click', () => nudge(0.5));
+        }
 
         buildCarousel();
     })();
