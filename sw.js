@@ -1,4 +1,4 @@
-const CACHE_NAME = 'language-lab-v1';
+const CACHE_NAME = 'language-lab-v2';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
