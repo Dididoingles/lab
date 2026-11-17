@@ -353,10 +353,27 @@
             let deferredPrompt;
 
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            // Verifica se já está rodando no modo app (instalado)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+            // NOVO: Se já estiver instalado, transforma o botão numa mensagem
+            if (isStandalone && pwaBtn) {
+                pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center; font-weight:500; line-height:1.4;">Mars avisa: Você já está usando a versão instalada do Language Lab. Aproveite!</p>';
+            }
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
+            });
+
+            // Se o aluno instalar agora, transforma o botão na mensagem na hora
+            window.addEventListener('appinstalled', () => {
+                const currentBtn = document.getElementById('pwa-install-btn');
+                if (currentBtn) {
+                    currentBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center; font-weight:500; line-height:1.4;">Mars avisa: Você já está usando a versão instalada do Language Lab. Aproveite!</p>';
+                }
+                if (tooltip) tooltip.classList.remove('show');
             });
 
             if (pwaBtn) {
@@ -367,13 +384,12 @@
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
-                            pwaBtn.style.display = 'none';
+                            pwaBtn.style.display = 'none'; // O evento appinstalled vai cuidar do texto
                             tooltip.classList.remove('show');
                         }
                         deferredPrompt = null;
                     } else {
-                        // Fallback silencioso: em vez de abrir um alerta feio, 
-                        // a gente substitui o botão por uma instrução discreta.
+                        // Fallback silencioso
                         pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center;">Mars explica: Vá no menu do navegador (⋮) e desça até a opção instalar ou criar atalho. Clique em criar atalho e pronto, o site fica salvo para você acessar facilmente.</p>';
                     }
                 });
@@ -432,7 +448,7 @@
                 todas:   'Essa é a lista completa de ferramentas!'
             };
 
-            const mobileNavRoutes = ['start', 'tools', 'profile', 'biblioteca', 'teacher'];
+            const mobileNavRoutes = ['start', 'tools', 'profile', 'biblioteca', 'teacher', 'todas'];
 
             function syncMobileNavThumb(route) {
                 if (!mobileThumb) return;
@@ -446,8 +462,13 @@
             }
 
             function updateBackBtn() {
-                const hasBrowserHistory = window.history.length > 1;
-                backBtn.disabled = !(navCount > 0 || hasBrowserHistory);
+                // Se estiver na tela inicial, o botão fica desativado.
+                // Se estiver em QUALQUER outra tela (como 'todas'), o botão fica ativo!
+                if (currentRoute === 'start') {
+                    backBtn.disabled = true;
+                } else {
+                    backBtn.disabled = false;
+                }
             }
 
             iframe.addEventListener('load', () => {
@@ -465,8 +486,10 @@
                 if (updateUrl) {
                     history.pushState({ route }, '', '#/' + route);
                     navCount++;
-                    updateBackBtn();
                 }
+                
+                // Atualiza o botão voltar imediatamente ao mudar de rota
+                updateBackBtn(); 
 
                 document.querySelectorAll('.nav-item, .mobile-nav__item').forEach(link => {
                     link.classList.toggle('active', link.dataset.route === route);
@@ -513,6 +536,12 @@
             });
 
             backBtn.addEventListener('click', () => {
+                // Se estiver na tela "todas", volta para a tela inicial direto
+                if (currentRoute === 'todas') {
+                    navigateTo('start');
+                    return;
+                }
+                
                 if (navCount > 0) {
                     history.back();
                 } else if (window.history.length > 1) {
