@@ -295,7 +295,7 @@
             gap: 14px;
             padding-bottom: 14px;
             margin-bottom: 18px;
-            margin-top: 80px;
+            margin-top: 60px;
             border-bottom: 1.5px dashed var(--border);
             flex-shrink: 0;
         }
@@ -518,7 +518,7 @@
             font-size: 0.96rem;
             color: var(--muted);
             line-height: 1.7;
-            max-width: 44ch;
+            max-width: 50ch;
             margin-bottom: 26px;
         }
         .restart-btn {
@@ -570,7 +570,7 @@
             .desc-lead {
                 font-size: clamp(0.8rem, 1.3vw, 1.14rem);
                 line-height: 1.2;
-                margin-top: -20px;
+                margin-top: -50px;
             }
         }
     </style>
@@ -874,11 +874,11 @@
             else if (pct.A2 >= 50) finalLevel = "A2";
 
             const descriptions = {
-                "A1": "Parabéns, você chegou até aqui! Acreditamos que você está iniciando a jornada. Compreende expressões básicas e frases simples para necessidades imediatas.",
-                "A2": "Parabéns, você chegou até aqui! Acreditamos que você está no básico consolidado. Lida com tarefas rotineiras e troca informações simples.",
-                "B1": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário. Comunica-se na maioria das situações de viagem.",
-                "B2": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário superior. Compreende ideias complexas.",
-                "C1": "Parabéns, você chegou até aqui! Acreditamos que você está no avançado. Utiliza o idioma de forma flexível."
+                "A1": "Parabéns, você chegou até aqui! Acreditamos que você está iniciando a jornada. Compreende expressões básicas e frases simples para necessidades imediatas. Importante: este teste depende do aluno, por isso não serve para comprovar fluência, apenas como referência",
+                "A2": "Parabéns, você chegou até aqui! Acreditamos que você está no básico consolidado. Lida com tarefas rotineiras e troca informações simples.  Importante: este teste depende do aluno, por isso não serve para comprovar fluência, apenas como referência",
+                "B1": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário. Comunica-se na maioria das situações de viagem.  Importante: este teste depende do aluno, por isso não serve para comprovar fluência, apenas como referência",
+                "B2": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário superior. Compreende ideias complexas.  Importante: este teste depende do aluno, por isso não serve para comprovar fluência, apenas como referência",
+                "C1": "Parabéns, você chegou até aqui! Acreditamos que você está no avançado. Utiliza o idioma de forma flexível. Importante: este teste depende do aluno, por isso não serve para comprovar fluência, apenas como referência"
             };
 
             document.getElementById('level-badge').innerText = finalLevel;
