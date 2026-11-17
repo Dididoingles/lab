@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Teste de nível | completo</title>
+<title>Teste de nível | Mars Education</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -46,6 +46,11 @@
       /* Altura automática em vez de fixa para o painel direito não ser cortado */
       display:flex;flex-direction:column;
     }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 34, 34, 0); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ffffff00; }
     
     .topbar{
       display:flex;justify-content:space-between;align-items:center;gap:14px;
@@ -144,6 +149,10 @@
 
     /* reading */
     #step-reading .test-left{gap:12px}
+
+    .footer-link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(194,0,0,.5); transition: color .15s, border-color .15s; }
+    .footer-link:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+    
     .reading-text{
       background:rgba(255,246,242,.6);border:1.5px solid var(--border-strong);border-radius:12px;
       padding:16px 18px;font-size:.92rem;line-height:1.7;color:var(--ink);
@@ -405,21 +414,17 @@
   <!-- INTRO -->
   <div class="step active" id="step-intro">
     <div class="intro-left">
-      <div>
-        <span class="eyebrow">Teste seu Inglês</span>
-        <p class="hero-sub">Listening, reading, writing e speaking ~12 min.</p>
-      </div>
       <div class="video-stage">
         <video id="mars-video" autoplay muted playsinline preload="auto"
                disablepictureinpicture disableremoteplayback
                controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
-          <source src="https://dididoingles.github.io/testyourenglish/marswarm.mp4" type="video/mp4">
+          <source src="https://dididoingles.github.io/lab/assets/linusfriend1.mp4" type="video/mp4">
         </video>
       </div>
     </div>
     <div class="intro-right">
       <p class="desc-lead">
-        Teste as <strong>4 habilidades</strong>  no Inglês e receba um diagnóstico mais preciso sobre seu nível.
+        <strong>Atenção:</strong> Como este teste é autoavaliativo, é importante que você seja honesto nas respostas e não tente chutar. Quando não souber a resposta clique em 'não sei'
       </p>
       <div class="meta-row">
         <span class="chip"><i class="fa-solid fa-clock"></i> ~12 min</span>
@@ -447,6 +452,8 @@
             <i class="fa-solid fa-clock"></i> Devagar
           </button>
           <span class="replay-info" id="replayInfo">2 reproduções restantes</span>
+
+          <p class="replay-info">Esses audios foram gravados em colaboração com o teacher Danney. Você pode solicitar uma aula teste com ele clicando <a href="https://wa.me/5516993272278/" target="_blank" rel="noopener noreferrer" class="footer-link">aqui</a>.</p>
         </div>
       </div>
     </div>
