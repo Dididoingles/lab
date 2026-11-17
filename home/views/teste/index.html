@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hub de Testes — Language Lab</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --ink: #222222; --paper: #ffffff;
+            --accent: #c20000; --accent-dark: #a30000; 
+            --muted: #666666;
+            --border-light: rgba(34,34,34,0.08);
+            --border-strong: rgba(34,34,34,0.18);
+            --shadow-hard-sm: 2px 3px 0 rgba(34,34,34,.85);
+            --font-title: 'Poppins', sans-serif;
+            --font-hand: 'Gochi Hand', cursive;
+            --font-mono: 'Space Mono', monospace;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            
+            --mobile-safe-top: env(safe-area-inset-top, 0px);
+            --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+            --shell-top: 64px;
+            --shell-bottom: 64px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        
+        body {
+            background: transparent; 
+            font-family: var(--font-title); 
+            color: var(--ink);
+            -webkit-tap-highlight-color: transparent;
+            text-wrap: pretty; overflow-wrap: break-word;
+            
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: center;
+            padding: 100px 24px 0; 
+            overflow: hidden; 
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #f1f1f100; }
+        ::-webkit-scrollbar-thumb { background: #88888800; }
+        ::-webkit-scrollbar-thumb:hover { background: #55555500; }
+        
+        .content-wrapper {
+            width: 100%; 
+            max-width: 800px; 
+            height: 100%;
+            padding-bottom: 40px; 
+            display: flex; 
+            flex-direction: column;
+        }
+
+        /* Header enxuto */
+        .page-header {
+            padding: 0 0 24px;
+            border-bottom: 1.5px dashed var(--border-light);
+            margin-bottom: 32px;
+        }
+        
+        .eyebrow {
+            font-family: var(--font-mono); font-size: .72rem; font-weight: 700; color: var(--accent);
+            text-transform: uppercase; letter-spacing: .14em;
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-bottom: 8px;
+        }
+        .eyebrow::before { content: ''; width: 22px; height: 2px; background: var(--accent); border-radius: 2px; }
+        
+        .hero-title { font-size: 2rem; font-weight: 700; letter-spacing: -.045em; line-height: 1.1; }
+        .hero-title .accent { color: var(--accent); }
+        .hero-sub { font-family: var(--font-hand); font-size: 1.15rem; color: var(--muted); margin-top: 6px; }
+
+        /* Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            min-height: 0;
+            align-items: start;
+        }
+
+        /* ============================================================
+           CARD HORIZONTAL
+           ============================================================ */
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--paper);
+            border: 1.5px solid var(--border-light);
+            border-radius: 16px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            border-color: rgba(34,34,34,0.15);
+        }
+
+        .card-icon {
+            font-size: 2.2rem;
+            color: var(--accent);
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .option-card:hover .card-icon {
+            transform: scale(1.08) rotate(-3deg);
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -.03em;
+            line-height: 1.2;
+            color: var(--ink);
+        }
+
+        .card-desc { 
+            font-size: 0.8rem; 
+            color: var(--muted); 
+            line-height: 1.4; 
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-top: 8px;
+        }
+        .meta-badge {
+            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
+            color: var(--muted); text-transform: uppercase;
+            background: #f5f5f5; padding: 3px 6px; border-radius: 4px;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+
+        /* ============================================================
+           ESTADO "EM BREVE" (Gerado via JavaScript)
+           ============================================================ */
+        .option-card.is-soon {
+            cursor: default;
+        }
+        
+        .option-card.is-soon:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(120,0,0,0.08);
+            border-color: var(--border-light);
+        }
+
+        .option-card.is-soon .card-icon {
+            opacity: 0.55;
+            color: var(--muted);
+        }
+        
+        .option-card.is-soon:hover .card-icon {
+            transform: none;
+        }
+
+        .option-card.is-soon .card-title,
+        .option-card.is-soon .card-desc {
+            color: var(--muted);
+            opacity: 0.7;
+        }
+
+        .tool-card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent);
+            color: #ffffff;
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 9px;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Mobile */
+        @media(max-width: 1024px) {
+            body {
+                padding-top: calc(var(--shell-top, 64px) + var(--mobile-safe-top, 0px) + 16px);
+                padding-bottom: calc(var(--shell-bottom, 64px) + var(--mobile-safe-bottom, 0px) + 16px);
+                padding-left: 16px; padding-right: 16px;
+                align-items: flex-start; overflow-y: auto; height: auto; min-height: 100dvh;
+            }
+
+            .content-wrapper { height: auto; padding-bottom: 20px; }
+            .page-header { margin-bottom: 24px; }
+
+            .options-grid { gap: 12px; }
+            
+            .option-card { padding: 14px 16px; gap: 14px; border-radius: 12px; }
+            .card-icon { font-size: 1.8rem; width: 48px; height: 48px; }
+            .card-title { font-size: 0.95rem; }
+            .card-desc { font-size: 0.75rem; }
+            
+            .option-card:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border-color: var(--border-light); }
+            .option-card.is-soon:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content-wrapper">
+        
+        <div class="page-header">
+            <span class="eyebrow">Diagnóstico</span>
+            <h1 class="hero-title">Escolha seu <span class="accent">Teste</span></h1>
+            <p class="hero-sub">Você prefere uma resposta rápida ou um diagnóstico profundo?</p>
+        </div>
+
+        <!-- O HTML agora só tem a div vazia. O JS preenche -->
+        <div class="options-grid" id="testesGrid"></div>
+        
+    </div>
+
+    <script>
+        // ============================================================
+        // DADOS DOS TESTES (Aqui você controla tudo)
+        // ============================================================
+        const testesData = [
+            {
+                title: 'Teste Rápido',
+                link: 'testerapido.html',
+                desc: 'Focado na sua gramática e vocabulário em apenas 15 questões de múltipla escolha.',
+                icon: 'fa-solid fa-bolt',
+                badges: [
+                    '<i class="fa-regular fa-clock"></i> ~3 min',
+                    '<i class="fa-solid fa-list-check"></i> 15 questões'
+                ]
+                // Sem "soon: true" = está ativo
+            },
+            {
+                title: 'Teste Completo',
+                link: 'testecompleto.html', // Quando publicar, só apagar o "soon: true" abaixo
+                desc: 'Avalie as 4 habilidades: Listening, Reading, Writing e Speaking com nota detalhada por área.',
+                icon: 'fa-solid fa-bullseye',
+                badges: [
+                    '<i class="fa-regular fa-clock"></i> ~12 min',
+                    '<i class="fa-solid fa-list-check"></i> 17 questões',
+                    '<i class="fa-solid fa-microphone"></i> Áudio'
+                ],
+                soon: true // <-- APAGUE OU COMENTE ESTA LINHA PARA ATIVAR O TESTE
+            }
+        ];
+
+        const grid = document.getElementById('testesGrid');
+
+        testesData.forEach((teste) => {
+            const card = document.createElement('a');
+            card.className = 'option-card';
+            card.href = teste.soon ? '#' : teste.link;
+            
+            // Se estiver "em breve"
+            if (teste.soon) {
+                card.classList.add('is-soon');
+                card.setAttribute('aria-disabled', 'true');
+                card.addEventListener('click', (e) => e.preventDefault());
+            }
+
+            // Constrói as badges
+            const badgesHtml = teste.badges.map(b => `<span class="meta-badge">${b}</span>`).join('');
+
+            // Constrói o HTML interno do card
+            card.innerHTML = `
+                <i class="${teste.icon} card-icon"></i>
+                <div class="card-content">
+                    <h2 class="card-title">${teste.title}</h2>
+                    <p class="card-desc">${teste.desc}</p>
+                    <div class="card-meta">
+                        ${badgesHtml}
+                    </div>
+                </div>
+            `;
+
+            // Se estiver "em breve", adiciona o selo vermelho no canto
+            if (teste.soon) {
+                const badge = document.createElement('span');
+                badge.className = 'tool-card-badge';
+                badge.textContent = 'Em breve';
+                card.appendChild(badge);
+            }
+
+            grid.appendChild(card);
+        });
+
+        // Avisa a shell que a página carregou
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
+        }
+    </script>
+
+</body>
+</html>
