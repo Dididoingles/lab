@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Teste de nível | completo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --ink:#222; --paper:#fff6f200; --accent:#c20000; --accent-dark:#a30000;
+      --muted:#6b5252; --border:rgba(34,34,34,.10); --border-strong:rgba(34,34,34,.18);
+      --shadow-hard-sm:2px 3px 0 rgba(34,34,34,.85);
+      --font-title:'Poppins',sans-serif; --font-mono:'Space Mono',monospace; --font-hand:'Gochi Hand',cursive;
+      --ease:cubic-bezier(0.22,1,0.36,1);
+      --mobile-safe-top:env(safe-area-inset-top, 0px);
+      --mobile-safe-bottom:env(safe-area-inset-bottom, 0px);
+      --shell-top: 64px;
+      --shell-bottom: 64px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    
+    body{
+      font-family:var(--font-title);color:var(--ink);
+      background-color:var(--paper);
+      background-image:
+        radial-gradient(ellipse 60% 80% at 0% 50%,rgba(194,0,0,.06) 0%,rgba(194,0,0,0) 60%),
+        radial-gradient(ellipse 60% 80% at 100% 50%,rgba(194,0,0,.06) 0%,rgba(194,0,0,0) 60%),
+        radial-gradient(ellipse 50% 60% at 50% 0%,rgba(194,0,0,.03) 0%,rgba(194,0,0,0) 70%);
+      background-attachment:fixed;
+      display:flex;align-items:flex-start;justify-content:center;
+      /* O SEGREDO ESTÁ AQUI: 120px no topo para fugir do Mars/topbar, 
+         40px embaixo para não encostar no fim da tela */
+      padding:120px 24px 40px; 
+      -webkit-tap-highlight-color:transparent;
+      overflow-y:auto; /* Permite rolar se o teste for maior que a tela */
+    }
+    p,.text{text-wrap:pretty;overflow-wrap:break-word}
+
+    /* ============================================================
+       SHELL / PALCO
+       ============================================================ */
+    .stage{
+      width:100%;max-width:1180px;
+      /* Altura automática em vez de fixa para o painel direito não ser cortado */
+      display:flex;flex-direction:column;
+    }
+    
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:14px;
+      padding-bottom:12px;margin-bottom:14px;
+      border-bottom:1.5px dashed var(--border);flex-shrink:0;
+    }
+    .brand{display:flex;align-items:baseline;gap:8px;min-width:0}
+    .brand .l{font-weight:700;font-size:.95rem;color:var(--accent);letter-spacing:-.03em;white-space:nowrap}
+    .brand .s{font-family:var(--font-mono);font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+    .gp{display:flex;align-items:center;gap:10px;flex:1;max-width:280px}
+    .gp-track{flex:1;height:5px;background:rgba(34,34,34,.08);border-radius:4px;overflow:hidden}
+    .gp-fill{height:100%;background:var(--accent);width:0%;border-radius:4px;transition:width .55s var(--ease)}
+    .gp-label{font-family:var(--font-mono);font-size:.68rem;color:var(--muted);white-space:nowrap}
+
+    /* ============================================================
+       ETAPAS
+       ============================================================ */
+    .step{display:none;flex:1;min-height:0}
+    .step.active{display:grid;animation:stepIn .5s var(--ease) both}
+    @keyframes stepIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ---------- INTRO ---------- */
+    #step-intro.active{
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap:56px;align-items:center;
+    }
+    .intro-left{display:flex;flex-direction:column;align-items:flex-start;gap:22px;min-width:0}
+    .eyebrow{
+      font-family:var(--font-mono);font-size:.72rem;font-weight:700;color:var(--accent);
+      text-transform:uppercase;letter-spacing:.14em;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);border-radius:2px}
+    .hero-title{font-size:clamp(2rem,4.2vw,3.4rem);font-weight:700;letter-spacing:-.045em;line-height:1.02;text-wrap:balance}
+    .hero-title .accent{color:var(--accent)}
+    .hero-sub{font-family:var(--font-mono);font-size:.86rem;color:var(--muted);line-height:1.55;max-width:38ch;margin-top:10px}
+
+    .video-stage{width:100%;max-width:460px;aspect-ratio:16/10;position:relative;isolation:isolate;padding:8px;margin:-8px}
+    .video-stage video{
+      width:100%;height:100%;display:block;object-fit:cover;pointer-events:none;background:transparent;
+      -webkit-mask-image:
+        radial-gradient(ellipse 95% 95% at 50% 50%, #000 55%, transparent 100%),
+        linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        radial-gradient(ellipse 95% 95% at 50% 50%, #000 55%, transparent 100%),
+        linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      mask-composite: intersect;
+      mix-blend-mode: multiply;
+    }
+    .intro-right{display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0}
+    .desc-lead{font-size:clamp(1rem,1.3vw,1.14rem);line-height:1.7;color:var(--ink);max-width:46ch}
+    .desc-lead strong{color:var(--accent);font-weight:600}
+    .meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+    .chip{
+      font-family:var(--font-mono);font-size:.7rem;color:var(--muted);
+      border:1.5px solid var(--border-strong);padding:5px 11px;border-radius:999px;
+      display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.5);white-space:nowrap;
+    }
+    .chip i{color:var(--accent);font-size:.7rem}
+    .start-btn{
+      background:var(--accent);color:#fff;border:2px solid var(--ink);
+      padding:13px 30px;border-radius:11px;cursor:pointer;
+      font-family:var(--font-title);font-weight:600;font-size:.9rem;
+      text-transform:uppercase;letter-spacing:.06em;
+      display:inline-flex;align-items:center;justify-content:center;gap:9px;
+      box-shadow:var(--shadow-hard-sm);transition:all .2s var(--ease);align-self:flex-start;
+    }
+    .start-btn:hover{background:var(--accent-dark);transform:translate(-2px,-2px);box-shadow:4px 5px 0 rgba(34,34,34,.85)}
+    .start-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(34,34,34,.85)}
+
+    /* ---------- ETAPAS DE TESTE ---------- */
+    #step-listening.active,
+    #step-reading.active,
+    #step-writing.active,
+    #step-speaking.active{
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap:48px;align-items:stretch;
+    }
+    
+    .test-left{
+      display:flex;flex-direction:column;gap:16px;min-width:0;
+      padding-right:8px;
+    }
+    .test-left .step-eyebrow{
+      font-family:var(--font-mono);font-size:.7rem;font-weight:700;color:var(--accent);
+      text-transform:uppercase;letter-spacing:.14em;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .test-left .step-eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);border-radius:2px}
+    .step-title{font-size:clamp(1.5rem,2.4vw,2.2rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;text-wrap:balance}
+    .step-title .accent{color:var(--accent)}
+    .step-desc{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);line-height:1.6;max-width:44ch}
+
+    /* reading */
+    #step-reading .test-left{gap:12px}
+    .reading-text{
+      background:rgba(255,246,242,.6);border:1.5px solid var(--border-strong);border-radius:12px;
+      padding:16px 18px;font-size:.92rem;line-height:1.7;color:var(--ink);
+      overflow-y:auto;
+      flex:0 0 auto;
+      min-height:120px;
+      max-height:320px;
+      align-self:flex-start;
+      -webkit-overflow-scrolling:touch;
+    }
+    .reading-text h4{
+      font-size:.88rem;font-weight:700;margin-bottom:10px;color:var(--accent);
+      text-transform:uppercase;letter-spacing:.05em;
+      padding-bottom:6px;border-bottom:1px dashed var(--border);
+    }
+    .reading-text p{margin-bottom:10px}
+    .reading-text p:last-child{margin-bottom:0}
+
+    .left-panel{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px}
+
+    /* audio */
+    .audio-player{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      background:rgba(194,0,0,.04);border:1.5px dashed rgba(194,0,0,.25);
+      border-radius:14px;padding:14px 16px;
+    }
+    .audio-player button{
+      background:var(--accent);color:#fff;border:none;border-radius:10px;
+      padding:10px 18px;font-family:var(--font-title);font-weight:600;font-size:.82rem;
+      cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .2s;
+    }
+    .audio-player button:hover:not(:disabled){background:var(--accent-dark)}
+    .audio-player button:disabled{opacity:.4;cursor:not-allowed}
+    .audio-player .replay-info{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+
+    /* prompt */
+    .prompt-box{
+      background:rgba(194,0,0,.04);border:1.5px dashed rgba(194,0,0,.25);
+      border-radius:12px;padding:16px 18px;font-size:.92rem;line-height:1.6;
+    }
+    .prompt-box strong{color:var(--accent)}
+    .prompt-box small{color:var(--muted);display:block;margin-top:6px}
+
+    /* mic */
+    .mic-wrap{
+      display:flex;flex-direction:column;align-items:center;gap:14px;
+      padding:24px;background:rgba(194,0,0,.03);border:1.5px dashed rgba(194,0,0,.25);border-radius:16px;
+    }
+    .mic-btn{
+      width:78px;height:78px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 8px 20px rgba(194,0,0,.4);
+      transition:transform .25s,box-shadow .25s,background-color .25s;
+    }
+    .mic-btn:hover:not(:disabled){transform:scale(1.06);background:var(--accent-dark);box-shadow:0 10px 26px rgba(194,0,0,.55)}
+    .mic-btn:disabled{opacity:.4;cursor:not-allowed}
+    .mic-btn svg{width:32px;height:32px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .mic-btn.listening{background:#ffc2b8;animation:micPulse 1.2s ease-in-out infinite}
+    @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,194,184,.6)}50%{box-shadow:0 0 0 16px rgba(255,194,184,0)}}
+    .mic-hint{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-align:center;line-height:1.5;max-width:32ch}
+
+    /* ============================================================
+       PAINEL DIREITO
+       ============================================================ */
+    .test-right{
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .q-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .q-counter{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);letter-spacing:.02em}
+    .q-text{font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.55;font-weight:500;margin-bottom:6px;text-wrap:pretty}
+
+    .options{display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;padding-right:4px}
+    .opt{
+      background:rgba(255,255,255,.6);border:1.5px solid var(--border-strong);color:var(--ink);
+      padding:12px 16px;border-radius:11px;text-align:left;cursor:pointer;
+      transition:all .2s var(--ease);font-family:var(--font-title);font-size:.92rem;
+      display:flex;align-items:center;width:100%;
+    }
+    .opt .ltr{
+      display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+      font-family:var(--font-mono);font-weight:700;color:var(--muted);margin-right:11px;
+      flex-shrink:0;border-radius:6px;border:1.5px solid var(--border-strong);font-size:.7rem;
+      transition:all .2s;
+    }
+    .opt .txt{flex:1;text-wrap:pretty}
+    .opt:hover:not(.selected):not(:disabled){border-color:var(--ink);transform:translateX(4px);box-shadow:-3px 0 0 var(--accent)}
+    .opt.selected{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:var(--shadow-hard-sm);transform:translate(-1px,-1px)}
+    .opt.selected .ltr{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.12)}
+    .opt:disabled{cursor:default;opacity:.65}
+    .opt.selected:disabled{opacity:1}
+
+    /* IDK */
+    .opt.opt-idk{border-style:dashed;color:var(--muted)}
+    .opt.opt-idk .ltr{border-style:dashed}
+    .opt.opt-idk:hover:not(.selected):not(:disabled){border-color:var(--muted);box-shadow:-3px 0 0 var(--muted);color:var(--ink)}
+    .opt.opt-idk.selected{background:var(--ink);border-color:var(--ink);color:#fff;border-style:solid;box-shadow:var(--shadow-hard-sm)}
+    .opt.opt-idk.selected .ltr{color:#fff;border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.1);border-style:solid}
+
+    /* writing */
+    .write-area{
+      width:100%;
+      flex:0 0 auto;
+      min-height:160px;
+      max-height:280px;
+      overflow-y:auto;
+      padding:14px 16px;border-radius:12px;
+      border:1.5px solid var(--border-strong);background:#fff;
+      font-family:var(--font-title);font-size:.92rem;line-height:1.6;color:var(--ink);
+      resize:none;outline:none;transition:border-color .2s;
+    }
+    .write-area:focus{border-color:var(--accent)}
+    .write-meta{
+      display:flex;justify-content:space-between;align-items:center;
+      font-family:var(--font-mono);font-size:.7rem;color:var(--muted);
+    }
+
+    /* nav */
+    .nav-row{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding-top:14px;
+      margin-top:auto; /* Cola o nav-row no fim do painel direito */
+      border-top:1.5px dashed var(--border);
+      flex-shrink:0;
+    }
+    .btn-nav{
+      background:rgba(255,255,255,.5);border:1.5px solid var(--border-strong);color:var(--muted);
+      cursor:pointer;font-family:var(--font-mono);font-size:.74rem;padding:9px 15px;border-radius:9px;
+      transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-transform:lowercase;
+    }
+    .btn-nav:hover:not(:disabled){color:var(--accent);border-color:var(--accent);background:rgba(194,0,0,.06)}
+    .btn-nav:disabled{opacity:.32;cursor:not-allowed}
+    .btn-nav.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .btn-nav.primary:hover:not(:disabled){background:var(--accent);border-color:var(--accent)}
+
+    /* eval */
+    .eval-box{
+      display:none;flex-direction:column;gap:10px;padding:14px 16px;border-radius:14px;
+      background:#fff;border:1.5px solid var(--border);box-shadow:0 6px 20px rgba(0,0,0,.05);
+      animation:fadeIn .4s ease-out forwards;
+      overflow-y:auto;
+      flex:0 1 auto;
+      max-height:260px;
+      min-height:0;
+    }
+    .eval-box.visible{display:flex}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .eval-header{display:flex;align-items:center;gap:10px}
+    .eval-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .eval-icon.good{background:rgba(10,122,10,.1)}
+    .eval-icon.ok{background:rgba(255,140,0,.12)}
+    .eval-icon.bad{background:rgba(194,0,0,.1)}
+    .eval-icon svg{width:20px;height:20px;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+    .eval-icon.good svg{stroke:#0a7a0a}
+    .eval-icon.ok svg{stroke:#c26000}
+    .eval-icon.bad svg{stroke:#c20000}
+    .eval-title{font-weight:700;font-size:.9rem}
+    .eval-title.good{color:#0a7a0a}
+    .eval-title.ok{color:#c26000}
+    .eval-title.bad{color:#c20000}
+    .eval-transcript{
+      font-size:.82rem;color:#444;line-height:1.5;padding:10px 12px;
+      background:#fafafa;border-radius:10px;font-style:italic;
+    }
+    .eval-transcript strong{font-style:normal;font-weight:600;color:#222}
+    .eval-transcript mark.lt-error{background:rgba(194,0,0,.12);color:#c20000;border-bottom:1px dotted #c20000;border-radius:2px;padding:0 2px;font-style:normal}
+    .eval-feedback{font-size:.78rem;color:#555;line-height:1.5}
+    .lt-errors{display:none;flex-direction:column;gap:6px;margin-top:2px}
+    .lt-errors.visible{display:flex}
+    .lt-errors-title{font-size:.68rem;color:var(--accent);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+    .lt-error-item{padding:7px 10px;border-radius:8px;background:#fff5f5;border-left:3px solid var(--accent);display:flex;flex-direction:column;gap:3px}
+    .lt-error-msg{font-size:.76rem;font-weight:500;color:#333;line-height:1.4}
+    .lt-error-suggestion{font-size:.72rem;color:#666}
+    .lt-error-suggestion strong{color:var(--accent);font-weight:600}
+
+    /* result */
+    #step-result.active{grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);gap:56px;align-items:center}
+    .result-left{display:flex;flex-direction:column;gap:14px;min-width:0}
+    .result-overall{padding:24px;border-radius:16px;background:rgba(194,0,0,.05);border:1.5px solid rgba(194,0,0,.2)}
+    .result-overall .lbl{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+    .result-overall .big{font-size:clamp(4rem,8vw,6rem);font-weight:700;color:var(--accent);letter-spacing:-.04em;line-height:1;margin:6px 0;animation:pop .6s var(--ease) .15s both}
+    @keyframes pop{0%{opacity:0;transform:scale(.7) rotate(-6deg)}70%{transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+    .result-overall .desc{font-size:.88rem;color:var(--muted);line-height:1.6}
+    .result-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .result-item{border:1.5px solid var(--border-strong);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;background:rgba(255,255,255,.5)}
+    .result-item .skill{font-family:var(--font-mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .result-item .lvl{font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+    .result-item .pct{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+
+    /* loading */
+    .spinner{width:36px;height:36px;border-radius:50%;border:3px solid rgba(194,0,0,.15);border-top-color:var(--accent);animation:spin .9s linear infinite;margin:20px auto}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{text-align:center;font-size:.82rem;color:var(--muted)}
+
+    /* ============================================================
+       MOBILE
+       ============================================================ */
+    @media(max-width:900px){
+      body{
+        padding-top:    calc(var(--shell-top, 64px) + var(--mobile-safe-top, 0px) + 16px);
+        padding-bottom: calc(var(--shell-bottom, 64px) + var(--mobile-safe-bottom, 0px) + 16px);
+        padding-left:16px;padding-right:16px;
+        align-items:flex-start;overflow-y:auto;height:auto;min-height:100dvh;
+      }
+      .stage{height:auto;min-height:auto}
+
+      .desc-lead{font-size:clamp(0.8rem,1.3vw,1.14rem);line-height:1.7;color:var(--ink);max-width:46ch}
+
+      #step-intro.active{grid-template-columns:1fr;gap:24px;align-items:stretch}
+      .video-stage{max-width:100%}
+      .start-btn{width:100%;align-self:stretch;margin-bottom:8px}
+
+      #step-listening.active,
+      #step-reading.active,
+      #step-writing.active,
+      #step-speaking.active{grid-template-columns:1fr;gap:20px;height:auto}
+      .test-left{height:auto}
+      .test-left .step-desc{max-width:100%}
+      .left-panel{justify-content:flex-start}
+      .reading-text{max-height:260px;flex:none;min-height:160px}
+      .write-area{min-height:160px;max-height:220px;flex:none}
+
+      .test-right{height:auto;overflow-y:visible}
+      .eval-box{max-height:none}
+
+      #step-result.active{grid-template-columns:1fr;gap:20px}
+
+      .step{flex:none;display:none}
+      .step.active{display:grid}
+    }
+    @media(max-width:480px){
+      .step-title{font-size:1.35rem}
+      .opt{padding:10px 13px;font-size:.88rem}
+      .btn-nav{font-size:.7rem;padding:8px 12px}
+      .result-grid{grid-template-columns:1fr 1fr}
+      .audio-player{padding:12px}
+      .audio-player button{padding:9px 14px;font-size:.78rem}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="l">Teste de nivelamento</span>
+      <span class="s">// Mars × Lab</span>
+    </div>
+    <div class="gp">
+      <div class="gp-track"><div class="gp-fill" id="gpFill"></div></div>
+      <span class="gp-label" id="gpLabel">intro</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="step active" id="step-intro">
+    <div class="intro-left">
+      <div>
+        <span class="eyebrow">Teste seu Inglês</span>
+        <p class="hero-sub">Listening, reading, writing e speaking ~12 min.</p>
+      </div>
+      <div class="video-stage">
+        <video id="mars-video" autoplay muted playsinline preload="auto"
+               disablepictureinpicture disableremoteplayback
+               controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
+          <source src="https://dididoingles.github.io/testyourenglish/marswarm.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <div class="intro-right">
+      <p class="desc-lead">
+        Teste as <strong>4 habilidades</strong>  no Inglês e receba um diagnóstico mais preciso sobre seu nível.
+      </p>
+      <div class="meta-row">
+        <span class="chip"><i class="fa-solid fa-clock"></i> ~12 min</span>
+        <span class="chip"><i class="fa-solid fa-list-check"></i> 17 questões</span>
+        <span class="chip"><i class="fa-solid fa-bullseye"></i> até C1</span>
+      </div>
+      <button class="start-btn" onclick="goToStep('listening')">
+        <i class="fa-solid fa-play"></i> Começar teste
+      </button>
+    </div>
+  </div>
+
+  <!-- LISTENING -->
+  <div class="step" id="step-listening">
+    <div class="test-left">
+      <span class="step-eyebrow">Etapa 1 · Listening</span>
+      <h2 class="step-title">Ouça e <span class="accent">responda</span></h2>
+      <p class="step-desc">Ouça o teacher Danney falando sobre Londres e responda 10 perguntas. Atenção: Você só pode ouvir o audio completo, sem pausas por no máximo de 2 vezes.</p>
+      <div class="left-panel">
+        <div class="audio-player">
+          <button id="playBtn" onclick="playListening(false)">
+            <i class="fa-solid fa-play"></i> Ouvir áudio
+          </button>
+          <button id="slowBtn" onclick="playListening(true)" disabled>
+            <i class="fa-solid fa-clock"></i> Devagar
+          </button>
+          <span class="replay-info" id="replayInfo">2 reproduções restantes</span>
+        </div>
+      </div>
+    </div>
+    <div class="test-right">
+      <div>
+        <div class="q-header"><span class="q-counter" id="lQCount">Pergunta 1 de 10</span></div>
+        <p class="q-text" id="lQText">Aperte "Ouvir áudio" para começar.</p>
+        <div class="options" id="lOptions"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-nav" onclick="goToStep('intro')">
+          <i class="fa-solid fa-chevron-left"></i> voltar
+        </button>
+        <button class="btn-nav primary" id="lNextBtn" onclick="nextListening()" disabled>
+          próximo <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- READING -->
+  <div class="step" id="step-reading">
+    <div class="test-left">
+      <span class="step-eyebrow">Etapa 2 · Reading</span>
+      <p class="step-desc">Leia o texto e responda 5 perguntas.</p>
+      <div class="reading-text" id="readingText"></div>
+    </div>
+    <div class="test-right">
+      <div>
+        <div class="q-header"><span class="q-counter" id="rQCount">Pergunta 1 de 5</span></div>
+        <p class="q-text" id="rQText"></p>
+        <div class="options" id="rOptions"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-nav" onclick="goToStep('listening')">
+          <i class="fa-solid fa-chevron-left"></i> voltar
+        </button>
+        <button class="btn-nav primary" id="rNextBtn" onclick="nextReading()" disabled>
+          próximo <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WRITING -->
+  <div class="step" id="step-writing">
+    <div class="test-left">
+      <span class="step-eyebrow">Etapa 3 · Writing</span>
+      <h2 class="step-title">Escreva sobre o <span class="accent">tema</span></h2>
+      <p class="step-desc">80–120 palavras em inglês. Gramática verificada automaticamente.</p>
+      <div class="prompt-box" id="writingPrompt"></div>
+    </div>
+    <div class="test-right">
+        <div style="display:flex;flex-direction:column;gap:8px">
+        <textarea class="write-area" id="writeArea" placeholder="Write your answer here..." oninput="updateWriteCounter()"></textarea>
+        <div class="write-meta">
+          <span id="writeCounter">0 palavras</span>
+          <span id="writeMin">mín. 80 · máx. 120</span>
+        </div>
+      </div>
+      <div class="eval-box" id="writingEval"></div>
+      <div class="nav-row">
+        <button class="btn-nav" onclick="goToStep('reading')">
+          <i class="fa-solid fa-chevron-left"></i> voltar
+        </button>
+        <button class="btn-nav primary" id="wNextBtn" onclick="submitWriting()" disabled>
+          avaliar e continuar <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPEAKING -->
+  <div class="step" id="step-speaking">
+    <div class="test-left">
+      <span class="step-eyebrow">Etapa 4 · Speaking</span>
+      <h2 class="step-title">Fale sobre o <span class="accent">tema</span></h2>
+      <p class="step-desc">Aperte o microfone e fale 30–60s em inglês.</p>
+      <div class="prompt-box" id="speakingPrompt"></div>
+      <div class="mic-wrap">
+        <button class="mic-btn" id="micBtn" onclick="toggleSpeaking()">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </button>
+        <p class="mic-hint" id="micHint">Clique para gravar.</p>
+      </div>
+    </div>
+    <div class="test-right">
+      <div class="eval-box" id="speakingEval"></div>
+      <div class="nav-row">
+        <button class="btn-nav" onclick="goToStep('writing')">
+          <i class="fa-solid fa-chevron-left"></i> voltar
+        </button>
+        <button class="btn-nav primary" id="sNextBtn" onclick="finishTest()" disabled>
+          finalizar <i class="fa-solid fa-check"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="step" id="step-result">
+    <div class="result-left">
+      <span class="step-eyebrow">Resultado</span>
+      <div class="result-overall">
+        <div class="lbl">Nível geral estimado</div>
+        <div class="big" id="overallLevel">--</div>
+        <p class="desc" id="overallDesc"></p>
+      </div>
+    </div>
+    <div class="result-right">
+      <div class="result-grid" id="resultGrid"></div>
+      <p style="font-size:.72rem;color:var(--muted);line-height:1.5;text-align:center">
+        * Estimativa. Não substitui avaliação formal.
+      </p>
+      <div class="nav-row" style="justify-content:flex-end">
+        <button class="btn-nav primary" onclick="goHome()">
+          concluir <i class="fa-solid fa-check"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   FIX 4 — CONCLUIR: volta pro começo do teste (intro)
+   ============================================================ */
+function goHome(){
+  resetTest();
+}
+
+/* ============================================================
+   SAFE-AREA
+   ============================================================ */
+function applyInsets(top, bottom){
+  document.documentElement.style.setProperty('--shell-top', top + 'px');
+  document.documentElement.style.setProperty('--shell-bottom', bottom + 'px');
+}
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === 'shellInsets' || d.action === 'shellInsets'){
+    applyInsets(Number(d.top) || 64, Number(d.bottom) || 64);
+  }
+  if (d.type === 'safeArea'){
+    const t = Number(d.top) || 0;
+    const b = Number(d.bottom) || 0;
+    applyInsets(64 + t, 64 + b);
+  }
+});
+if (window.parent !== window){
+  window.parent.postMessage({ action: 'requestShellInsets' }, '*');
+  window.parent.postMessage({ action: 'requestSafeArea' }, '*');
+  window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
+}
+
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const AUDIO_URL = 'https://res.cloudinary.com/dbwqwgbtx/video/upload/PLACEHOLDER.mp3';
+
+/* ============================================================
+   SCRIPT DO ÁUDIO — Daniel (peça pra ele ler isto, ~1 min):
+
+   "Hi, my name is Daniel and I've lived in London for about
+    five years. I was born here but moved to Brazil when I was a kid, and I've learned about British and brazilian culture along the way.
+
+    One thing that surprised me at first was the weather. People
+    always say it rains a lot in England, and honestly, that's true.
+    But what really surprised me was how quickly it changes — you
+    can have sunshine, rain and wind in the same afternoon.
+
+    Another curiosity is the famous double-decker buses and the
+    black cabs. They're everywhere, and they're part of London's
+    identity. The Tube, the underground metro system, is also
+    iconic — it's the oldest in the world, and it's still one of
+    the best ways to move around the city.
+
+    British people are known for being polite and reserved. They
+    love saying 'sorry' even when it's not their fault, and they
+    always queue in line — never jump the queue!
+
+    Finally, the food. I have to say, Sunday roast is amazing. It's
+    a traditional meal with roast meat, potatoes and vegetables,
+    usually eaten on Sundays with family. Tea is also a big deal
+    here — people drink it all day long.
+
+    London is an expensive city, but it's full of history and
+    diversity. I'm glad I came here."
+   ============================================================ */
+const listeningQuestions = [
+  { q: "How long has Daniel lived in London?",
+    options: ["About one year", "About five years", "About three years", "About ten years"], answer: 1, lv: 'A1' },
+  { q: "When did he move to Brazil?",
+    options: ["To work", "when he was a kid", "To visit family", "recently"], answer: 1, lv: 'A1' },
+  { q: "What surprised him most about the weather?",
+    options: ["It is always hot", "It never rains", "It changes very quickly", "It snows all year"], answer: 2, lv: 'A2' },
+  { q: "What did he say about the buses and cabs?",
+    options: ["They are rare", "They are part of London's identity", "They are cheap", "They are modern"], answer: 1, lv: 'A2' },
+  { q: "What is mentioned about the Tube?",
+    options: ["It is the oldest metro in the world", "It only works on weekends", "It is the newest metro in the world", "It is free for tourists"], answer: 0, lv: 'A2' },
+  { q: "What habit of British people is mentioned?",
+    options: ["They never apologize", "They always jump the queue", "They love saying 'sorry' and always queue", "They hate tea"], answer: 2, lv: 'B1' },
+  { q: "What is Sunday roast?",
+    options: ["A type of tea", "A famous London pub", "A type of bus", "A traditional meal with roast meat, potatoes and vegetables"], answer: 3, lv: 'B1' },
+  { q: "How often do British people drink tea, according to Daniel?",
+    options: ["Only at breakfast", "Only in winter", "All day long", "Never"], answer: 2, lv: 'B1' },
+  { q: "What does he say about London's cost of living?",
+    options: ["It is cheap", "It is expensive", "It is free", "It is the same as Brazil"], answer: 1, lv: 'B1' },
+  { q: "What is his overall opinion about London?",
+    options: ["He regrets moving there", "He wants to leave soon", "He thinks it is boring", "He is glad he came"], answer: 3, lv: 'B1' }
+];
+const audio = new Audio(AUDIO_URL);
+audio.preload = 'auto';
+
+/* ============================================================
+   READING
+   ============================================================ */
+const readingData = {
+  title: "The Rise of Remote Work",
+  text: `Remote work was once a rare privilege reserved for a few professions. Over the past decade, however, it has become increasingly common — and the COVID-19 pandemic accelerated this shift dramatically. Millions of employees who had never worked from home suddenly found themselves setting up desks in kitchens and bedrooms.
+
+Companies quickly discovered both the benefits and the challenges of remote work. On the positive side, employees saved time and money by avoiding long commutes. Many reported higher job satisfaction and better work-life balance, as they could spend more time with family or pursue personal interests. Companies, in turn, reduced their office costs and could hire talent from anywhere in the world.
+
+Yet remote work is not without its downsides. Some workers struggle with isolation, missing the casual conversations that happen in an office. Others find it difficult to disconnect from work, checking emails late into the evening. Managers also face new obstacles: how do you build team culture when everyone is behind a screen? How do you measure productivity without seeing people work?
+
+Today, many organizations have adopted a hybrid model, combining days at home with days in the office. This approach seems to offer the best of both worlds, though it requires careful planning and clear communication. What is certain is that the traditional office, as we knew it, has changed forever.`,
+  questions: [
+    { q: "According to the text, what event accelerated the shift to remote work?",
+      options: ["A new law", "The COVID-19 pandemic", "A technological revolution", "An economic crisis"], answer: 1, lv: 'B1' },
+    { q: "What is mentioned as a benefit for employees?",
+      options: ["Higher salaries", "Free lunches", "Saving time and money on commutes", "Longer vacations"], answer: 2, lv: 'B1' },
+    { q: "Which problem is mentioned for some workers?",
+      options: ["Feeling isolated", "Too many meetings", "Bad internet", "Low salaries"], answer: 0, lv: 'B2' },
+    { q: "What model have many organizations adopted today?",
+      options: ["Full remote", "Full in-office", "Hybrid", "Four-day week"], answer: 2, lv: 'B2' },
+    { q: "The phrase 'best of both worlds' means:",
+      options: ["A difficult choice", "Something impossible", "A cheap alternative", "A combination of advantages from two options"], answer: 3, lv: 'B2' }
+  ]
+};
+
+/* ============================================================
+   WRITING / SPEAKING
+   ============================================================ */
+const writingTask = {
+  prompt: "Describe your ideal weekend. What would you do, where would you go, and who would you spend time with?"
+};
+const speakingTask = {
+  prompt: "Tell me about your last vacation. Where did you go, what did you do, and how did you feel?",
+  hint: "Use past tense: went, visited, ate, saw, stayed, enjoyed..."
+};
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const state = {
+  listening: { current: 0, answers: Array(10).fill(null), plays: 0 },
+  reading:   { current: 0, answers: Array(5).fill(null) },
+  writing:   { text: '', score: 0, errors: 0, ltMatches: [] },
+  speaking:  { transcript: '', score: 0, errors: 0, ltMatches: [], duration: 0 }
+};
+const IDK = -1;
+
+/* ============================================================
+   NAVEGAÇÃO
+   ============================================================ */
+const STEPS = ['intro','listening','reading','writing','speaking','result'];
+const STEP_LABELS = { intro:'intro', listening:'1/4 · listening', reading:'2/4 · reading', writing:'3/4 · writing', speaking:'4/4 · speaking', result:'resultado' };
+
+function goToStep(name){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step-' + name);
+  if (el) el.classList.add('active');
+  const idx = STEPS.indexOf(name);
+  const pct = name === 'intro' ? 0 : name === 'result' ? 100 : (idx / 4) * 100;
+  document.getElementById('gpFill').style.width = pct + '%';
+  document.getElementById('gpLabel').textContent = STEP_LABELS[name] || name;
+
+  if (name === 'listening') initListeningUI();
+  if (name === 'reading') initReadingUI();
+  if (name === 'writing') initWritingUI();
+  if (name === 'speaking') initSpeakingUI();
+  if (name === 'result') renderResult();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   LISTENING
+   ============================================================ */
+function initListeningUI(){
+  renderListeningQuestion();
+  updateReplayInfo();
+}
+function updateReplayInfo(){
+  const left = Math.max(0, 2 - state.listening.plays);
+  document.getElementById('replayInfo').textContent = left === 1 ? '1 reprodução restante' : left === 0 ? 'Sem reproduções restantes' : '2 reproduções restantes';
+  document.getElementById('playBtn').disabled = left === 0;
+  document.getElementById('slowBtn').disabled = left === 0;
+}
+function playListening(slow){
+  if (state.listening.plays >= 2) return;
+  state.listening.plays++;
+  audio.currentTime = 0;
+  audio.playbackRate = slow ? 0.75 : 1;
+  audio.play().catch(() => {});
+  updateReplayInfo();
+}
+audio.addEventListener('ended', updateReplayInfo);
+
+function renderListeningQuestion(){
+  const i = state.listening.current;
+  const q = listeningQuestions[i];
+  document.getElementById('lQCount').textContent = `Pergunta ${i+1} de ${listeningQuestions.length}`;
+  document.getElementById('lQText').textContent = q.q;
+
+  const selected = state.listening.answers[i];
+  const isAnswered = selected !== null;
+  const isIdk = selected === IDK;
+
+  const opts = document.getElementById('lOptions');
+  opts.innerHTML = q.options.map((opt, k) => `
+    <button class="opt ${selected === k ? 'selected' : ''}"
+            data-idx="${k}"
+            ${isAnswered ? 'disabled' : ''}>
+      <span class="ltr">${String.fromCharCode(65+k)}</span>
+      <span class="txt">${opt}</span>
+    </button>
+  `).join('') + `
+    <button class="opt opt-idk ${isIdk ? 'selected' : ''}"
+            data-idx="${IDK}"
+            ${isAnswered ? 'disabled' : ''}>
+      <span class="ltr">?</span>
+      <span class="txt">Não sei / Não tenho certeza</span>
+    </button>
+  `;
+
+  if (!opts._bound){
+    opts._bound = true;
+    opts.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.opt');
+      if (!btn || btn.disabled) return;
+      answerListening(Number(btn.dataset.idx));
+    });
+  }
+
+  document.getElementById('lNextBtn').disabled = !isAnswered;
+  const isLast = i === listeningQuestions.length - 1;
+  document.getElementById('lNextBtn').innerHTML = isLast
+    ? 'ir para reading <i class="fa-solid fa-chevron-right"></i>'
+    : 'próximo <i class="fa-solid fa-chevron-right"></i>';
+}
+function answerListening(k){
+  state.listening.answers[state.listening.current] = k;
+  renderListeningQuestion();
+}
+function nextListening(){
+  const i = state.listening.current;
+  if (state.listening.answers[i] === null) return;
+  if (i < listeningQuestions.length - 1){
+    state.listening.current++;
+    renderListeningQuestion();
+  } else {
+    goToStep('reading');
+  }
+}
+
+/* ============================================================
+   READING
+   ============================================================ */
+function initReadingUI(){
+  document.getElementById('readingText').innerHTML =
+    `<h4>${readingData.title}</h4>` +
+    readingData.text.split('\n\n').map(p => `<p>${p}</p>`).join('');
+  renderReadingQuestion();
+}
+function renderReadingQuestion(){
+  const i = state.reading.current;
+  const q = readingData.questions[i];
+  document.getElementById('rQCount').textContent = `Pergunta ${i+1} de ${readingData.questions.length}`;
+  document.getElementById('rQText').textContent = q.q;
+
+  const selected = state.reading.answers[i];
+  const isAnswered = selected !== null;
+  const isIdk = selected === IDK;
+
+  const opts = document.getElementById('rOptions');
+  opts.innerHTML = q.options.map((opt, k) => `
+    <button class="opt ${selected === k ? 'selected' : ''}"
+            data-idx="${k}"
+            ${isAnswered ? 'disabled' : ''}>
+      <span class="ltr">${String.fromCharCode(65+k)}</span>
+      <span class="txt">${opt}</span>
+    </button>
+  `).join('') + `
+    <button class="opt opt-idk ${isIdk ? 'selected' : ''}"
+            data-idx="${IDK}"
+            ${isAnswered ? 'disabled' : ''}>
+      <span class="ltr">?</span>
+      <span class="txt">Não sei / Não tenho certeza</span>
+    </button>
+  `;
+
+  if (!opts._bound){
+    opts._bound = true;
+    opts.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.opt');
+      if (!btn || btn.disabled) return;
+      answerReading(Number(btn.dataset.idx));
+    });
+  }
+
+  document.getElementById('rNextBtn').disabled = !isAnswered;
+  const isLast = i === readingData.questions.length - 1;
+  document.getElementById('rNextBtn').innerHTML = isLast
+    ? 'ir para writing <i class="fa-solid fa-chevron-right"></i>'
+    : 'próximo <i class="fa-solid fa-chevron-right"></i>';
+}
+function answerReading(k){
+  state.reading.answers[state.reading.current] = k;
+  renderReadingQuestion();
+}
+function nextReading(){
+  const i = state.reading.current;
+  if (state.reading.answers[i] === null) return;
+  if (i < readingData.questions.length - 1){
+    state.reading.current++;
+    renderReadingQuestion();
+  } else {
+    goToStep('writing');
+  }
+}
+
+/* ============================================================
+   WRITING
+   ============================================================ */
+function initWritingUI(){
+  document.getElementById('writingPrompt').innerHTML = `<strong>Tarefa:</strong> ${writingTask.prompt}`;
+  updateWriteCounter();
+}
+function updateWriteCounter(){
+  const text = document.getElementById('writeArea').value.trim();
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  document.getElementById('writeCounter').textContent = `${words} palavras`;
+  document.getElementById('wNextBtn').disabled = words < 20;
+}
+async function submitWriting(){
+  const text = document.getElementById('writeArea').value.trim();
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const btn = document.getElementById('wNextBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> avaliando...';
+
+  const evalBox = document.getElementById('writingEval');
+  evalBox.className = 'eval-box visible';
+  evalBox.innerHTML = '<div class="spinner"></div><p class="loading-text">Corrigindo gramática...</p>';
+
+  const heuristic = evaluateWriting(text, words);
+  const ltMatches = await languageToolCheck(text);
+  const penalty = ltMatches.length * 12;
+  const score = Math.max(0, heuristic.score - penalty);
+
+  state.writing = { text, score, errors: ltMatches.length, ltMatches, words };
+
+  const level = score >= 70 ? 'good' : score >= 40 ? 'ok' : 'bad';
+  const title = score >= 70 ? 'Boa redação!' : score >= 40 ? 'Redação razoável' : 'Precisa melhorar';
+
+  evalBox.innerHTML = `
+    <div class="eval-header">
+      <div class="eval-icon ${level}">
+        <svg viewBox="0 0 24 24">${level === 'good'
+          ? '<polyline points="20 6 9 17 4 12"></polyline>'
+          : level === 'ok'
+          ? '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>'
+          : '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>'}</svg>
+      </div>
+      <div class="eval-title ${level}">${title} · ${score}/100</div>
+    </div>
+    <div class="eval-feedback">${heuristic.feedback} ${penalty > 0 ? `Penalidade de ${penalty} pts por ${ltMatches.length} erro(s).` : ''}</div>
+    ${renderLTErrors(ltMatches)}
+  `;
+
+  btn.disabled = false;
+  btn.innerHTML = 'continuar <i class="fa-solid fa-chevron-right"></i>';
+  btn.onclick = () => goToStep('speaking');
+}
+function evaluateWriting(text, wordCount){
+  const uniqueWords = new Set(text.toLowerCase().match(/\b[a-z]+\b/g) || []).size;
+  const varietyRatio = wordCount > 0 ? uniqueWords / wordCount : 0;
+  const connectives = (text.match(/\b(because|however|although|therefore|moreover|but|and|so|since|while)\b/gi) || []).length;
+  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+  const avgSentenceLen = sentences > 0 ? wordCount / sentences : 0;
+
+  let score = 0;
+  if (wordCount >= 80) score += 30; else if (wordCount >= 50) score += 20; else if (wordCount >= 20) score += 10;
+  if (varietyRatio >= 0.6) score += 25; else if (varietyRatio >= 0.45) score += 15; else if (varietyRatio >= 0.3) score += 8;
+  if (connectives >= 3) score += 20; else if (connectives >= 1) score += 10;
+  if (avgSentenceLen >= 8 && avgSentenceLen <= 22) score += 15;
+  if (sentences >= 4) score += 10;
+  score = Math.min(100, score);
+
+  return {
+    score,
+    feedback: `Você escreveu ${wordCount} palavras em ${sentences} frase(s), com ${connectives} conectivo(s) e ${Math.round(varietyRatio*100)}% de variedade lexical.`
+  };
+}
+
+/* ============================================================
+   SPEAKING
+   ============================================================ */
+let recognition = null;
+let isListening = false;
+let speakStart = 0;
+let finalTranscript = '';
+
+function initSpeakingUI(){
+  document.getElementById('speakingPrompt').innerHTML =
+    `<strong>Tarefa:</strong> ${speakingTask.prompt}<small>${speakingTask.hint}</small>`;
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR){
+    document.getElementById('micHint').textContent = 'Reconhecimento de voz indisponível. Use Chrome/Edge.';
+    document.getElementById('micBtn').disabled = true;
+    return;
+  }
+  if (recognition) return;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+}
+
+function toggleSpeaking(){
+  if (!recognition) return;
+  if (isListening){ recognition.stop(); return; }
+
+  finalTranscript = '';
+  isListening = true;
+  speakStart = performance.now();
+  document.getElementById('micBtn').classList.add('listening');
+  document.getElementById('micHint').textContent = 'Ouvindo... clique para parar.';
+
+  recognition.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript + ' ';
+    }
+  };
+  recognition.onerror = () => {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+    document.getElementById('micHint').textContent = 'Erro ao ouvir. Tente novamente.';
+  };
+  recognition.onend = async () => {
+    if (!isListening) return;
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+    const transcript = finalTranscript.trim();
+    const duration = (performance.now() - speakStart) / 1000;
+    if (!transcript){
+      document.getElementById('micHint').textContent = 'Nada capturado. Tente de novo.';
+      return;
+    }
+    await evaluateSpeaking(transcript, duration);
+  };
+  try { recognition.start(); } catch(e){
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+  }
+}
+
+async function evaluateSpeaking(transcript, duration){
+  const evalBox = document.getElementById('speakingEval');
+  evalBox.className = 'eval-box visible';
+  evalBox.innerHTML = '<div class="spinner"></div><p class="loading-text">Avaliando sua fala...</p>';
+
+  const heuristic = evaluateSpeakingHeuristic(transcript, duration);
+  const ltMatches = await languageToolCheck(transcript);
+  const penalty = ltMatches.length * 12;
+  const score = Math.max(0, heuristic.score - penalty);
+
+  state.speaking = { transcript, score, errors: ltMatches.length, ltMatches, duration };
+  document.getElementById('sNextBtn').disabled = false;
+
+  const level = score >= 70 ? 'good' : score >= 40 ? 'ok' : 'bad';
+  const title = score >= 70 ? 'Boa fala!' : score >= 40 ? 'Fala razoável' : 'Fale mais';
+
+  evalBox.innerHTML = `
+    <div class="eval-header">
+      <div class="eval-icon ${level}">
+        <svg viewBox="0 0 24 24">${level === 'good'
+          ? '<polyline points="20 6 9 17 4 12"></polyline>'
+          : level === 'ok'
+          ? '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>'
+          : '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>'}</svg>
+      </div>
+      <div class="eval-title ${level}">${title} · ${score}/100</div>
+    </div>
+    <div class="eval-transcript"><strong>Você disse:</strong> "${highlightLT(transcript, ltMatches)}"</div>
+    ${renderLTErrors(ltMatches)}
+    <div class="eval-feedback">${heuristic.feedback} ${penalty > 0 ? `Penalidade de ${penalty} pts.` : ''}</div>
+  `;
+}
+
+function evaluateSpeakingHeuristic(transcript, duration){
+  const words = transcript.trim().split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+  const wps = duration > 0 ? wordCount / duration : 0;
+  const uniqueWords = new Set(words.map(w => w.toLowerCase().replace(/[^a-z]/g, ''))).size;
+  const varietyRatio = wordCount > 0 ? uniqueWords / wordCount : 0;
+
+  let score = 0;
+  if (wordCount >= 40) score += 40; else if (wordCount >= 25) score += 30; else if (wordCount >= 15) score += 20; else if (wordCount >= 5) score += 10;
+  if (varietyRatio >= 0.6) score += 25; else if (varietyRatio >= 0.45) score += 15; else if (varietyRatio >= 0.3) score += 8;
+  if (wps >= 0.8 && wps <= 3) score += 20; else if (wps > 0.3) score += 10;
+  if (duration >= 20) score += 15;
+  score = Math.min(100, score);
+
+  return {
+    score,
+    feedback: `Você falou ${wordCount} palavras em ${duration.toFixed(1)}s (${wps.toFixed(1)} palavras/s), com ${Math.round(varietyRatio*100)}% de variedade.`
+  };
+}
+
+/* ============================================================
+   LANGUAGETOOL
+   ============================================================ */
+async function languageToolCheck(text){
+  try {
+    const res = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ text, language: 'en-US' })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data.matches || [];
+  } catch(e){
+    console.warn('LanguageTool falhou:', e);
+    return [];
+  }
+}
+function highlightLT(text, matches){
+  if (!matches.length) return escapeHtml(text);
+  const sorted = [...matches].sort((a,b) => b.offset - a.offset);
+  let out = text;
+  sorted.forEach(m => {
+    const s = m.offset, e = m.offset + m.length;
+    if (s >= 0 && e <= out.length){
+      out = out.slice(0,s) + '<mark class="lt-error">' + escapeHtml(out.slice(s,e)) + '</mark>' + out.slice(e);
+    }
+  });
+  return out;
+}
+function renderLTErrors(matches){
+  if (!matches.length){
+    return `<div class="lt-errors visible" style="border-left-color:#0a7a0a;background:#f0faf0;padding:7px 10px;border-radius:8px">
+      <div class="lt-error-msg" style="color:#0a7a0a">✓ Gramática impecável (LanguageTool)</div>
+    </div>`;
+  }
+  const items = matches.map(m => {
+    const sug = (m.replacements || []).slice(0,3).map(r => `<strong>${escapeHtml(r.value)}</strong>`).join(', ');
+    return `<div class="lt-error-item">
+      <div class="lt-error-msg">${escapeHtml(m.message)}</div>
+      ${sug ? `<div class="lt-error-suggestion">Sugestões: ${sug}</div>` : ''}
+    </div>`;
+  }).join('');
+  return `<div class="lt-errors visible">
+    <div class="lt-errors-title">Pontos de atenção (${matches.length})</div>
+    ${items}
+  </div>`;
+}
+function escapeHtml(t){
+  const d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+
+/* ============================================================
+   PONTUAÇÃO
+   ============================================================ */
+const WEIGHTS = { A1:1, A2:1.5, B1:2, B2:2.5, C1:3 };
+
+function scoreMC(questions, answers){
+  let score = 0, max = 0;
+  questions.forEach((q, i) => {
+    const w = WEIGHTS[q.lv] || 1;
+    max += w;
+    if (answers[i] === q.answer) score += w;
+  });
+  return Math.round((score / max) * 100);
+}
+function scoreToLevel(pct){
+  if (pct >= 85) return 'C1';
+  if (pct >= 70) return 'B2';
+  if (pct >= 50) return 'B1';
+  if (pct >= 30) return 'A2';
+  return 'A1';
+}
+function finishTest(){ goToStep('result'); }
+
+function renderResult(){
+  const lScore = scoreMC(listeningQuestions, state.listening.answers);
+  const rScore = scoreMC(readingData.questions, state.reading.answers);
+  const wScore = state.writing.score || 0;
+  const sScore = state.speaking.score || 0;
+
+  const overall = Math.round((lScore * 1.0 + rScore * 1.0 + wScore * 0.8 + sScore * 0.8) / 3.6);
+  const overallLevel = scoreToLevel(overall);
+
+  document.getElementById('overallLevel').textContent = overallLevel;
+  document.getElementById('overallDesc').textContent = levelDescription(overallLevel);
+
+  const skills = [
+    { name: 'Listening', score: lScore },
+    { name: 'Reading',   score: rScore },
+    { name: 'Writing',   score: wScore },
+    { name: 'Speaking',  score: sScore }
+  ];
+  document.getElementById('resultGrid').innerHTML = skills.map(s => `
+    <div class="result-item">
+      <span class="skill">${s.name}</span>
+      <span class="lvl">${scoreToLevel(s.score)}</span>
+      <span class="pct">${s.score}/100</span>
+    </div>
+  `).join('');
+}
+function levelDescription(lv){
+  const d = {
+    A1: "Iniciante — compreende expressões básicas e frases simples.",
+    A2: "Básico consolidado — lida com tarefas rotineiras e troca informações simples.",
+    B1: "Intermediário — comunica-se na maioria das situações e descreve planos.",
+    B2: "Intermediário superior — compreende ideias complexas e interage com naturalidade.",
+    C1: "Avançado — utiliza o idioma de forma flexível em contextos sociais e profissionais."
+  };
+  return d[lv] || '';
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function resetTest(){
+  state.listening = { current: 0, answers: Array(10).fill(null), plays: 0 };
+  state.reading   = { current: 0, answers: Array(5).fill(null) };
+  state.writing   = { text: '', score: 0, errors: 0, ltMatches: [] };
+  state.speaking  = { transcript: '', score: 0, errors: 0, ltMatches: [], duration: 0 };
+  document.getElementById('writeArea').value = '';
+  document.getElementById('writingEval').className = 'eval-box';
+  document.getElementById('speakingEval').className = 'eval-box';
+  document.getElementById('sNextBtn').disabled = true;
+  const wBtn = document.getElementById('wNextBtn');
+  wBtn.onclick = submitWriting;
+  wBtn.innerHTML = 'avaliar e continuar <i class="fa-solid fa-chevron-right"></i>';
+  audio.pause(); audio.currentTime = 0;
+  goToStep('intro');
+}
+
+/* ============================================================
+   VÍDEO
+   ============================================================ */
+(function(){
+  const video = document.getElementById('mars-video');
+  if (!video) return;
+  video.muted = true;
+  video.loop = false;
+  video.addEventListener('loadedmetadata', () => {
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {});
+  });
+  video.addEventListener('ended', () => {
+    video.pause();
+    video.currentTime = Math.max(0, video.duration - 0.05);
+  });
+  video.addEventListener('contextmenu', e => e.preventDefault());
+})();
+</script>
+</body>
+</html>
