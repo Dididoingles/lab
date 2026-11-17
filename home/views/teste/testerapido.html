@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Teste de nível | Mars Education</title>
+    <title>Teste de nível</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
            ==================================================== */
         :root {
             --ink: #222222;
-            --paper: #fff6f2;            /* branco quente, puxado pro rubi */
-            --paper-warm: #ffeeee;       /* tom mais saturado pra gradientes */
+            --paper: #fff6f2;            
+            --paper-warm: #ffeeee;       
             --accent: #c20000;
             --accent-dark: #a30000;
             --muted: #6b5252;
@@ -41,8 +41,6 @@
         body {
             font-family: var(--font-title);
             color: var(--ink);
-            /* Fundo quente com dois gradientes radiais suaves nas laterais
-               (rubi diluído) — cria profundidade sem virar "malha". */
             background-color: transparent;
             background-image:
                 radial-gradient(ellipse 60% 80% at 0% 50%,  rgba(194,0,0,0.06) 0%, rgba(194,0,0,0) 60%),
@@ -53,7 +51,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 32px;
+            padding: 60px;
             -webkit-tap-highlight-color: transparent;
             margin-bottom: 100px;
         }
@@ -64,11 +62,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(34, 34, 34, 0); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ffffff00; }
 
-        /* ====================================================
-           WRAP DE TEXTO BONITO
-           ==================================================== */
         p, .text {
             text-wrap: pretty;
             overflow-wrap: break-word;
@@ -77,7 +71,7 @@
         }
 
         /* ====================================================
-           PALCO — DUAS PÁGINAS SOBREPOSTAS (fade cruzado)
+           PALCO — DUAS PÁGINAS SOBREPOSTAS
            ==================================================== */
         .stage {
             position: relative;
@@ -118,69 +112,36 @@
         .page--test { align-items: stretch; }
 
         /* ====================================================
-           COLUNA ESQUERDA — TÍTULO, SUBTÍTULO, VÍDEO
+           COLUNA ESQUERDA
            ==================================================== */
         .col-left {
-            display: flex;
+            display:flex;
             flex-direction: column;
             align-items: flex-start;
             min-width: 0;
             gap: 22px;
         }
 
-        .eyebrow {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            margin-bottom: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .eyebrow::before {
-            content: '';
-            width: 22px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .hero-title {
-            font-family: var(--font-title);
-            font-size: clamp(2rem, 4.2vw, 3.4rem);
-            font-weight: 700;
-            color: var(--ink);
-            letter-spacing: -0.045em;
-            line-height: 1.02;
-            text-wrap: balance;
-        }
-        .hero-title .accent { color: var(--accent); }
-
         .hero-sub {
             font-family: var(--font-mono);
             font-size: 0.86rem;
             color: var(--muted);
             letter-spacing: 0.02em;
-            margin-top: 12px;
+            margin-top: -100px;
             line-height: 1.55;
             max-width: 38ch;
             text-wrap: pretty;
         }
 
         /* ====================================================
-           VÍDEO — FUNDIDO AO FUNDO COM MÁSCARA + BLEND
+           VÍDEO
            ==================================================== */
         .video-stage {
             width: 100%;
-            max-width: 460px;
+            max-width: 660px;
             aspect-ratio: 16 / 10;
             position: relative;
             isolation: isolate;
-            /* Compensa as bordas: o vídeo "transborda" um pouco e a máscara
-               suaviza nos 4 lados, então o conteúdo real fica intacto. */
             padding: 8px;
             margin: -8px;
         }
@@ -192,10 +153,6 @@
             object-fit: cover;
             pointer-events: none;
             background: transparent;
-
-            /* MÁSCARA em 4 lados: fade radial + fade linear por borda.
-               Radial centraliza o "foco", linear garante que topo/base/
-               esquerda/direita fiquem realmente transparentes. */
             -webkit-mask-image:
                 radial-gradient(ellipse 95% 95% at 50% 50%, #000 55%, transparent 100%),
                 linear-gradient(to right,  transparent 0%, #000 12%, #000 88%, transparent 100%),
@@ -206,14 +163,11 @@
                 linear-gradient(to right,  transparent 0%, #000 12%, #000 88%, transparent 100%),
                 linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
             mask-composite: intersect;
-
-            /* Blend com o fundo quente: multiply suave deixa o branco do
-               vídeo "absorver" o tom rubi da página. */
             mix-blend-mode: multiply;
         }
 
         /* ====================================================
-           COLUNA DIREITA — DESCRIÇÃO, BOTÃO
+           COLUNA DIREITA
            ==================================================== */
         .col-right {
             display: flex;
@@ -237,7 +191,6 @@
             font-weight: 600;
         }
 
-        /* Linha única de chips + instagram */
         .meta-row {
             display: flex;
             flex-wrap: wrap;
@@ -285,6 +238,14 @@
         }
         .btn-instagram i { color: var(--accent); font-size: .85rem; }
 
+        /* Contêiner para alinhar os elementos ao lado se desejado ou manter fluxo flexível */
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
         .start-btn {
             background: var(--accent);
             color: #fff;
@@ -303,7 +264,6 @@
             justify-content: center;
             gap: 9px;
             box-shadow: var(--shadow-hard-sm);
-            align-self: flex-start;
         }
         .start-btn:hover {
             background: var(--accent-dark);
@@ -321,6 +281,7 @@
            ==================================================== */
         .test-card {
             display: flex;
+            margin-top: 30px;
             flex-direction: column;
             height: 100%;
             min-height: 0;
@@ -334,7 +295,7 @@
             gap: 14px;
             padding-bottom: 14px;
             margin-bottom: 18px;
-            margin-top: 50px;
+            margin-top: 80px;
             border-bottom: 1.5px dashed var(--border);
             flex-shrink: 0;
         }
@@ -393,7 +354,6 @@
         }
 
         .question-area {
-            flex: 1;
             min-height: 0;
             overflow-y: auto;
             display: flex;
@@ -476,15 +436,9 @@
             border-radius: 6px;
             border: 1.5px solid var(--border-strong);
             font-size: 0.7rem;
-            transition: all .2s;
         }
         .option-btn .opt-text { flex: 1; text-wrap: pretty; }
 
-        .option-btn:hover:not(.selected):not(:disabled) {
-            border-color: var(--ink);
-            transform: translateX(4px);
-            box-shadow: -3px 0 0 var(--accent);
-        }
         .option-btn.selected {
             border-color: var(--accent);
             background: var(--accent);
@@ -499,30 +453,6 @@
         }
         .option-btn:disabled { cursor: default; opacity: 0.65; }
         .option-btn.selected:disabled { opacity: 1; }
-
-        .option-btn.option-idk {
-            border-style: dashed;
-            color: var(--muted);
-        }
-        .option-btn.option-idk .opt-letter { border-style: dashed; }
-        .option-btn.option-idk:hover:not(.selected):not(:disabled) {
-            border-color: var(--muted);
-            box-shadow: -3px 0 0 var(--muted);
-            color: var(--ink);
-        }
-        .option-btn.option-idk.selected {
-            background: var(--ink);
-            border-color: var(--ink);
-            color: #fff;
-            border-style: solid;
-            box-shadow: var(--shadow-hard-sm);
-        }
-        .option-btn.option-idk.selected .opt-letter {
-            color: #fff;
-            border-color: rgba(255,255,255,0.4);
-            background: rgba(255,255,255,0.1);
-            border-style: solid;
-        }
 
         .game-footer {
             display: flex;
@@ -544,27 +474,15 @@
             font-size: 0.74rem;
             padding: 8px 14px;
             border-radius: 9px;
-            transition: all .2s;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             text-transform: lowercase;
         }
-        .btn-nav:hover:not(:disabled) {
-            color: var(--accent);
-            border-color: var(--accent);
-            background: rgba(194,0,0,0.06);
-        }
-        .btn-nav:disabled { opacity: 0.32; cursor: not-allowed; }
         .btn-nav.primary {
             background: var(--ink);
             color: #fff;
             border-color: var(--ink);
-        }
-        .btn-nav.primary:hover:not(:disabled) {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
         }
 
         /* ====================================================
@@ -577,12 +495,7 @@
             justify-content: center;
             height: 100%;
         }
-        .result-view.is-active { display: flex; animation: fadeIn 0.6s var(--ease-out-expo) forwards; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        .result-view.is-active { display: flex; }
 
         .res-label {
             font-family: var(--font-mono);
@@ -600,13 +513,6 @@
             line-height: 1;
             letter-spacing: -0.04em;
             margin: 4px 0 14px;
-            text-shadow: 3px 3px 0 rgba(194,0,0,.18);
-            animation: levelPop 0.6s var(--ease-out-expo) 0.15s both;
-        }
-        @keyframes levelPop {
-            0%   { opacity: 0; transform: scale(0.7) rotate(-6deg); }
-            70%  { transform: scale(1.08) rotate(2deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0); }
         }
         .res-desc {
             font-size: 0.96rem;
@@ -614,7 +520,6 @@
             line-height: 1.7;
             max-width: 44ch;
             margin-bottom: 26px;
-            text-wrap: pretty;
         }
         .restart-btn {
             background: var(--accent);
@@ -626,42 +531,22 @@
             font-family: var(--font-title);
             font-weight: 600;
             font-size: 0.86rem;
-            transition: all .2s var(--ease-out-expo);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
             box-shadow: var(--shadow-hard-sm);
         }
-        .restart-btn:hover {
-            background: var(--accent-dark);
-            transform: translate(-2px, -2px);
-            box-shadow: 4px 5px 0 rgba(34,34,34,.85);
-        }
-        .restart-btn:active {
-            transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0 rgba(34,34,34,.85);
-        }
-
-    
 
         /* ====================================================
-           RESPONSIVIDADE
+           RESPONSIVIDADE E AJUSTES SOLICITADOS
            ==================================================== */
         @media (max-width: 900px) {
-            body { padding: 16px; padding-top: 50px; padding-bottom: 100px; flex-start; overflow-y: auto; }
-
-            .hero-title { font-size: 1.9rem; }
-
-            .game-header{ margin-top: 20px; }
+            body { padding: 12px; padding-top: 300px; padding-bottom: 300px; flex-start; overflow-y: auto; }
 
             .stage {
                 height: auto;
                 min-height: calc(100dvh - 96px);
                 align-items: stretch;
             }
-            .game-footer{margin-top: -5px;}
+            .game-footer { margin-bottom: 150px; }
 
             .page {
                 position: relative;
@@ -676,65 +561,21 @@
             .page.is-active { display: grid; }
 
             .video-stage { max-width: 100%; align-content: center; margin-bottom: 10px; }
-            .start-btn {
-                width: 100%;
-                align-self: stretch;
+
+            /* Apenas no mobile, apenas na hero (.col-left), diminuímos o espaço de cima dos 3 pontinhos (".hero-sub") */
+            #page-intro .col-left .hero-sub {
+                margin-top: 2px !important;
             }
 
             .desc-lead {
-            font-size: clamp(0.8rem, 1.3vw, 1.14rem);
-            line-height: 1.2;
-            margin-top: -20px;
-            
-        }
-
-        .hero-sub {
-            font-size: 0.6rem;
-            letter-spacing: 0.02em;
-            margin-top: 12px;
-            line-height: 1.55;
-            max-width: 100ch;
-            text-wrap: pretty;
-        }
-           
-
-        @media (max-width: 480px) {
-            .hero-title { font-size: 1.9rem; }
-            .hero-sub { font-size: 0.8rem; }
-            .game-header { flex-wrap: wrap; }
-            .progress-wrap { max-width: none; flex-basis: 100%; }
-            .question-text { font-size: 1rem; }
-            .option-btn { padding: 10px 13px; font-size: 0.88rem; }
-            .btn-nav { font-size: 0.7rem; padding: 7px 11px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
+                font-size: clamp(0.8rem, 1.3vw, 1.14rem);
+                line-height: 1.2;
+                margin-top: -20px;
             }
         }
-
-        /* Ajuste exclusivo para dispositivos móveis onde o shell exibe as navbars */
-@media (max-width: 1024px) {
-    body {
-        /* 
-          - Topo: Altura da barra superior + safe-area do topo + respiro (ex: 16px)
-          - Base: Altura da barra inferior + safe-area da base + respiro (ex: 16px)
-        */
-        padding-top: calc(350px + env(safe-area-inset-top, 0px) + 16px);
-        padding-bottom: calc(400px + env(safe-area-inset-bottom, 0px) + 16px);
-        padding-left: 16px;
-        padding-right: 16px;
-        
-        overflow-y: auto; /* Garante rolagem caso o conteúdo passe da altura útil */
-    }
-}
     </style>
 </head>
 <body>
-
-  
 
     <!-- ================= PALCO COM DUAS PÁGINAS ================= -->
     <div class="stage">
@@ -742,28 +583,25 @@
         <!-- ============ PÁGINA 1: INTRO ============ -->
         <div class="page page--intro is-active" id="page-intro">
 
-            <!-- Coluna esquerda: título + subtítulo + vídeo -->
+            <!-- Coluna esquerda: subtítulo (3 pontinhos) + vídeo -->
             <div class="col-left">
                 <div>
-                   
-                    <h1 class="hero-title">Teste seu <span class="accent">Inglês</span></h1>
-                    <p class="hero-sub">Descubra seu nível aproximado em 5 minutos.</p>
+                    <p class="hero-sub">...</p>
                 </div>
 
                 <div class="video-stage">
                     <video id="mars-video" autoplay muted playsinline preload="auto"
                            disablepictureinpicture disableremoteplayback
                            controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
-                        <source src="https://dididoingles.github.io/testyourenglish/marswarm.mp4" type="video/mp4">
+                      <source src="https://dididoingles.github.io/lab/assets/linustest1.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
 
-            <!-- Coluna direita: descrição + chips/insta + botão -->
+            <!-- Coluna direita: descrição + chips/insta + botão ao lado -->
             <div class="col-right">
                 <p class="desc-lead">
-                    Responda <strong>25 perguntas</strong> e receba um diagnóstico do seu
-                    estágio atual no idioma. Com <strong>95% de precisão</strong>.
+                    <strong>Atenção:</strong> Como este teste é autoavaliativo, é importante que você seja honesto nas respostas e não tente chutar. Quando não souber a resposta clique em 'não sei'
                 </p>
 
                 <div class="meta-row">
@@ -776,9 +614,12 @@
                     </a>
                 </div>
 
-                <button class="start-btn" onclick="startTest()">
-                    <i class="fa-solid fa-play"></i> Começar Teste
-                </button>
+                <!-- Contêiner que posiciona o botão ao lado dos elementos ou integrado na linha -->
+                <div class="action-row">
+                    <button class="start-btn" onclick="startTest()">
+                        <i class="fa-solid fa-play"></i> Começar Teste
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -829,51 +670,35 @@
     </div>
 
     <script>
-        /* ====================================================
-           VÍDEO — autoplay e congela no último frame
-           ==================================================== */
         (function () {
             const video = document.getElementById('mars-video');
             video.muted = true;
             video.autoplay = true;
             video.loop = false;
-
             video.addEventListener('loadedmetadata', () => {
                 const tryPlay = video.play();
                 if (tryPlay && tryPlay.catch) tryPlay.catch(() => {});
             });
-
             video.addEventListener('ended', () => {
                 video.pause();
                 video.currentTime = Math.max(0, video.duration - 0.05);
             });
-
             video.addEventListener('contextmenu', e => e.preventDefault());
         })();
 
-        /* ====================================================
-           NAVEGAÇÃO ENTRE PÁGINAS
-           ==================================================== */
         const pageIntro = document.getElementById('page-intro');
         const pageTest  = document.getElementById('page-test');
 
         function showTestPage() {
             pageIntro.classList.remove('is-active');
-            setTimeout(() => {
-                pageTest.classList.add('is-active');
-            }, 300);
+            setTimeout(() => { pageTest.classList.add('is-active'); }, 300);
         }
 
         function showIntroPage() {
             pageTest.classList.remove('is-active');
-            setTimeout(() => {
-                pageIntro.classList.add('is-active');
-            }, 300);
+            setTimeout(() => { pageIntro.classList.add('is-active'); }, 300);
         }
 
-        /* ====================================================
-           BANCO DE PERGUNTAS
-           ==================================================== */
         const questions = [
             { q: "Hi, ___ name is Mark. What's yours?", options: ["my", "me", "I", "mine"], a: 0, lv: "A1" },
             { q: "Where ___ you from?", options: ["is", "am", "are", "be"], a: 2, lv: "A1" },
@@ -912,9 +737,6 @@
             return text.replace(/___/g, '<span class="blank">___</span>');
         }
 
-        /* ====================================================
-           START / RESET
-           ==================================================== */
         function startTest() {
             showTestPage();
             setTimeout(() => {
@@ -936,12 +758,8 @@
             }, 320);
         }
 
-        /* ====================================================
-           RENDER
-           ==================================================== */
         function render() {
             if (isTransitioning) return;
-
             const q = questions[current];
             const area = document.getElementById('question-area');
             const progress = ((current + 1) / questions.length) * 100;
@@ -952,9 +770,7 @@
 
             const nextBtn = document.getElementById('next-btn');
             const isLast = current === questions.length - 1;
-            nextBtn.innerHTML = isLast
-                ? 'finalizar <i class="fa-solid fa-check"></i>'
-                : 'próximo <i class="fa-solid fa-chevron-right"></i>';
+            nextBtn.innerHTML = isLast ? 'finalizar <i class="fa-solid fa-check"></i>' : 'próximo <i class="fa-solid fa-chevron-right"></i>';
             nextBtn.disabled = answers[current] === null;
 
             area.style.opacity = '0';
@@ -970,15 +786,13 @@
                     <div class="options-list">
                         ${q.options.map((opt, i) => `
                             <button class="option-btn ${answers[current] === i ? 'selected' : ''}"
-                                    onclick="selectOption(${i})"
-                                    ${isAnswered ? 'disabled' : ''}>
+                                    onclick="selectOption(${i})" ${isAnswered ? 'disabled' : ''}>
                                 <span class="opt-letter">${letters[i]}</span>
                                 <span class="opt-text">${opt}</span>
                             </button>
                         `).join('')}
                         <button class="option-btn option-idk ${isIdk ? 'selected' : ''}"
-                                onclick="selectOption(${IDK})"
-                                ${isAnswered ? 'disabled' : ''}>
+                                onclick="selectOption(${IDK})" ${isAnswered ? 'disabled' : ''}>
                             <span class="opt-letter">?</span>
                             <span class="opt-text">Não sei / Não tenho certeza</span>
                         </button>
@@ -990,13 +804,9 @@
             }, 180);
         }
 
-        /* ====================================================
-           SELECT
-           ==================================================== */
         function selectOption(index) {
             if (answers[current] !== null) return;
             answers[current] = index;
-
             document.querySelectorAll('.option-btn').forEach((btn, i) => {
                 btn.disabled = true;
                 const isIdkBtn = btn.classList.contains('option-idk');
@@ -1006,16 +816,10 @@
             document.getElementById('next-btn').disabled = false;
 
             if (current < questions.length - 1) {
-                setTimeout(() => {
-                    current++;
-                    render();
-                }, 420);
+                setTimeout(() => { current++; render(); }, 420);
             }
         }
 
-        /* ====================================================
-           NEXT / PREV
-           ==================================================== */
         function next() {
             if (answers[current] === null || isTransitioning) return;
             if (current < questions.length - 1) {
@@ -1037,15 +841,10 @@
             }
         }
 
-        /* ====================================================
-           FINISH
-           ==================================================== */
         function finish() {
             const unanswered = answers.some(a => a === null);
             if (unanswered) {
-                if (confirm('Você ainda tem perguntas não respondidas. Deseja finalizar mesmo assim?')) {
-                    proceedToResult();
-                }
+                if (confirm('Você ainda tem perguntas não respondidas. Deseja finalizar mesmo assim?')) proceedToResult();
             } else {
                 proceedToResult();
             }
@@ -1054,7 +853,6 @@
         function proceedToResult() {
             document.getElementById('game-ui').style.display = 'none';
             document.getElementById('result-ui').classList.add('is-active');
-            void document.getElementById('result-ui').offsetWidth;
 
             const levelScores = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0 };
             const levelTotals = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0 };
@@ -1076,39 +874,20 @@
             else if (pct.A2 >= 50) finalLevel = "A2";
 
             const descriptions = {
-                "A1": "Parabéns, você chegou até aqui! Acreditamos que você está iniciando a jornada. Compreende expressões básicas e frases simples para necessidades imediatas. Importante: esse teste não substitui o teste formal com um profissional, e muitos aspectos importantes podem ter ficado de fora.",
-                "A2": "Parabéns, você chegou até aqui! Acreditamos que você está no básico consolidado. Lida com tarefas rotineiras e troca informações simples sobre assuntos familiares. Importante: esse teste não substitui o teste formal com um profissional, e muitos aspectos importantes podem ter ficado de fora.",
-                "B1": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário. Comunica-se na maioria das situações de viagem e descreve planos e experiências. Importante: esse teste não substitui o teste formal com um profissional, e muitos aspectos importantes podem ter ficado de fora.",
-                "B2": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário superior. Compreende ideias complexas e interage com nativos com naturalidade. Importante: esse teste não substitui o teste formal com um profissional, e muitos aspectos importantes podem ter ficado de fora.",
-                "C1": "Parabéns, você chegou até aqui! Acreditamos que você está no avançado. Utiliza o idioma de forma flexível para fins sociais, académicos e profissionais. Importante: esse teste não substitui o teste formal com um profissional, e muitos aspectos importantes podem ter ficado de fora."
+                "A1": "Parabéns, você chegou até aqui! Acreditamos que você está iniciando a jornada. Compreende expressões básicas e frases simples para necessidades imediatas.",
+                "A2": "Parabéns, você chegou até aqui! Acreditamos que você está no básico consolidado. Lida com tarefas rotineiras e troca informações simples.",
+                "B1": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário. Comunica-se na maioria das situações de viagem.",
+                "B2": "Parabéns, você chegou até aqui! Acreditamos que você está no intermediário superior. Compreende ideias complexas.",
+                "C1": "Parabéns, você chegou até aqui! Acreditamos que você está no avançado. Utiliza o idioma de forma flexível."
             };
 
             document.getElementById('level-badge').innerText = finalLevel;
             document.getElementById('level-desc').innerText = descriptions[finalLevel];
         }
 
-        /* ====================================================
-           TOOLTIP DO MARS
-           ==================================================== */
-        const marsLink = document.getElementById('mars-link');
-        const marsTooltip = document.getElementById('mars-tooltip');
-        let tooltipTimer;
-        marsLink.addEventListener('mouseenter', () => {
-            clearTimeout(tooltipTimer);
-            marsTooltip.classList.add('show');
-        });
-        marsLink.addEventListener('mouseleave', () => {
-            tooltipTimer = setTimeout(() => marsTooltip.classList.remove('show'), 250);
-        });
-        marsLink.addEventListener('touchstart', () => {
-            marsTooltip.classList.add('show');
-            setTimeout(() => marsTooltip.classList.remove('show'), 2500);
-        }, { passive: true });
-
-        // Warn the shell that the book page has loaded
-if (window.parent && window.parent !== window) {
-    window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
-}
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ action: 'pageLoaded', route: 'teste' }, '*');
+        }
     </script>
 </body>
 </html>
