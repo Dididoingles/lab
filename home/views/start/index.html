@@ -40,7 +40,7 @@
         }
         
         body {
-            padding: 60px 40px 60px 40px;
+            padding: 10px 40px 60px 40px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -56,7 +56,7 @@
             margin-left: -20px;
             margin-right: -40px;
             width: calc(100% + 80px);
-            margin-bottom: 32px;
+            margin-bottom: -5px;
         }
 
         .welcome-hero-img {
@@ -208,7 +208,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px; /* Ensures the icon stays centered in the circle */
+    width: 32px;
 }
 
 .book-icon-label {
@@ -228,7 +228,7 @@
 .book-icon:hover,
 .book-icon:focus-visible {
     width: 250px;
-    justify-content: flex-start; /* Aligns left when expanding */
+    justify-content: flex-start;
     padding-left: 2px;
     color: var(--accent);
     border-color: rgba(194,0,0,0.3);
@@ -244,6 +244,8 @@
 .book-icon:active {
     transform: scale(0.98);
 }
+
+
         /* =========================================
            CARROSSEL — ELIPSE 3D HARMÔNICA
            ========================================= */
@@ -251,7 +253,9 @@
             position: relative;
             width: 100vw;
             margin-left: calc(-50vw + 50%);
-            margin-bottom: 6px;
+            margin-bottom: 20px;
+            margin-top: 0px;
+
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
             mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
         }
@@ -259,7 +263,7 @@
         .carousel-section {
             position: relative;
             width: 100%;
-            height: 440px;
+            height: 380px;
             margin: 20px 0 0 0;
             touch-action: pan-y;
             user-select: none;
@@ -340,9 +344,17 @@
         }
 
         .carousel-controls {
-            position: relative; display: flex; align-items: center; justify-content: flex-start; gap: 8px;
-            margin: 6px auto 0; max-width: 800px; width: 100%; padding-left: 0; z-index: 10;
-        }
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-start; 
+    gap: 8px;
+    margin: 6px auto 0; 
+    max-width: 800px; 
+    width: calc(100% - 80px); /* Fixes the 100vw overflow */
+    padding-left: 0; 
+    z-index: 10;
+}
 
         .carousel-btn {
             display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%;
@@ -357,7 +369,7 @@
             display: inline-flex; align-items: center; justify-content: center; gap: 6px;
             font-family: var(--font-hand); letter-spacing: normal; font-size: 14px;
             padding: 0 10px; height: 38px; border-radius: 5px; cursor: pointer;
-            border: 1px solid var(--ink); text-decoration: none; background: #d15252; color: #fff;
+            border: 1px solid var(--ink); text-decoration: none; background: #b74948; color: #fff;
             box-shadow: var(--shadow-hard-sm);
             transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
             white-space: nowrap; flex-shrink: 0;
@@ -379,9 +391,11 @@
             .quick-card > img { width: 60px; height: 60px; }
             .quick-card-name { font-size: 14px; }
             .quick-card-desc { font-size: 12px; }
-            .book-egg { margin: 20px 0 100px; }
-            .book-egg-text { font-size: 10px; }
-
+            .carousel-controls { 
+    padding-left: 20px; 
+    width: calc(100% - 40px); /* Fixes mobile width */
+    margin: 6px 0 100px 0; 
+}
             .carousel-section { height: 340px; margin: 10px 0 0 0; perspective: 1500px; }
             .slide-card { width: 180px; height: 230px; margin-top: -115px; margin-left: -90px; }
             .slide-card .card { padding: 12px 10px; }
@@ -419,7 +433,7 @@
                     <span class="quick-card-name">Plano de estudos</span>
                     <span class="quick-card-desc">Monte seu cronograma</span>
                 </a>
-                <a class="quick-card" href="https://dididoingles.github.io/testyourenglish/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
+                <a class="quick-card" href="../teste/" target="" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
                     <img src="../../../assets/level1.webp" alt="Nivelamento">
                     <span class="quick-card-name">Teste de nível</span>
                     <span class="quick-card-desc">Descubra seu inglês</span>
@@ -441,7 +455,7 @@
             <div class="section-head-highlight">
                 <span class="section-kicker">Highlight</span>
                 <h2 class="section-title">Mais buscadas</h2>
-                <a href="../todas/index.html" class="btn-see-all">Ver tudo <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#" class="btn-see-all" onclick="parent.postMessage({ action: 'navigate', route: 'todas' }, '*'); return false;">Ver tudo <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </section>
 
@@ -453,14 +467,15 @@
             <div class="carousel-controls">
                 <button class="carousel-btn" id="btnPrev" aria-label="Voltar carrossel"><i class="fa-solid fa-arrow-left"></i></button>
                 <button class="carousel-btn" id="btnNext" aria-label="Avançar carrossel"><i class="fa-solid fa-arrow-right"></i></button>
-                 <a class="book-icon" href="../../../book.html" aria-label="Descubra o que tinha no livro">
-    <i class="fa-solid fa-book"></i>
-    <span class="book-icon-label">Descubra o que tinha no livro</span>
-</a>
+
+                <a class="book-icon" href="../../../book.html" aria-label="Descubra o que tinha no livro">
+                    <i class="fa-solid fa-book"></i>
+                    <span class="book-icon-label">Descubra o que tinha no livro</span>
+                </a>
             </div>
         </div>
 
-       
+        
 
     </section>
 
@@ -680,6 +695,8 @@
 
         buildCarousel();
     })();
+
+    
     </script>
 
 </body>
