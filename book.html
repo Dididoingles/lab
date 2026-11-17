@@ -775,6 +775,11 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }, 100);
         });
+
+        // Warn the shell that the book page has loaded
+if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'pageLoaded', route: 'book' }, '*');
+}
     </script>
 </body>
 </html>
