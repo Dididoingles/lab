@@ -275,6 +275,8 @@
         <div class="mars-tooltip" id="mars-tooltip">
             <span class="tooltip-close" id="mars-close">×</span>
             <p id="mars-message">Olá! Eu sou o Mars.</p>
+            <p id="mars-message">...</p>
+            <p id="mars-message">Considere instalar o Language Lab no seu dispositivo. É rápido, leve e seguro.</p>
             <button class="btn-install" id="pwa-install-btn">Instalar Lab</button>
         </div>
 
@@ -353,11 +355,8 @@
             let deferredPrompt;
 
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
-            // Verifica se já está rodando no modo app (instalado)
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-            // NOVO: Se já estiver instalado, transforma o botão numa mensagem
             if (isStandalone && pwaBtn) {
                 pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center; font-weight:500; line-height:1.4;">Mars avisa: Você já está usando a versão instalada do Language Lab. Aproveite!</p>';
             }
@@ -367,7 +366,6 @@
                 deferredPrompt = e;
             });
 
-            // Se o aluno instalar agora, transforma o botão na mensagem na hora
             window.addEventListener('appinstalled', () => {
                 const currentBtn = document.getElementById('pwa-install-btn');
                 if (currentBtn) {
@@ -384,27 +382,22 @@
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
-                            pwaBtn.style.display = 'none'; // O evento appinstalled vai cuidar do texto
+                            pwaBtn.style.display = 'none';
                             tooltip.classList.remove('show');
                         }
                         deferredPrompt = null;
                     } else {
-                        // Fallback silencioso
-                        pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center;">Mars explica: Vá no menu do navegador (⋮) e desça até a opção instalar ou criar atalho. Clique em criar atalho e pronto, o site fica salvo para você acessar facilmente.</p>';
+                        pwaBtn.outerHTML = '<p style="margin-top:12px; font-size:11px; color:var(--accent); text-align:center;">Mars explica: Pode ser que você já tenha feito a instalação. Se não foi o caso, vá no menu do navegador (⋮) e desça até a opção instalar ou criar atalho. Clique em criar atalho e pronto, o site fica salvo para você acessar facilmente.</p>';
                     }
                 });
             }
 
             if (iosModalClose) {
-                iosModalClose.addEventListener('click', () => {
-                    iosModal.classList.remove('show');
-                });
+                iosModalClose.addEventListener('click', () => iosModal.classList.remove('show'));
             }
             if (iosModal) {
                 iosModal.addEventListener('click', (e) => {
-                    if (e.target === iosModal) {
-                        iosModal.classList.remove('show');
-                    }
+                    if (e.target === iosModal) iosModal.classList.remove('show');
                 });
             }
 
@@ -445,10 +438,14 @@
                 profile: 'Aqui é só para quem é aluno.',
                 biblioteca: 'Nossa biblioteca de conteúdos!',
                 teacher: 'Um pouco sobre a teacher!',
-                todas:   'Essa é a lista completa de ferramentas!'
+                todas:   'Essa é a lista completa de ferramentas!',
+                book:    'O que tinha no livro? Dê uma espiada!'
             };
 
-            const mobileNavRoutes = ['start', 'tools', 'profile', 'biblioteca', 'teacher', 'todas'];
+            const mobileNavRoutes = ['start', 'tools', 'profile', 'biblioteca', 'teacher', 'todas', 'teste'];
+
+            // ADICIONADO: Lista de laboratórios que estão na pasta /pages/
+            const labsRoutes = ['listening', 'speaking', 'writing', 'reading'];
 
             function syncMobileNavThumb(route) {
                 if (!mobileThumb) return;
@@ -462,8 +459,6 @@
             }
 
             function updateBackBtn() {
-                // Se estiver na tela inicial, o botão fica desativado.
-                // Se estiver em QUALQUER outra tela (como 'todas'), o botão fica ativo!
                 if (currentRoute === 'start') {
                     backBtn.disabled = true;
                 } else {
@@ -471,12 +466,60 @@
                 }
             }
 
-            iframe.addEventListener('load', () => {
+                       // --- DETECÇÃO DE CARREGAMENTO DO IFRAME (Compatível com CodePad e GitHub Pages) ---
+                       iframe.addEventListener('load', () => {
                 cancelSkeleton();
                 requestAnimationFrame(() => {
                     iframe.style.opacity = '1';
                 });
                 isFirstLoad = false;
+
+                try {
+                    const path = iframe.contentWindow.location.pathname;
+                    
+                    if (path.endsWith('book.html')) {
+                        return; 
+                    }
+
+                    let route = 'start'; 
+                    
+                    // Procura por /views/NOME_DA_PASTA/ ou /views/NOME_DA_PASTA/index.html
+                    if (path.includes('/views/')) {
+                        const match = path.match(/\/views\/([^/]+)(?:\/|$)/);
+                        if (match && match[1]) {
+                            route = match[1];
+                        }
+                    } 
+                    // Procura por /pages/NOME_DA_PASTA/ ou /pages/NOME_DA_PASTA/index.html
+                    else if (path.includes('/pages/')) {
+                        const match = path.match(/\/pages\/([^/]+)(?:\/|$)/);
+                        if (match && match[1]) {
+                            route = match[1];
+                        }
+                    }
+
+                    if (route !== currentRoute) {
+                        currentRoute = route;
+                        history.pushState({ route }, '', '#/' + route);
+                        navCount++;
+                        
+                        updateBackBtn();
+                        
+                        let navHighlightRoute = route;
+                        if (labsRoutes.includes(route)) {
+                            navHighlightRoute = 'tools';
+                        }
+
+                        document.querySelectorAll('.nav-item, .mobile-nav__item').forEach(link => {
+                            link.classList.toggle('active', link.dataset.route === navHighlightRoute);
+                        });
+                        syncMobileNavThumb(navHighlightRoute);
+
+                        if (marsMessages[route]) messageEl.innerHTML = marsMessages[route];
+                    }
+                } catch (e) {
+                    console.warn('Iframe URL not accessible', e);
+                }
             });
 
             function navigateTo(route, updateUrl = true) {
@@ -488,15 +531,19 @@
                     navCount++;
                 }
                 
-                // Atualiza o botão voltar imediatamente ao mudar de rota
                 updateBackBtn(); 
 
+                // Se for um lab, o menu 'tools' acende
+                let navHighlightRoute = route;
+                if (labsRoutes.includes(route)) {
+                    navHighlightRoute = 'tools';
+                }
+
                 document.querySelectorAll('.nav-item, .mobile-nav__item').forEach(link => {
-                    link.classList.toggle('active', link.dataset.route === route);
+                    link.classList.toggle('active', link.dataset.route === navHighlightRoute);
                 });
 
-                syncMobileNavThumb(route);
-
+                syncMobileNavThumb(navHighlightRoute);
                 if (marsMessages[route]) messageEl.innerHTML = marsMessages[route];
 
                 iframe.style.opacity = '0';
@@ -507,7 +554,13 @@
                     if (swapped) return;
                     swapped = true;
                     iframe.removeEventListener('transitionend', onEnd);
-                    iframe.src = 'views/' + route + '/index.html';
+                    
+                    // Se for rota da pasta pages, muda o caminho
+                    if (labsRoutes.includes(route)) {
+                        iframe.src = '../pages/' + route + '/index.html';
+                    } else {
+                        iframe.src = 'views/' + route + '/index.html';
+                    }
                 };
                 const onEnd = (e) => {
                     if (e.propertyName === 'opacity') swapSrc();
@@ -517,27 +570,65 @@
                 setTimeout(swapSrc, 250);
             }
 
-            window.addEventListener('popstate', () => {
-                if (navCount > 0) navCount--;
-                updateBackBtn();
-                navigateTo(routeFromHash(), false);
-            });
-
+            // --- ESCUTANDO MENSAGENS DO IFRAME ---
             window.addEventListener('message', (event) => {
+                // 1. Quando o book.html carrega
+                if (event.data && event.data.action === 'pageLoaded' && event.data.route === 'book') {
+                    currentRoute = 'book';
+                    history.pushState({ route: 'book' }, '', '#/book');
+                    navCount++;
+                    updateBackBtn();
+                    
+                    document.querySelectorAll('.nav-item, .mobile-nav__item').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    syncMobileNavThumb('book');
+                    if (marsMessages['book']) messageEl.innerHTML = marsMessages['book'];
+                    return;
+                }
+
+                // 2. Navegação via botões (Ver tudo, Book icon)
                 if (event.data && event.data.action === 'navigate') {
                     if (event.data.route === 'back') {
                         if (!backBtn.disabled) backBtn.click();
                         return;
                     }
+                    
+                    if (event.data.url) {
+                        iframe.style.opacity = '0';
+                        scheduleSkeleton();
+                        iframe.src = event.data.url;
+                        return;
+                    }
+
                     if (event.data.route !== currentRoute) {
                         navigateTo(event.data.route);
                     }
                 }
             });
 
+            window.addEventListener('popstate', () => {
+                if (navCount > 0) navCount--;
+                updateBackBtn();
+                
+                const route = routeFromHash();
+                if (route === 'book') {
+                    iframe.style.opacity = '0';
+                    scheduleSkeleton();
+                    iframe.src = '../book.html'; // Note: adjust this relative path if needed
+                } else {
+                    navigateTo(route, false);
+                }
+            });
+
             backBtn.addEventListener('click', () => {
-                // Se estiver na tela "todas", volta para a tela inicial direto
-                if (currentRoute === 'todas') {
+                // NOVO: Se estiver em um lab, volta para a lista de labs (tools)
+                if (labsRoutes.includes(currentRoute) || currentRoute === 'todas') {
+                    navigateTo('tools');
+                    return;
+                }
+
+                if (currentRoute === 'book') {
                     navigateTo('start');
                     return;
                 }
@@ -569,8 +660,19 @@
                 });
 
                 setTimeout(() => {
-                    navigateTo(routeFromHash(), false);
-                    syncMobileNavThumb(currentRoute);
+                    const initialRoute = routeFromHash();
+                    if (initialRoute === 'book') {
+                        iframe.src = '../book.html';
+                        currentRoute = 'book';
+                    } else {
+                        navigateTo(initialRoute, false);
+                    }
+                    
+                    // Acende o menu correto no início
+                    let initialHighlight = currentRoute;
+                    if (labsRoutes.includes(currentRoute)) initialHighlight = 'tools';
+                    
+                    syncMobileNavThumb(initialHighlight);
                     updateBackBtn();
                 }, 150);
             });
