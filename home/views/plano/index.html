@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" type="image/png" href="favicon.png">
+<title>Plano de estudos | Mars Education</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#222;--paper:#fff6f2;--paper-warm:#ffeeee;--accent:#c20000;--accent-dark:#a30000;--muted:#6b5252;--border:rgba(34,34,34,.10);--border-strong:rgba(34,34,34,.18);--shadow-hard-sm:2px 3px 0 rgba(34,34,34,.85);--font-title:'Poppins',sans-serif;--font-mono:'Space Mono',monospace;--ease-out-expo:cubic-bezier(.22,1,.36,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--font-title);color:var(--ink);background-color:transparent;
+background-image:radial-gradient(ellipse 60% 80% at 0% 50%,rgba(194,0,0,.06) 0%,rgba(194,0,0,0) 60%),radial-gradient(ellipse 60% 80% at 100% 50%,rgba(194,0,0,.06) 0%,rgba(194,0,0,0) 60%),radial-gradient(ellipse 50% 60% at 50% 0%,rgba(194,0,0,.03) 0%,rgba(194,0,0,0) 70%);
+background-attachment:fixed;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:32px;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(34,34,34,0);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+p,.text{text-wrap:pretty;overflow-wrap:break-word;hyphens:auto}
+
+.stage{position:relative;width:100%;max-width:1180px;height:min(94dvh,820px);display:flex;align-items:center;justify-content:center}
+.page{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(10px);transition:opacity .55s var(--ease-out-expo),transform .55s var(--ease-out-expo),visibility 0s linear .55s}
+.page.is-active{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);transition:opacity .55s var(--ease-out-expo),transform .55s var(--ease-out-expo),visibility 0s linear 0s}
+.page--test,.page--identify{align-items:stretch}
+
+.col-left{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:22px}
+.col-right{display:flex;flex-direction:column;justify-content:center;min-width:0;gap:22px}
+.eyebrow{font-family:var(--font-mono);font-size:.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);border-radius:2px}
+.hero-title{font-size:clamp(2rem,4.2vw,3.4rem);font-weight:700;letter-spacing:-.045em;line-height:1.02;text-wrap:balance}
+.hero-title .accent{color:var(--accent)}
+.hero-sub{font-family:var(--font-mono);font-size:.86rem;color:var(--muted);letter-spacing:.02em;margin-top:12px;line-height:1.55;max-width:52ch}
+.video-stage{width:100%;max-width:460px;aspect-ratio:16/10;position:relative;isolation:isolate;padding:8px;margin:-8px}
+.video-stage video{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none;background:transparent;
+-webkit-mask-image:radial-gradient(ellipse 95% 95% at 50% 50%,#000 55%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 12%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;
+mask-image:radial-gradient(ellipse 95% 95% at 50% 50%,#000 55%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 12%,#000 88%,transparent 100%);mask-composite:intersect;mix-blend-mode:multiply}
+.desc-lead{font-size:clamp(.95rem,1.3vw,1.14rem);line-height:1.5;font-weight:400;max-width:52ch}
+.desc-lead strong{color:var(--accent);font-weight:600}
+.meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.meta-chip,.btn-instagram{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);border:1.5px solid var(--border-strong);padding:5px 11px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.meta-chip i,.btn-instagram i{color:var(--accent);font-size:.7rem}
+.btn-instagram{text-decoration:none;transition:all .25s}
+.btn-instagram:hover{border-color:var(--accent);color:var(--accent);background:rgba(194,0,0,.06)}
+.start-btn{background:var(--accent);color:#fff;border:2px solid var(--ink);padding:12px 30px;border-radius:11px;cursor:pointer;font-family:var(--font-title);font-weight:600;font-size:.9rem;transition:all .2s var(--ease-out-expo);text-transform:uppercase;letter-spacing:.06em;display:inline-flex;margin-bottom:100px;align-items:center;justify-content:center;gap:9px;box-shadow:var(--shadow-hard-sm);align-self:flex-start}
+.start-btn:hover{background:var(--accent-dark);transform:translate(-2px,-2px);box-shadow:4px 5px 0 rgba(34,34,34,.85)}
+.start-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(34,34,34,.85)}
+.start-btn i{font-size:.75rem}
+
+.test-card{display:flex;flex-direction:column;height:100%;min-height:0;width:100%;position:relative}
+.game-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:14px;margin-bottom:18px;margin-top:20px;border-bottom:1.5px dashed var(--border);flex-shrink:0}
+.game-header .brand{display:flex;align-items:baseline;gap:8px;min-width:0}
+.game-header .brand .l{font-weight:700;font-size:1rem;color:var(--accent);letter-spacing:-.03em;white-space:nowrap}
+.game-header .brand .s{font-family:var(--font-mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.progress-wrap{display:flex;align-items:center;gap:10px;flex:1;max-width:240px}
+.progress-track{flex:1;height:5px;background:rgba(34,34,34,.08);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);width:0;border-radius:4px;transition:width .55s var(--ease-out-expo)}
+.progress-count{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);white-space:nowrap;min-width:48px;text-align:right}
+.question-area{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;padding-right:18px;transition:opacity .2s ease}
+.level-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.66rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;background:rgba(194,0,0,.06);border:1px solid rgba(194,0,0,.18);padding:3px 9px;border-radius:999px;margin-bottom:12px;align-self:flex-start}
+.question-text{font-size:1.1rem;line-height:1.55;font-weight:500;margin-bottom:18px;min-height:48px}
+.options-list{display:flex;flex-direction:column;gap:8px}
+.option-btn{background:rgba(255,255,255,.6);border:1.5px solid var(--border-strong);color:var(--ink);padding:11px 15px;border-radius:11px;text-align:left;cursor:pointer;transition:all .2s var(--ease-out-expo);font-family:var(--font-title);font-size:.92rem;display:flex;align-items:center;width:100%}
+.opt-letter{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;font-family:var(--font-mono);font-weight:700;color:var(--muted);margin-right:11px;flex-shrink:0;border-radius:6px;border:1.5px solid var(--border-strong);font-size:.7rem}
+.option-btn:hover:not(.selected){border-color:var(--ink);transform:translateX(4px);box-shadow:-3px 0 0 var(--accent)}
+.option-btn.selected{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:var(--shadow-hard-sm);transform:translate(-1px,-1px)}
+.option-btn.selected .opt-letter{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.12)}
+.game-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;margin-top:14px;border-top:1.5px dashed var(--border);flex-shrink:0;margin-bottom:100px}
+.btn-nav{background:rgba(255,255,255,.5);border:1.5px solid var(--border-strong);color:var(--muted);cursor:pointer;font-family:var(--font-mono);font-size:.74rem;padding:8px 14px;border-radius:9px;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-transform:lowercase}
+.btn-nav:hover:not(:disabled){color:var(--accent);border-color:var(--accent);background:rgba(194,0,0,.06)}
+.btn-nav:disabled{opacity:.32;cursor:not-allowed}
+.btn-nav.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-nav.primary:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:#fff}
+
+.user-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;width:100%;margin-top:4px}
+.user-input-wrap{display:flex;flex-direction:column;gap:6px}
+.user-input-wrap.full{grid-column:1/-1}
+.user-input-wrap label{font-family:var(--font-mono);font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.user-input{font-family:var(--font-title);font-size:1rem;padding:12px 14px;border:1.5px solid var(--border-strong);border-radius:11px;background:rgba(255,255,255,.6);color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s,background .2s;width:100%}
+.user-input:focus{border-color:var(--accent);color:var(--accent);background:rgba(194,0,0,.06) outline: none !important;}
+.user-input.error{border-color:var(--accent);background:rgba(194,0,0,.04)}
+.user-hint{font-family:var(--font-mono);font-size:.66rem;color:var(--muted);margin-top:10px;line-height:1.5}
+
+.result-view{display:none;flex-direction:column;align-items:stretch;justify-content:flex-start;height:100%;width:100%;overflow-y:auto;overflow-x:hidden;margin-bottom:100px}
+.result-view.is-active{display:flex;animation:fadeIn .5s var(--ease-out-expo) forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.result-inner{padding:4px 18px 28px 4px;display:flex;flex-direction:column;align-items:flex-start;width:100%}
+.res-label{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.profile-badge{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;color:var(--accent);line-height:1.1;letter-spacing:-.04em;margin:4px 0 8px;text-shadow:3px 3px 0 rgba(194,0,0,.12)}
+.result-user{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);margin-bottom:10px}
+.res-desc{font-size:.92rem;color:var(--muted);line-height:1.65;max-width:62ch;margin-bottom:16px}
+.rec-box{background:rgba(255,255,255,.45);border:1.5px solid var(--border-strong);border-radius:12px;padding:14px 16px;width:100%;margin-bottom:14px}
+.rec-box h4{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.rec-box ul{list-style:none}
+.rec-box li{font-size:.82rem;margin-bottom:5px;padding-left:16px;position:relative;line-height:1.45}
+.rec-box li::before{content:"→";color:var(--accent);position:absolute;left:0;font-weight:600}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:100%;margin:6px 0 14px}
+.day{font:700 .72rem var(--font-mono);padding:10px 0;text-align:center;border:1.5px solid var(--border-strong);border-radius:9px;background:rgba(255,255,255,.55);cursor:pointer;color:var(--muted);transition:all .2s}
+.day:hover{border-color:var(--ink)}
+.day.on{background:var(--accent);border-color:var(--ink);color:#fff;box-shadow:var(--shadow-hard-sm)}
+.day.rest{border-style:dashed}
+#dp{width:100%}
+.dtitle{font-size:1.2rem;font-weight:700;letter-spacing:-.03em;margin-bottom:2px}
+.dmeta{font:.72rem var(--font-mono);color:var(--muted);margin-bottom:14px}
+.blk{background:#fff;border:1.5px solid var(--border-strong);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.bt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.bt b{font-size:.95rem}.bt span{font:.7rem var(--font-mono);color:var(--accent);white-space:nowrap}
+.bn{font:.66rem var(--font-mono);color:var(--muted);margin:3px 0 8px}
+.pre{display:none;font:.74rem/1.6 var(--font-mono);white-space:pre-wrap;background:#faf3f0;border:1px dashed var(--border-strong);border-radius:9px;padding:10px 12px;margin-bottom:8px}
+.pre.on{display:block}
+.mini{background:rgba(255,255,255,.6);border:1.5px solid var(--border-strong);color:var(--muted);font:.7rem var(--font-mono);padding:6px 11px;border-radius:8px;cursor:pointer;margin-right:6px}
+.mini:hover{color:var(--accent);border-color:var(--accent)}
+.rest-card{text-align:center;padding:34px 16px;border:1.5px dashed var(--border-strong);border-radius:12px;background:rgba(255,255,255,.4)}
+.rest-card p{font-size:.88rem;color:var(--muted);line-height:1.6;max-width:50ch;margin:8px auto 0}
+.contact-footer{background:#fcf7f7;border-radius:12px;padding:18px 20px;width:100%;margin:6px 0 14px}
+.contact-footer b{display:block;font-size:.95rem;margin-bottom:8px}
+.contact-footer p{font-size:.82rem;color:#313131c4;margin-bottom:12px;line-height:1.55}
+.contact-footer a{display:inline-flex;gap:7px;align-items:center;border:1.5px solid rgba(248,144,144,.66);color:#b40909;padding:7px 14px;border-radius:10px;font:.72rem var(--font-mono);text-decoration:none;margin:0 8px 6px 0}
+.contact-footer a:hover{background:rgba(250,103,103,.4);border-color:#af0505}
+.result-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.restart-btn,.pdf-btn{border:2px solid var(--ink);padding:9px 22px;border-radius:11px;cursor:pointer;font-family:var(--font-title);font-weight:600;font-size:.82rem;transition:all .2s var(--ease-out-expo);text-transform:uppercase;letter-spacing:.05em;display:inline-flex;align-items:center;gap:9px;box-shadow:var(--shadow-hard-sm)}
+.restart-btn{background:var(--accent);color:#fff}.pdf-btn{background:#fff;color:var(--ink)}
+.restart-btn:hover{background:var(--accent-dark);transform:translate(-2px,-2px);box-shadow:4px 5px 0 rgba(34,34,34,.85)}
+.pdf-btn:hover{background:var(--paper-warm);transform:translate(-2px,-2px);box-shadow:4px 5px 0 rgba(34,34,34,.85)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.user-input:focus-visible {
+  outline: none !important;
+}
+#print-area{display:none}
+
+.leitor-link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(194,0,0,.5); transition: color .15s, border-color .15s; }
+    .leitor-link:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+
+@media(min-width:1000px){.test-card{margin-top:80px}}
+@media(max-width:900px){
+body{padding:16px;padding-top:80px;align-items:flex-start;overflow-y:auto}
+.game-header{margin-top:0}
+.stage{height:auto;min-height:calc(100dvh - 96px);align-items:stretch}
+.page{position:relative;inset:auto;grid-template-columns:1fr;gap:28px;align-items:stretch;min-height:calc(100dvh - 96px)}
+.page:not(.is-active){display:none}.page.is-active{display:grid}
+.video-stage{max-width:100%}.start-btn{width:100%;align-self:stretch}
+.result-view{height:auto;overflow:visible}.question-area{overflow:visible}}
+@media(max-width:480px){.hero-title{font-size:1.9rem}.hero-sub{font-size:.8rem}.game-header{flex-wrap:wrap}.progress-wrap{max-width:none;flex-basis:100%}.question-text{font-size:1rem}.option-btn{padding:10px 13px;font-size:.88rem}.btn-nav{font-size:.7rem;padding:7px 11px}.user-fields{grid-template-columns:1fr}.days{gap:4px}.day{font-size:.62rem;padding:9px 0}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+@page{margin:12mm}
+@media print{
+html,body{height:auto;overflow:visible}
+body{display:block;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:11px}
+.stage{display:none!important}
+#print-area{display:block!important}
+#print-area h1{font-size:26px;letter-spacing:-.04em;margin-bottom:4px}
+#print-area h1 span,.pa-badge,.pa-day b.pt{color:var(--accent)}
+.pa-badge{font-size:24px;font-weight:700;letter-spacing:-.03em;margin:6px 0}
+.pa-meta{font:10px var(--font-mono);color:var(--muted);margin-bottom:6px}
+.pa-p{font-size:11px;line-height:1.55;margin-bottom:10px}
+.pa-box{border:1px solid #ccc;border-radius:8px;padding:8px 10px;margin-bottom:10px;break-inside:avoid}
+.pa-box h4{font:700 9px var(--font-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.pa-box li{margin:0 0 3px 14px;font-size:10.5px;line-height:1.45}
+.pa-day{border:1px solid #ccc;border-radius:8px;padding:8px 10px;margin-bottom:10px;break-inside:avoid}
+.pa-day b.pt{font-size:13px;display:block;margin-bottom:4px}
+.pa-b{border-top:1px dashed #ccc;padding-top:5px;margin-top:5px;font-size:10.5px}
+.pa-b em{color:var(--muted)}
+.pa-b p{font:9.5px/1.5 var(--font-mono);margin-top:3px}}
+</style>
+</head>
+<body>
+<div class="stage">
+
+<!-- INTRO -->
+<div class="page page--intro is-active" id="page-intro">
+  <div class="col-left">
+    <div>
+      <div class="eyebrow">Mars Education</div>
+      <h1 class="hero-title">Aprenda <span class="accent">com IA</span></h1>
+      <p class="hero-sub">Responda perguntas e receba um cronograma de 7 dias com atividades prontas para fazer na IA que você preferir.</p>
+    </div>
+    <div class="video-stage">
+      <video id="mars-video" autoplay muted playsinline preload="auto" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
+        <source src="https://dididoingles.github.io/discoveryourprofile/sherlockmars1.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <div class="col-right">
+    <p class="desc-lead"><strong>Importante:</strong> Seu plano vai ter todos os prompts prontos para você copiar e colar, mas é importante questionar. Peça fontes que você possa verificar e não deixe de usar o <a href="https://dididoingles.github.io/leitor/" target="_blank" rel="noopener noreferrer" class="leitor-link">leitor interativo</a> para ouvir e praticar a pronúncia!</p>
+    <div class="meta-row">
+      <span class="meta-chip"><i class="fa-solid fa-clock"></i>~3 min</span>
+      <span class="meta-chip"><i class="fa-solid fa-calendar-week"></i>6 dias + descanso</span>
+      <span class="meta-chip"><i class="fa-solid fa-copy"></i>Prompts</span>
+      <span class="meta-chip"><i class="fa-solid fa-brain"></i>Base em ciência cognitiva</span>
+      <a href="https://instagram.com/dicarvalho.prof" target="_blank" rel="noopener noreferrer" class="btn-instagram" aria-label="Instagram do professor"><i class="fa-brands fa-instagram"></i> Siga-nos</a>
+    </div>
+    <button class="start-btn" onclick="setActivePage(pageIdentify);setTimeout(()=>$('userName').focus(),350)"><i class="fa-solid fa-play"></i> Começar</button>
+  </div>
+</div>
+
+<!-- IDENTIFICAÇÃO -->
+<div class="page page--identify" id="page-identify">
+  <div class="test-card" style="grid-column:1/-1;">
+    <div class="game-header">
+      <div class="brand"><span class="l">Antes de começar</span><span class="s">// Mars × Lab</span></div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><span class="progress-count">0 / 9</span></div>
+    </div>
+    <div class="question-area" style="padding-right:4px;">
+      <span class="level-tag"><i class="fa-solid fa-id-card"></i> Identificação</span>
+      <p class="question-text">Como podemos te chamar?</p>
+      <div class="user-fields">
+        <div class="user-input-wrap"><label for="userName">Seu nome</label><input type="text" id="userName" class="user-input" placeholder="Escreva aqui" maxlength="40" autocomplete="given-name"></div>
+        <div class="user-input-wrap"><label for="userRest">Dia de descanso</label><select id="userRest" class="user-input"><option value="0">Domingo</option><option value="6">Sábado</option><option value="1">Segunda</option><option value="2">Terça</option><option value="3">Quarta</option><option value="4">Quinta</option><option value="5">Sexta</option></select></div>
+        <div class="user-input-wrap full"><label for="userTopic">Um assunto que você gosta</label><input type="text" id="userTopic" class="user-input" placeholder="Ex.: futebol, culinária, direito, games" maxlength="50"></div>
+      </div>
+      <p class="user-hint">Os exercícios serão montados em cima desse assunto. Não coletamos dados.</p>
+    </div>
+    <div class="game-footer">
+      <button class="btn-nav" onclick="setActivePage(pageIntro)"><i class="fa-solid fa-chevron-left"></i> anterior</button>
+      <button class="btn-nav primary" onclick="goToTest()">iniciar <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- TESTE + RESULTADO -->
+<div class="page page--test" id="page-test">
+  <div class="test-card" style="grid-column:1/-1;">
+    <div id="game-ui" style="display:none;flex-direction:column;height:100%;min-height:0;">
+      <div class="game-header">
+        <div class="brand"><span class="l">Hábitos de estudo</span><span class="s">// Mars × Lab</span></div>
+        <div class="progress-wrap"><div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div><span id="progress-count" class="progress-count"></span></div>
+      </div>
+      <div id="question-area" class="question-area"></div>
+      <div class="game-footer">
+        <button id="prev-btn" class="btn-nav" onclick="prev()"><i class="fa-solid fa-chevron-left"></i> anterior</button>
+        <span></span>
+      </div>
+    </div>
+
+    <div id="result-ui" class="result-view">
+      <div class="result-inner">
+        <div class="res-label">Seu perfil</div>
+        <div id="profile-badge" class="profile-badge"></div>
+        <p class="result-user" id="resultUser"></p>
+        <p id="profile-desc" class="res-desc"></p>
+        <div class="rec-box"><h4><i class="fa-solid fa-bullseye"></i> Ênfase do seu plano</h4><ul id="focusList"></ul></div>
+        <div class="res-label">Sua semana</div>
+        <div class="days" id="dy"></div>
+        <div id="dp"></div>
+        <div class="rec-box" style="margin-top:18px"><h4><i class="fa-solid fa-shield-halved"></i> Regras de ouro ao usar a IA</h4><ul id="rulesList"></ul></div>
+        <div class="contact-footer">
+          <b>Quer acompanhamento de um professor?</b>
+          <p>Posso ajustar este plano ao seu ritmo. Me chama pra conversar!</p>
+          <a href="https://instagram.com/dicarvalho.prof" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> @dicarvalho.prof</a>
+          <a href="https://wa.me/5516993272278?text=Ol%C3%A1%21%20Fiz%20o%20plano%20de%20estudos%20e%20quero%20saber%20mais." target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> (16) 99327-2278</a>
+        </div>
+        <div class="result-actions">
+          <button class="restart-btn" onclick="resetTest()"><i class="fa-solid fa-rotate-right"></i> Refazer</button>
+          <button class="pdf-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Imprimir  PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<div id="print-area"></div>
+
+<script>
+(function(){const v=document.getElementById('mars-video');if(!v)return;v.muted=true;v.autoplay=true;v.loop=false;
+v.addEventListener('loadedmetadata',()=>{const p=v.play();if(p&&p.catch)p.catch(()=>{})});
+v.addEventListener('ended',()=>{v.pause();v.currentTime=Math.max(0,v.duration-.05)});
+v.addEventListener('contextmenu',e=>e.preventDefault())})();
+
+const $=id=>document.getElementById(id);
+const pageIntro=$('page-intro'),pageIdentify=$('page-identify'),pageTest=$('page-test');
+function setActivePage(p){[pageIntro,pageIdentify,pageTest].forEach(x=>{if(x!==p)x.classList.remove('is-active')});p.classList.add('is-active')}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+const Q=[
+["Qual é o seu nível atual de inglês?",["Iniciante (A1–A2)","Intermediário (B1)","Intermediário alto (B2)","Avançado (C1+)"]],
+["Qual é o seu principal objetivo?",["Conversar com confiança","Trabalho e carreira","Provas e certificados","Viagens e cultura"]],
+["Quanto tempo você tem por dia, de verdade?",["20 minutos","30 minutos","45 minutos","60 minutos"]],
+["Como você se sente ao falar inglês com outras pessoas?",["Travo ou evito falar","Fico bem nervoso, mas falo","Um pouco tenso no início","Tranquilo, gosto de falar"]],
+["Ao estudar, você se testa antes de reler ou assistir de novo?",["Nunca","Às vezes","Frequentemente","Sempre"]],
+["Em quantos dias da semana você produz inglês (fala ou escrita)?",["0 a 1","2 a 3","4 a 5","Todos"]],
+["O que você faz com os seus erros?",["Evito errar","Fico frustrado e paro","Corrijo e esqueço","Registro e reviso depois"]],
+["Como você espaça as revisões?",["Estudo tudo de uma vez","Só revejo quando esqueço","Tento, mas sem constância","Tenho um sistema fixo"]],
+["Com que frequência você questiona ou compara fontes e argumenta em inglês?",["Nunca","Raramente","Às vezes","Frequentemente"]]];
+let A=[],cur=0,U={},busy=false;
+const L='ABCD';
+
+function goToTest(){const n=$('userName'),v=n.value.trim();n.classList.toggle('error',!v);if(!v){n.focus();return}
+U={n:v,i:$('userTopic').value.trim(),r:+$('userRest').value};A=Array(Q.length).fill(null);cur=0;busy=false;
+setActivePage(pageTest);
+setTimeout(()=>{$('game-ui').style.display='flex';$('result-ui').classList.remove('is-active');render()},320)}
+function render(){const[q,o]=Q[cur],a=$('question-area');
+$('progress-fill').style.width=(cur+1)/Q.length*100+'%';$('progress-count').textContent=`${cur+1} / ${Q.length}`;$('prev-btn').disabled=cur===0;
+a.style.opacity='0';
+setTimeout(()=>{a.innerHTML=`<span class="level-tag"><i class="fa-solid fa-brain"></i> Hábito · ${cur+1}</span><p class="question-text">${q}</p><div class="options-list">${o.map((t,i)=>`<button class="option-btn ${A[cur]===i?'selected':''}" onclick="pick(${i})"><span class="opt-letter">${L[i]}</span><span>${t}</span></button>`).join('')}</div>`;a.scrollTop=0;a.style.opacity='1'},150)}
+function pick(i){if(busy)return;busy=true;A[cur]=i;
+document.querySelectorAll('.option-btn').forEach((b,j)=>b.classList.toggle('selected',j===i));
+setTimeout(()=>{busy=false;cur<Q.length-1?(cur++,render()):finish()},380)}
+function prev(){if(cur>0&&!busy){cur--;render()}}
+function resetTest(){A=[];U={};['userName','userTopic'].forEach(i=>$(i).value='');$('userRest').value='0';setActivePage(pageIntro);
+setTimeout(()=>{$('game-ui').style.display='none';$('result-ui').classList.remove('is-active')},320)}
+
+const LV=['A1–A2','B1','B2','C1+'],GO=['conversar com confiança','trabalho e carreira','provas e certificados','viagens e cultura'],
+HI=['português simples, usando só inglês bem curto e simples','inglês simples (use português só se eu pedir)','inglês natural','inglês, em nível avançado'],
+DN=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],ORD=[1,2,3,4,5,6,0];
+const RULES=["Tente responder sozinho antes de pedir a resposta. O esforço de recuperar é o que fixa.","Uma pergunta por vez. Se a IA despejar texto, interrompa e peça para refazer.","A IA erra gramática e inventa regras. Se algo parecer estranho, peça fonte ou confirme em um dicionário.","Sentir que está difícil e que você erra bastante é sinal de que o método funciona. Fluência fácil engana.","Sessões curtas e regulares vencem maratonas. Respeite o dia de descanso: é nele que a memória consolida."];
+const REST="Hoje o cérebro consolida o que você praticou. Sem estudo formal. Se quiser, apenas ouça ou assista algo em inglês por prazer.";
+const AC={
+recall:["Teste de recuperação","Recuperação ativa",c=>`Me teste sobre o que estudei nos últimos dias (anotações e erros, se houver: [cole aqui]). Faça 5 perguntas de recuperação (completar frase, tradução, produzir uma frase), uma por vez, ANTES de qualquer explicação. No fim, diga quais itens devo rever.`],
+chunks:["Expressões em contexto","Codificação elaborativa",c=>`Crie 8 expressões ou colocações úteis (não palavras soltas) sobre ${c.t}, para o meu objetivo: ${c.g}. Mostre 2 por vez. Para cada uma, peça que eu crie uma frase real minha ANTES de mostrar o seu exemplo.`],
+shadow:["Shadowing","Fonologia e memória motora",c=>`Escreva um texto de uns 80 palavras sobre ${c.t}, em frases curtas. Vou ouvi-lo no leitor de voz, repetir em voz alta logo depois de cada frase e, por fim, ler sozinho. Depois me faça 3 perguntas sobre o texto.`],
+write:["Escrita guiada","Hipótese do output",c=>`Proponha um tema sobre ${c.t}. Vou escrever de 6 a 8 linhas. Responda com a versão corrigida (recast), destaque no máximo 3 padrões de erro e me peça para reescrever a frase com meu pior erro.`],
+review:["Revisão espaçada de erros","Efeito de espaçamento",c=>`Estes são meus erros de 1, 3 e 7 dias atrás: [cole aqui]. Transforme-os em mini-exercícios, começando pelos mais antigos, um por vez, sem dar a resposta antes de eu tentar.`],
+interleave:["Contraste de estruturas","Interleaving",c=>`Misture, em ordem aleatória, exercícios de duas estruturas parecidas adequadas ao meu nível (ex.: present perfect x past simple, ou in/on/at). Eu escolho e justifico. Só depois você confirma.`],
+explain:["Ensine à IA","Efeito de geração",c=>`Finja ser um aluno iniciante e confuso. Vou explicar com minhas palavras uma regra de inglês de hoje. Faça perguntas ingênuas que revelem buracos na minha explicação.`],
+talk:["Conversa por voz","Output e fluência",c=>`Converse comigo por voz sobre ${c.t}. Não interrompa meus erros. No fim, mostre 3 correções (recasts) e 3 expressões que eu poderia ter usado.`],
+talkS:["Conversa com roteiro","Fala com baixa ansiedade",c=>`Vamos conversar sobre ${c.t} em duas etapas: (1) eu escrevo as respostas e você responde por texto; (2) repetimos as mesmas perguntas por voz, sem eu ler. Sem julgamento: erro é só informação.`],
+critical:["Debate crítico","Metacognição e argumentação",c=>`Escolha uma afirmação discutível sobre ${c.t} e defenda-a. Eu vou contra-argumentar em inglês com justificativa. Aponte falácias ou lacunas e me peça evidências. Não aceite "concordo": me peça sempre um porquê.`],
+criticalW:["Debate escrito","Metacognição e argumentação",c=>`Escolha uma afirmação discutível sobre ${c.t} e defenda-a por texto. Eu respondo por escrito, sem pressa, com justificativa. Aponte lacunas nos meus argumentos e me peça evidências.`],
+verify:["Ache o erro da IA","Monitoramento crítico",c=>`Explique uma regra de inglês do meu nível com exemplos e inclua UM erro sutil de propósito. Eu tento achar e justificar. Só depois revele qual era.`],
+micro:["Micro-output","Hipótese do output",c=>`Peça 3 frases minhas sobre o meu dia usando vocabulário de hoje. Corrija por recast, sem explicar regras.`],
+reflect:["Previsão e autoavaliação","Metacognição",c=>`Antes de praticar, peça que eu preveja de 0 a 100% meu desempenho em 5 itens da semana. Aplique os itens, compare com a previsão e me ajude a ajustar o foco da próxima semana.`],
+free:["Leitura ou escuta autêntica","Input compreensível",c=>`Recomende um trecho curto e autêntico sobre ${c.t} no meu nível. Depois que eu ler ou ouvir, peça um resumo de 2 minutos sem eu olhar o texto.`]};
+const PF={
+conf:["Construtor de Confiança","Seu maior ganho está em reduzir a ativação ansiosa ao produzir. Sob estresse, a atenção fica ocupada com monitoramento de ameaça e a recuperação de palavras piora. O plano começa pela escrita, de baixo risco social, e migra aos poucos para a fala, tratando o erro como informação.",["Escrever antes de falar, e falar com roteiro nas primeiras semanas","Correção por reformulação, sem listas longas de erros","Metas pequenas e progresso visível a cada sessão"]],
+prod:["Produtor em Ativação","Você consome mais do que produz. O input é necessário, mas produzir força o processamento da gramática e revela lacunas que só aparecem quando você tenta dizer algo. O plano insere micro-output em vários dias.",["Produzir algo todos os dias, mesmo que pouco","Texto e fala depois de cada novo conteúdo","Feedback imediato da IA, sempre depois da sua tentativa"]],
+rev:["Revisor Estratégico","Você pratica, mas a retenção depende de recuperação e espaçamento. O plano começa as sessões com testes e reorganiza as revisões em intervalos crescentes.",["Testar-se antes de reler","Revisões em 1, 3 e 7 dias, com seus próprios erros","Menos conteúdo novo, mais consolidação"]],
+ref:["Refinador Crítico","Seus hábitos já são sólidos. O ganho marginal vem de dificuldade crescente, precisão e argumentação. O plano aumenta o espaço para debate e para checar a própria IA.",["Argumentar e justificar em inglês","Contrastar estruturas parecidas","Questionar as respostas da IA"]]};
+let P=[],T=[],plan={},HDR='',PK='';
+
+function finish(){
+$('game-ui').style.display='none';$('result-ui').classList.add('is-active');
+const lv=A[0],anx=3-A[3],ctx={t:U.i||GO[A[1]],g:GO[A[1]],l:LV[lv],h:HI[lv]},min=[20,30,45,60][A[2]];
+const k=anx>=2?'conf':A[5]<=1?'prod':(A[4]<=1||A[7]<=1)?'rev':'ref';PK=k;
+const S=[['Conteúdo novo',['recall','chunks','shadow']],['Escrita guiada',['recall','write','review']],['Contraste e explicação',['recall','interleave','explain']],['Fala',['shadow',k=='conf'?'talkS':'talk','reflect']],['Pensamento crítico',['recall',k=='conf'?'criticalW':'critical','verify']],['Integração leve',['review','free','reflect']]];
+if(k=='prod'||A[5]<=1){S[0][1].push('micro');S[2][1].push('micro')}
+if(k=='rev')S[0][1][0]='review';
+if(k=='ref')S[1][1][2]='critical';
+HDR=`Você é meu tutor de inglês (meu nível: ${ctx.l}). Regras: fale comigo em ${ctx.h}; faça UMA pergunta por vez; nunca me dê a resposta antes de eu tentar; corrija reformulando minha frase corretamente e só explique a regra se eu pedir.`;
+P=[];T=[];plan={};const st=(U.r+1)%7;
+S.forEach((s,j)=>{const d=(st+j)%7,m=Math.max(5,Math.round(min/s[1].length/5)*5);
+plan[d]={t:s[0],b:s[1].map(a=>{const x=AC[a],tx=x[2](ctx);T.push(tx);P.push(HDR+'\n\nTarefa: '+tx);return{n:x[0],g:x[1],m,i:P.length-1}})}});
+$('profile-badge').textContent=PF[k][0];$('profile-desc').textContent=PF[k][1];
+$('focusList').innerHTML=PF[k][2].map(x=>`<li>${x}</li>`).join('');
+$('rulesList').innerHTML=RULES.map(x=>`<li>${x}</li>`).join('');
+$('resultUser').textContent=`${U.n} · nível ${ctx.l} · ${min} min por dia`;
+$('dy').innerHTML=ORD.map(d=>`<button class="day ${d==U.r?'rest':''}" id="d${d}" onclick="sel(${d})">${DN[d].slice(0,3)}</button>`).join('');
+sel(ORD.find(d=>d!=U.r));buildPrint(ctx,min)}
+
+function dayHtml(d){const p=plan[d];
+if(!p)return`<div class="rest-card"><div class="dtitle">${DN[d]} · Descanso</div><p>${REST}</p></div>`;
+const tot=p.b.reduce((a,b)=>a+b.m,0);
+return`<div class="dtitle">${DN[d]} · ${p.t}</div><div class="dmeta">~${tot} min · ${p.b.length} blocos</div>`+p.b.map(b=>`<div class="blk"><div class="bt"><b>${b.n}</b><span>${b.m} min</span></div><div class="bn">${b.g}</div><div class="pre" id="p${b.i}">${esc(P[b.i])}</div><button class="mini" onclick="$('p${b.i}').classList.toggle('on')"><i class="fa-solid fa-eye"></i> ver prompt</button><button class="mini" onclick="cp(${b.i},this)"><i class="fa-solid fa-copy"></i> copiar</button></div>`).join('')}
+function sel(d){document.querySelectorAll('.day').forEach(e=>e.classList.toggle('on',e.id=='d'+d));$('dp').innerHTML=dayHtml(d)}
+function cp(i,b){const t=P[i],ok=()=>{b.innerHTML='<i class="fa-solid fa-check"></i> copiado';setTimeout(()=>b.innerHTML='<i class="fa-solid fa-copy"></i> copiar',1600)};
+if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>0);else{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();ok()}}
+
+function buildPrint(ctx,min){
+const days=ORD.map(d=>{const p=plan[d];
+if(!p)return`<div class="pa-day"><b class="pt">${DN[d]} · Descanso</b><p class="pa-p" style="margin:0">${REST}</p></div>`;
+const tot=p.b.reduce((a,b)=>a+b.m,0);
+return`<div class="pa-day"><b class="pt">${DN[d]} · ${p.t} (~${tot} min)</b>${p.b.map(b=>`<div class="pa-b"><strong>${b.n}</strong> · ${b.m} min · <em>${b.g}</em><p>${esc(T[b.i])}</p></div>`).join('')}</div>`}).join('');
+$('print-area').innerHTML=`<div class="eyebrow">Mars Education</div><h1>Plano de estudos <span>com IA</span></h1>
+<div class="pa-meta">${esc(U.n)} · nível ${ctx.l} · ${min} min por dia · ${new Date().toLocaleDateString('pt-BR')}</div>
+<div class="pa-badge">${PF[PK][0]}</div><p class="pa-p">${PF[PK][1]}</p>
+<div class="pa-box"><h4>Ênfase do seu plano</h4><ul>${PF[PK][2].map(x=>`<li>${x}</li>`).join('')}</ul></div>
+<div class="pa-box"><h4>Instrução base: cole no início de cada conversa com a IA</h4><p class="pa-p" style="margin:0;font:9.5px/1.5 var(--font-mono)">${esc(HDR)}</p></div>
+${days}
+<div class="pa-box"><h4>Regras de ouro ao usar a IA</h4><ul>${RULES.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+<div class="pa-meta">Mars Education · @dicarvalho.prof · (16) 99327-2278</div>`}
+
+['userName','userTopic'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goToTest()}}));
+
+if(window.parent&&window.parent!==window){window.parent.postMessage({action:'pageLoaded',route:'plano'},'*')}
+</script>
+</body>
+</html>
