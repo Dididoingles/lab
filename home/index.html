@@ -738,6 +738,26 @@
                 if (navigator.onLine) el.classList.remove('show');
             });
         })();
+
+        function applyViewportHeight() {
+  const appShell = document.querySelector('.main-wrapper'); // seu container raiz
+  if (appShell) {
+    appShell.style.height = window.innerHeight + 'px';
+  }
+}
+
+// Executar uma vez na inicialização
+applyViewportHeight();
+
+// Recalcular ao redimensionar (inclui rotação de tela)
+window.addEventListener('resize', applyViewportHeight);
+
+// Recalcular ao retornar do background para o primeiro plano
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    applyViewportHeight();
+  }
+});
     </script>
 
 </body>
