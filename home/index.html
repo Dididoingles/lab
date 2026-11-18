@@ -233,6 +233,43 @@
             .mars-drawer { width: 32px; height: 32px; transform: translateY(7px); }
             .mars-drawer:hover { transform: translateY(7px) scale(1.1) rotate(-5deg); }
         }
+
+        /* ===== OVERLAY OFFLINE ===== */
+        .offline-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            background: rgba(245, 240, 240, 0.94);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            padding: 24px;
+        }
+        .offline-overlay.show { display: flex; }
+        .offline-card {
+            background: var(--paper);
+            border: 2px solid var(--ink);
+            border-radius: 18px;
+            padding: 28px 24px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-hard-sm);
+            font-family: var(--font-title);
+        }
+        .offline-card h2 { font-size: 18px; margin-bottom: 8px; color: var(--ink); }
+        .offline-card p  { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+        .offline-retry {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-family: var(--font-title);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .offline-retry:hover { background: var(--accent-dark); }
     </style>
 </head>
 <body>
@@ -326,6 +363,15 @@
                     <li>Confirme o nome e toque em <strong>Adicionar</strong>.</li>
                 </ol>
             </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY OFFLINE -->
+    <div class="offline-overlay" id="offline-overlay" aria-hidden="true" role="alertdialog" aria-live="assertive">
+        <div class="offline-card">
+            <h2>Você está offline</h2>
+            <p>O Language Lab precisa de conexão para carregar esta parte. Verifique sua internet e tente novamente.</p>
+            <button class="offline-retry" id="offline-retry">Tentar novamente</button>
         </div>
     </div>
 
@@ -675,6 +721,21 @@
                     syncMobileNavThumb(initialHighlight);
                     updateBackBtn();
                 }, 150);
+            });
+        })();
+
+        // === OVERLAY OFFLINE ===
+        (function () {
+            const el = document.getElementById('offline-overlay');
+            if (!el) return;
+            const toggle = () => el.classList.toggle('show', !navigator.onLine);
+            toggle();
+            addEventListener('online',  toggle);
+            addEventListener('offline', toggle);
+
+            const btn = document.getElementById('offline-retry');
+            if (btn) btn.addEventListener('click', () => {
+                if (navigator.onLine) el.classList.remove('show');
             });
         })();
     </script>
