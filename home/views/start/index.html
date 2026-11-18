@@ -245,6 +245,27 @@
     transform: scale(0.98);
 }
 
+.tool-card.exclusive {
+            cursor: allowed;
+        }
+        .tool-card.exclusive::after {
+            content: 'Novo';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #c20000;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 8px;
+            letter-spacing: 0.10em;
+            padding: 4px 7px;
+            border-radius: 6px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        
 
         /* =========================================
            CARROSSEL — ELIPSE 3D HARMÔNICA
@@ -428,25 +449,25 @@
                 <h2 class="section-title">Acesso rápido</h2>
             </div>
             <div class="quick-grid">
-                <a class="quick-card" href="../../../breve.html" style="--aura:#c20000;--aura-shadow:rgba(120,0,0,0.18);">
-                    <img src="../../../assets/study.webp" alt="Gerador de plano de estudos">
-                    <span class="quick-card-name">Plano de estudos</span>
-                    <span class="quick-card-desc">Monte seu cronograma</span>
+                <a class="quick-card tool-card exclusive" href="../plano/" style="--aura:#c20000;--aura-shadow:rgba(120,0,0,0.18);">
+                    <img src="../../../assets/study.webp" alt="Gerador de plano de estudos" class="tool-card-art">
+                    <span class="quick-card-name tool-card-name">Plano de estudos</span>
+                    <span class="quick-card-desc">Gere um cronograma para estudar com IA</span>
                 </a>
                 <a class="quick-card" href="../teste/" target="" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
                     <img src="../../../assets/level1.webp" alt="Nivelamento">
                     <span class="quick-card-name">Teste de nível</span>
-                    <span class="quick-card-desc">Descubra seu inglês</span>
+                    <span class="quick-card-desc">Uma resposta rápida ou uma análise completa?</span>
                 </a>
                 <a class="quick-card" href="../perfil/" target="" rel="noopener noreferrer" style="--aura:#c20000;--aura-shadow:rgba(120,0,0,0.18);">
                     <img src="../../../assets/brain.webp" alt="Perfil de aprendizagem">
-                    <span class="quick-card-name">Perfil de aprendizagem</span>
-                    <span class="quick-card-desc">Como você aprende</span>
+                    <span class="quick-card-name">Perfil do aluno</span>
+                    <span class="quick-card-desc">Você está estudando do jeito certo?</span>
                 </a>
                 <a class="quick-card" href="https://dididoingles.github.io/Whiteboard/" target="_blank" rel="noopener noreferrer" style="--aura:#2b2b2b;--aura-shadow:rgba(15,15,15,0.18);">
                     <img src="../../../assets/board.webp" alt="Whiteboard">
                     <span class="quick-card-name">Whiteboard</span>
-                    <span class="quick-card-desc">Nossa lousinha de aula</span>
+                    <span class="quick-card-desc">Nosso quadro branco que traduz e gamifica</span>
                 </a>
             </div>
         </section>
