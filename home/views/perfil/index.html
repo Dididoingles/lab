@@ -821,6 +821,58 @@
             box-shadow: var(--shadow-hard-sm);
         }
 
+        /* ===== LOADER DE PÁGINA INTEIRA ===== */
+.video-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--paper, #fff6f2);
+  background-image:
+    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(194,0,0,.06) 0%, rgba(194,0,0,0) 60%),
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(194,0,0,.06) 0%, rgba(194,0,0,0) 60%),
+    radial-gradient(ellipse 50% 60% at 50% 0%, rgba(194,0,0,.03) 0%, rgba(194,0,0,0) 70%);
+  z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .6s var(--ease-out-expo), visibility 0s linear .6s;
+}
+
+.video-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.video-loader i {
+  font-size: 3.6rem;
+  color: #b74948;
+  animation: atom-spin 1.6s linear infinite;
+  filter: drop-shadow(0 0 14px rgba(183,73,72,.35));
+}
+
+.video-loader span {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #b74948;
+  opacity: .8;
+}
+
+@keyframes atom-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-loader i { animation: none; }
+}
+
       
         @media (min-width: 1000px) {
             
@@ -920,6 +972,11 @@
   
 
     <div class="stage">
+
+        <div class="video-loader" id="videoLoader">
+  <i class="fa-solid fa-flask"></i>
+  <span>Carregando…</span>
+</div>
 
         <!-- PÁGINA 1: INTRO -->
         <div class="page page--intro is-active" id="page-intro">
@@ -1096,22 +1153,54 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        (function () {
-            const video = document.getElementById('mars-video');
-            if (!video) return;
-            video.muted = true;
-            video.autoplay = true;
-            video.loop = false;
-            video.addEventListener('loadedmetadata', () => {
-                const p = video.play();
-                if (p && p.catch) p.catch(() => {});
-            });
-            video.addEventListener('ended', () => {
-                video.pause();
-                video.currentTime = Math.max(0, video.duration - 0.05);
-            });
-            video.addEventListener('contextmenu', e => e.preventDefault());
-        })();
+        (function(){
+  const v = document.getElementById('mars-video');
+  const loader = document.getElementById('videoLoader');
+  if (!v) return;
+
+  // Trava scroll enquanto o loader está ativo
+  document.body.style.overflow = 'hidden';
+
+  v.muted = true;
+  v.autoplay = true;
+  v.loop = false;
+
+  let hidden = false;
+  const hideLoader = () => {
+    if (hidden) return;
+    hidden = true;
+    if (loader) loader.classList.add('is-hidden');
+    document.body.style.overflow = ''; // libera o scroll
+  };
+
+  if (v.readyState >= 3) hideLoader();
+
+  v.addEventListener('canplay', hideLoader);
+  v.addEventListener('playing', hideLoader);
+
+  // Rede lenta: libera em no máximo 8s para não travar a página
+  setTimeout(hideLoader, 8000);
+
+  v.addEventListener('loadedmetadata', () => {
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  });
+
+  v.addEventListener('ended', () => {
+    v.pause();
+    v.currentTime = Math.max(0, v.duration - 0.05);
+  });
+
+  v.addEventListener('contextmenu', e => e.preventDefault());
+
+  v.addEventListener('error', () => {
+    hideLoader();
+    if (loader) {
+      const span = loader.querySelector('span');
+      if (span) span.textContent = 'Vídeo indisponível';
+    }
+  });
+})();
 
         const pageIntro    = document.getElementById('page-intro');
         const pageIdentify = document.getElementById('page-identify');
