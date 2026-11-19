@@ -124,6 +124,59 @@ mask-image:radial-gradient(ellipse 95% 95% at 50% 50%,#000 55%,transparent 100%)
 .user-input:focus-visible {
   outline: none !important;
 }
+
+/* ===== LOADER DE PÁGINA INTEIRA ===== */
+.video-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--paper, #fff6f2);
+  background-image:
+    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(194,0,0,.06) 0%, rgba(194,0,0,0) 60%),
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(194,0,0,.06) 0%, rgba(194,0,0,0) 60%),
+    radial-gradient(ellipse 50% 60% at 50% 0%, rgba(194,0,0,.03) 0%, rgba(194,0,0,0) 70%);
+  z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .6s var(--ease-out-expo), visibility 0s linear .6s;
+}
+
+.video-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.video-loader i {
+  font-size: 3.6rem;
+  color: #b74948;
+  animation: atom-spin 1.6s linear infinite;
+  filter: drop-shadow(0 0 14px rgba(183,73,72,.35));
+}
+
+.video-loader span {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #b74948;
+  opacity: .8;
+}
+
+@keyframes atom-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-loader i { animation: none; }
+}
+
 #print-area{display:none}
 
 .leitor-link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(194,0,0,.5); transition: color .15s, border-color .15s; }
@@ -147,6 +200,7 @@ body{padding:16px;padding-top:80px;align-items:flex-start;overflow-y:auto}
 html,body{height:auto;overflow:visible}
 body{display:block;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:11px}
 .stage{display:none!important}
+.video-loader{display:none!important}
 #print-area{display:block!important}
 #print-area h1{font-size:26px;letter-spacing:-.04em;margin-bottom:4px}
 #print-area h1 span,.pa-badge,.pa-day b.pt{color:var(--accent)}
@@ -164,6 +218,13 @@ body{display:block;padding:0;background:#fff;-webkit-print-color-adjust:exact;pr
 </style>
 </head>
 <body>
+
+<!-- ALTERADO: loader movido para cá, cobrindo a página inteira -->
+<div class="video-loader" id="videoLoader">
+  <i class="fa-solid fa-flask"></i>
+  <span>…</span>
+</div>
+
 <div class="stage">
 
 <!-- INTRO -->
@@ -175,6 +236,7 @@ body{display:block;padding:0;background:#fff;-webkit-print-color-adjust:exact;pr
       <p class="hero-sub">Responda perguntas e receba um cronograma de 7 dias com atividades prontas para fazer na IA que você preferir.</p>
     </div>
     <div class="video-stage">
+      <!-- ALTERADO: loader removido daqui -->
       <video id="mars-video" autoplay muted playsinline preload="auto" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
         <source src="https://dididoingles.github.io/lab/assets/marsplano.mp4" type="video/mp4">
       </video>
@@ -262,10 +324,54 @@ body{display:block;padding:0;background:#fff;-webkit-print-color-adjust:exact;pr
 <div id="print-area"></div>
 
 <script>
-(function(){const v=document.getElementById('mars-video');if(!v)return;v.muted=true;v.autoplay=true;v.loop=false;
-v.addEventListener('loadedmetadata',()=>{const p=v.play();if(p&&p.catch)p.catch(()=>{})});
-v.addEventListener('ended',()=>{v.pause();v.currentTime=Math.max(0,v.duration-.05)});
-v.addEventListener('contextmenu',e=>e.preventDefault())})();
+(function(){
+  const v = document.getElementById('mars-video');
+  const loader = document.getElementById('videoLoader');
+  if (!v) return;
+
+  // ALTERADO: trava o scroll enquanto o loader cobre a página
+  document.body.style.overflow = 'hidden';
+
+  v.muted = true;
+  v.autoplay = true;
+  v.loop = false;
+
+  let hidden = false;
+  const hideLoader = () => {
+    if (hidden) return;
+    hidden = true;
+    if (loader) loader.classList.add('is-hidden');
+    document.body.style.overflow = ''; // ALTERADO: libera o scroll
+  };
+
+  if (v.readyState >= 3) hideLoader();
+
+  v.addEventListener('canplay', hideLoader);
+  v.addEventListener('playing', hideLoader);
+
+  // Rede lenta: libera em no máximo 8s para não travar a página
+  setTimeout(hideLoader, 8000);
+
+  v.addEventListener('loadedmetadata', () => {
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  });
+
+  v.addEventListener('ended', () => {
+    v.pause();
+    v.currentTime = Math.max(0, v.duration - 0.05);
+  });
+
+  v.addEventListener('contextmenu', e => e.preventDefault());
+
+  v.addEventListener('error', () => {
+    hideLoader();
+    if (loader) {
+      const span = loader.querySelector('span');
+      if (span) span.textContent = 'Vídeo indisponível';
+    }
+  });
+})();
 
 const $=id=>document.getElementById(id);
 const pageIntro=$('page-intro'),pageIdentify=$('page-identify'),pageTest=$('page-test');
